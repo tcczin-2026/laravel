@@ -7,7 +7,7 @@
 
     <form method="post"
           action="{{ $console ? route('console.update', $console->id) : route('console.store') }}"
-          class="card card-body bg-white">
+          class="card card-body">
         @csrf
         @if ($console)
             @method('PUT')

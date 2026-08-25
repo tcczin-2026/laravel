@@ -7,7 +7,7 @@
 
     <form method="post"
           action="{{ $jogo ? route('jogo.update', $jogo->id) : route('jogo.store') }}"
-          class="card card-body bg-white">
+          class="card card-body">
         @csrf
         @if ($jogo)
             @method('PUT')

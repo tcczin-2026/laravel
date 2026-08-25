@@ -5,7 +5,7 @@
 @section('conteudo')
     <h1 class="h3 mb-4">{{ $jogo->nome }}</h1>
 
-    <div class="card card-body bg-white mb-4">
+    <div class="card card-body mb-4">
         <dl class="row mb-0">
             <dt class="col-sm-3">Plataforma</dt>     <dd class="col-sm-9">{{ $jogo->console->nome ?? '-' }}</dd>
             <dt class="col-sm-3">Quantidade</dt>     <dd class="col-sm-9">{{ $jogo->quantidade }}</dd>

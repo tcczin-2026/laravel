@@ -9,7 +9,7 @@
           action="{{ $registro
               ? route('auxiliar.update', [$tipo, $registro->id])
               : route('auxiliar.store', $tipo) }}"
-          class="card card-body bg-white">
+          class="card card-body">
         @csrf
         @if ($registro)
             @method('PUT')

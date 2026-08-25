@@ -8,39 +8,41 @@
         <a href="{{ route('auxiliar.create', $tipo) }}" class="btn btn-primary">Novo</a>
     </div>
 
-    <table class="table table-striped bg-white align-middle">
-        <thead>
-            <tr>
-                <th style="width: 80px">ID</th>
-                <th>Nome</th>
-                <th style="width: 180px">Acoes</th>
-            </tr>
-        </thead>
-        <tbody>
-            @forelse ($registros as $registro)
+    <div class="table-responsive">
+        <table class="table table-striped align-middle">
+            <thead>
                 <tr>
-                    <td>{{ $registro->id }}</td>
-                    <td>{{ $registro->nome }}</td>
-                    <td>
-                        <a href="{{ route('auxiliar.edit', [$tipo, $registro->id]) }}"
-                           class="btn btn-sm btn-warning">Editar</a>
+                    <th style="width: 80px">ID</th>
+                    <th>Nome</th>
+                    <th style="width: 180px">Acoes</th>
+                </tr>
+            </thead>
+            <tbody>
+                @forelse ($registros as $registro)
+                    <tr>
+                        <td>{{ $registro->id }}</td>
+                        <td>{{ $registro->nome }}</td>
+                        <td>
+                            <a href="{{ route('auxiliar.edit', [$tipo, $registro->id]) }}"
+                               class="btn btn-sm btn-warning">Editar</a>
 
-                        <form action="{{ route('auxiliar.destroy', [$tipo, $registro->id]) }}"
-                              method="post" class="d-inline"
-                              onsubmit="return confirm('Excluir este registro?')">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-sm btn-danger">Excluir</button>
-                        </form>
-                    </td>
-                </tr>
-            @empty
-                <tr>
-                    <td colspan="3" class="text-center text-muted">Nenhum registro cadastrado.</td>
-                </tr>
-            @endforelse
-        </tbody>
-    </table>
+                            <form action="{{ route('auxiliar.destroy', [$tipo, $registro->id]) }}"
+                                  method="post" class="d-inline"
+                                  onsubmit="return confirm('Excluir este registro?')">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-sm btn-danger">Excluir</button>
+                            </form>
+                        </td>
+                    </tr>
+                @empty
+                    <tr>
+                        <td colspan="3" class="text-center text-muted">Nenhum registro cadastrado.</td>
+                    </tr>
+                @endforelse
+            </tbody>
+        </table>
+    </div>
 
     <a href="{{ route('painel.index') }}" class="btn btn-link">Voltar ao painel</a>
 @endsection

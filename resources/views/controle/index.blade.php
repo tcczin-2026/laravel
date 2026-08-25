@@ -9,13 +9,14 @@
     </div>
 
     <div class="table-responsive">
-        <table class="table table-striped bg-white align-middle">
+        <table class="table table-striped align-middle">
             <thead>
                 <tr>
                     <th>ID</th>
                     <th>Nome</th>
                     <th>Marca</th>
                     <th>Qtd.</th>
+                    <th>Estoque</th>
                     <th>Cor</th>
                     <th>Vintage</th>
                     <th>Dispositivo</th>
@@ -31,6 +32,13 @@
                         <td>{{ $controle->nome }}</td>
                         <td>{{ $controle->marca->nome ?? '-' }}</td>
                         <td>{{ $controle->quantidade }}</td>
+                        <td>
+                            @if ($controle->quantidade > 0)
+                                <span class="stock-pill stock-pill--ok">Em estoque</span>
+                            @else
+                                <span class="stock-pill stock-pill--out">Esgotado</span>
+                            @endif
+                        </td>
                         <td>{{ $controle->cor->nome ?? '-' }}</td>
                         <td>{{ $controle->retro->nome ?? '-' }}</td>
                         <td>{{ $controle->console->nome ?? '-' }}</td>
@@ -49,7 +57,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="10" class="text-center text-muted">Nenhum controle cadastrado.</td>
+                        <td colspan="11" class="text-center text-muted">Nenhum controle cadastrado.</td>
                     </tr>
                 @endforelse
             </tbody>

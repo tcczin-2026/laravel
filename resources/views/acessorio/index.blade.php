@@ -9,13 +9,14 @@
     </div>
 
     <div class="table-responsive">
-        <table class="table table-striped bg-white align-middle">
+        <table class="table table-striped align-middle">
             <thead>
                 <tr>
                     <th>ID</th>
                     <th>Nome</th>
                     <th>Plataforma</th>
                     <th>Qtd.</th>
+                    <th>Estoque</th>
                     <th>Estado</th>
                     <th>Vintage</th>
                     <th>Cor</th>
@@ -30,6 +31,13 @@
                         <td>{{ $acessorio->nome }}</td>
                         <td>{{ $acessorio->console->nome ?? '-' }}</td>
                         <td>{{ $acessorio->quantidade }}</td>
+                        <td>
+                            @if ($acessorio->quantidade > 0)
+                                <span class="stock-pill stock-pill--ok">Em estoque</span>
+                            @else
+                                <span class="stock-pill stock-pill--out">Esgotado</span>
+                            @endif
+                        </td>
                         <td>{{ $acessorio->usado->nome ?? '-' }}</td>
                         <td>{{ $acessorio->retro->nome ?? '-' }}</td>
                         <td>{{ $acessorio->cor->nome ?? '-' }}</td>
@@ -47,7 +55,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="9" class="text-center text-muted">Nenhum acessorio cadastrado.</td>
+                        <td colspan="10" class="text-center text-muted">Nenhum acessorio cadastrado.</td>
                     </tr>
                 @endforelse
             </tbody>

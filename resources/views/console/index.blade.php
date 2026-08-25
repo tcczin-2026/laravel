@@ -9,13 +9,14 @@
     </div>
 
     <div class="table-responsive">
-        <table class="table table-striped bg-white align-middle">
+        <table class="table table-striped align-middle">
             <thead>
                 <tr>
                     <th>ID</th>
                     <th>Nome</th>
                     <th>Marca</th>
                     <th>Qtd.</th>
+                    <th>Estoque</th>
                     <th>Estado</th>
                     <th>Leitor</th>
                     <th>Cor</th>
@@ -32,6 +33,13 @@
                         <td>{{ $console->nome }}</td>
                         <td>{{ $console->marca->nome ?? '-' }}</td>
                         <td>{{ $console->quantidade }}</td>
+                        <td>
+                            @if ($console->quantidade > 0)
+                                <span class="stock-pill stock-pill--ok">Em estoque</span>
+                            @else
+                                <span class="stock-pill stock-pill--out">Esgotado</span>
+                            @endif
+                        </td>
                         <td>{{ $console->usado->nome ?? '-' }}</td>
                         <td>{{ $console->digital->nome ?? '-' }}</td>
                         <td>{{ $console->cor->nome ?? '-' }}</td>
@@ -51,7 +59,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="11" class="text-center text-muted">Nenhum console cadastrado.</td>
+                        <td colspan="12" class="text-center text-muted">Nenhum console cadastrado.</td>
                     </tr>
                 @endforelse
             </tbody>
