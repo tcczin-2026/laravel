@@ -27,7 +27,6 @@
             </div>
 
             @include('partials.select', ['campo' => 'MarcaControle', 'rotulo' => 'Marca',          'opcoes' => $marcas,   'selecionado' => $controle->MarcaControle ?? null])
-            @include('partials.select', ['campo' => 'dispositivo',   'rotulo' => 'Dispositivo',    'opcoes' => $consoles, 'selecionado' => $controle->dispositivo ?? null])
             @include('partials.select', ['campo' => 'estado',        'rotulo' => 'Estado',         'opcoes' => $usados,   'selecionado' => $controle->estado ?? null])
             @include('partials.select', ['campo' => 'cores',         'rotulo' => 'Cor',            'opcoes' => $cores,    'selecionado' => $controle->cores ?? null])
             @include('partials.select', ['campo' => 'vintage',       'rotulo' => 'Vintage',        'opcoes' => $retros,   'selecionado' => $controle->vintage ?? null])

@@ -26,7 +26,7 @@
                        class="form-control" value="{{ old('quantidade', $console->quantidade ?? 1) }}">
             </div>
 
-            @include('partials.select', ['campo' => 'MarcaConsole', 'rotulo' => 'Marca',        'opcoes' => $marcas,        'selecionado' => $console->MarcaConsole ?? null])
+            @include('partials.select', ['campo' => 'plataformaConsole', 'rotulo' => 'plataforma',        'opcoes' => $plataformas,        'selecionado' => $console->plataformaConsole ?? null])
             @include('partials.select', ['campo' => 'estado',       'rotulo' => 'Estado',       'opcoes' => $usados,        'selecionado' => $console->estado ?? null])
             @include('partials.select', ['campo' => 'leitor',       'rotulo' => 'Leitor',       'opcoes' => $digitais,      'selecionado' => $console->leitor ?? null])
             @include('partials.select', ['campo' => 'cores',        'rotulo' => 'Cor',          'opcoes' => $cores,         'selecionado' => $console->cores ?? null])

@@ -9,12 +9,12 @@
     </div>
 
     <div class="table-responsive">
-        <table class="table table-striped align-middle">
+    <table class="table table-dark align-middle">
             <thead>
                 <tr>
                     <th>ID</th>
                     <th>Nome</th>
-                    <th>Marca</th>
+                    <th>plataforma</th>
                     <th>Qtd.</th>
                     <th>Estoque</th>
                     <th>Estado</th>
@@ -31,7 +31,7 @@
                     <tr>
                         <td>{{ $console->id }}</td>
                         <td>{{ $console->nome }}</td>
-                        <td>{{ $console->marca->nome ?? '-' }}</td>
+                        <td>{{ $console->plataforma->nome ?? '-' }}</td>
                         <td>{{ $console->quantidade }}</td>
                         <td>
                             @if ($console->quantidade > 0)

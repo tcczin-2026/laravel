@@ -7,7 +7,7 @@ use App\Models\Cor;
 use App\Models\Desbloqueado;
 use App\Models\Digital;
 use App\Models\EdicaoEspecial;
-use App\Models\Marca;
+use App\Models\plataforma;
 use App\Models\Retro;
 use App\Models\Usado;
 use Illuminate\Database\QueryException;
@@ -19,8 +19,8 @@ class ConsoleController extends Controller
     public function index()
     {
         $consoles = Console::with([
-            'marca', 'usado', 'digital', 'cor', 'retro', 'desbloqueado', 'edicaoEspecial',
-        ])->orderBy('nome')->get();
+            'plataforma', 'usado', 'digital', 'cor', 'retro', 'desbloqueado', 'edicaoEspecial',
+        ])->orderBy('id')->get();
 
         return view('console.index', ['consoles' => $consoles]);
     }
@@ -29,7 +29,7 @@ class ConsoleController extends Controller
     public function show(int $id)
     {
         $console = Console::with([
-            'marca', 'usado', 'digital', 'cor', 'retro', 'desbloqueado', 'edicaoEspecial',
+            'plataforma', 'usado', 'digital', 'cor', 'retro', 'desbloqueado', 'edicaoEspecial',
             'controles', 'jogos', 'acessorios',
         ])->findOrFail($id);
 
@@ -88,7 +88,7 @@ class ConsoleController extends Controller
     {
         return $request->validate([
             'nome'         => 'required|string|max:100',
-            'MarcaConsole' => 'required|exists:marca,id',
+            'plataformaConsole' => 'required|exists:plataforma,id',
             'quantidade'   => 'required|integer|min:0',
             'estado'       => 'required|exists:usado,id',
             'leitor'       => 'required|exists:digital,id',
@@ -103,7 +103,7 @@ class ConsoleController extends Controller
     private function listas(): array
     {
         return [
-            'marcas'         => Marca::orderBy('nome')->get(),
+            'plataformas'         => plataforma::orderBy('nome')->get(),
             'usados'         => Usado::orderBy('nome')->get(),
             'digitais'       => Digital::orderBy('nome')->get(),
             'cores'          => Cor::orderBy('nome')->get(),

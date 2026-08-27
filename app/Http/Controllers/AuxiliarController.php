@@ -6,14 +6,14 @@ use App\Models\Cor;
 use App\Models\Desbloqueado;
 use App\Models\Digital;
 use App\Models\EdicaoEspecial;
-use App\Models\Marca;
+use App\Models\plataforma;
 use App\Models\Retro;
 use App\Models\Usado;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 
 /**
- * CRUD das sete tabelas auxiliares do diagrama (marca, cor, retro, usado,
+ * CRUD das sete tabelas auxiliares do diagrama (plataforma, cor, retro, usado,
  * digital, desbloqueado e edicao_especial). Todas tem a mesma estrutura
  * (id + nome), entao um unico controller atende as sete, escolhendo o model
  * pelo segmento {tipo} da rota.
@@ -21,7 +21,7 @@ use Illuminate\Http\Request;
 class AuxiliarController extends Controller
 {
     private const TIPOS = [
-        'marca'           => ['model' => Marca::class,          'titulo' => 'Marcas'],
+        'plataforma'           => ['model' => plataforma::class,          'titulo' => 'plataformas'],
         'cor'             => ['model' => Cor::class,            'titulo' => 'Cores'],
         'retro'           => ['model' => Retro::class,          'titulo' => 'Retro / Vintage'],
         'usado'           => ['model' => Usado::class,          'titulo' => 'Estado (Usado)'],
@@ -44,7 +44,7 @@ class AuxiliarController extends Controller
         return view('auxiliar.index', [
             'tipo'      => $tipo,
             'titulo'    => $config['titulo'],
-            'registros' => $model::orderBy('nome')->get(),
+            'registros' => $model::orderBy('id')->get(),
         ]);
     }
 

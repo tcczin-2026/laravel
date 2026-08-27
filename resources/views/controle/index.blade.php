@@ -9,7 +9,7 @@
     </div>
 
     <div class="table-responsive">
-        <table class="table table-striped align-middle">
+    <table class="table table-dark align-middle">
             <thead>
                 <tr>
                     <th>ID</th>
@@ -41,7 +41,6 @@
                         </td>
                         <td>{{ $controle->cor->nome ?? '-' }}</td>
                         <td>{{ $controle->retro->nome ?? '-' }}</td>
-                        <td>{{ $controle->console->nome ?? '-' }}</td>
                         <td>{{ $controle->usado->nome ?? '-' }}</td>
                         <td>{{ $controle->edicaoEspecial->nome ?? '-' }}</td>
                         <td>

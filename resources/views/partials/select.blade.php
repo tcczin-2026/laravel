@@ -4,7 +4,7 @@
 <div class="col-md-4 mb-3">
     <label for="{{ $campo }}" class="form-label">{{ $rotulo }}</label>
     <select name="{{ $campo }}" id="{{ $campo }}" class="form-select" required>
-        <option value="">-- selecione --</option>
+        <option value=""> selecione </option>
         @foreach ($opcoes as $opcao)
             <option value="{{ $opcao->id }}" @selected($valor == $opcao->id)>{{ $opcao->nome }}</option>
         @endforeach

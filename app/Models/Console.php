@@ -13,7 +13,7 @@ class Console extends Model
     public $timestamps = false;
     protected $fillable = [
         'nome',
-        'MarcaConsole',
+        'plataformaConsole',
         'quantidade',
         'estado',
         'leitor',
@@ -23,9 +23,9 @@ class Console extends Model
         'colecionador',
     ];
 
-    public function marca()
+    public function plataforma()
     {
-        return $this->belongsTo(Marca::class, 'MarcaConsole');
+        return $this->belongsTo(plataforma::class, 'plataformaConsole');
     }
 
     public function usado()

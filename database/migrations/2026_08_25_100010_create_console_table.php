@@ -11,7 +11,7 @@ return new class extends Migration
         Schema::create('console', function (Blueprint $table) {
             $table->id();
             $table->string('nome', 100);
-            $table->foreignId('MarcaConsole')->constrained('marca');
+            $table->foreignId('plataformaConsole')->constrained('plataforma');
             $table->integer('quantidade')->default(0);
             $table->foreignId('estado')->constrained('usado');
             $table->foreignId('leitor')->constrained('digital');

@@ -9,7 +9,7 @@
     </div>
 
     <div class="table-responsive">
-        <table class="table table-striped align-middle">
+        <table class="table table-dark align-middle">
             <thead>
                 <tr>
                     <th>ID</th>

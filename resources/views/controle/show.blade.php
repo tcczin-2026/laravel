@@ -9,7 +9,6 @@
         <dl class="row mb-0">
             <dt class="col-sm-3">Marca</dt>          <dd class="col-sm-9">{{ $controle->marca->nome ?? '-' }}</dd>
             <dt class="col-sm-3">Quantidade</dt>     <dd class="col-sm-9">{{ $controle->quantidade }}</dd>
-            <dt class="col-sm-3">Dispositivo</dt>    <dd class="col-sm-9">{{ $controle->console->nome ?? '-' }}</dd>
             <dt class="col-sm-3">Estado</dt>         <dd class="col-sm-9">{{ $controle->usado->nome ?? '-' }}</dd>
             <dt class="col-sm-3">Cor</dt>            <dd class="col-sm-9">{{ $controle->cor->nome ?? '-' }}</dd>
             <dt class="col-sm-3">Vintage</dt>        <dd class="col-sm-9">{{ $controle->retro->nome ?? '-' }}</dd>

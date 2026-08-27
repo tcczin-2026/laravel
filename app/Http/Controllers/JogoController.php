@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Console;
+use App\Models\plataforma;
 use App\Models\EdicaoEspecial;
 use App\Models\Jogo;
 use App\Models\Retro;
@@ -14,7 +14,7 @@ class JogoController extends Controller
     /** READ - lista */
     public function index()
     {
-        $jogos = Jogo::with(['console', 'usado', 'retro', 'edicaoEspecial'])
+        $jogos = Jogo::with(['plataforma', 'usado', 'retro', 'edicaoEspecial'])
             ->orderBy('nome')
             ->get();
 
@@ -24,7 +24,7 @@ class JogoController extends Controller
     /** READ - detalhe */
     public function show(int $id)
     {
-        $jogo = Jogo::with(['console', 'usado', 'retro', 'edicaoEspecial'])->findOrFail($id);
+        $jogo = Jogo::with(['plataforma', 'usado', 'retro', 'edicaoEspecial'])->findOrFail($id);
 
         return view('jogo.show', ['jogo' => $jogo]);
     }
@@ -75,7 +75,7 @@ class JogoController extends Controller
     {
         return $request->validate([
             'nome'         => 'required|string|max:100',
-            'Plataforma'   => 'required|exists:console,id',
+            'Plataforma'   => 'required|exists:plataforma,id',
             'quantidade'   => 'required|integer|min:0',
             'estado'       => 'required|exists:usado,id',
             'vintage'      => 'required|exists:retro,id',
@@ -86,7 +86,7 @@ class JogoController extends Controller
     private function listas(): array
     {
         return [
-            'consoles' => Console::orderBy('nome')->get(),
+            'plataformas' => plataforma::orderBy('nome')->get(),
             'usados'   => Usado::orderBy('nome')->get(),
             'retros'   => Retro::orderBy('nome')->get(),
             'edicoes'  => EdicaoEspecial::orderBy('nome')->get(),

@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Console;
 use App\Models\Controle;
 use App\Models\Cor;
 use App\Models\EdicaoEspecial;
@@ -17,8 +16,8 @@ class ControleController extends Controller
     public function index()
     {
         $controles = Controle::with([
-            'marca', 'cor', 'retro', 'console', 'usado', 'edicaoEspecial',
-        ])->orderBy('nome')->get();
+            'marca', 'cor', 'retro',  'usado', 'edicaoEspecial',
+        ])->orderBy('id')->get();
 
         return view('controle.index', ['controles' => $controles]);
     }
@@ -27,7 +26,7 @@ class ControleController extends Controller
     public function show(int $id)
     {
         $controle = Controle::with([
-            'marca', 'cor', 'retro', 'console', 'usado', 'edicaoEspecial',
+            'marca', 'cor', 'retro',  'usado', 'edicaoEspecial',
         ])->findOrFail($id);
 
         return view('controle.show', ['controle' => $controle]);
@@ -95,7 +94,6 @@ class ControleController extends Controller
             'marcas'   => Marca::orderBy('nome')->get(),
             'cores'    => Cor::orderBy('nome')->get(),
             'retros'   => Retro::orderBy('nome')->get(),
-            'consoles' => Console::orderBy('nome')->get(),
             'usados'   => Usado::orderBy('nome')->get(),
             'edicoes'  => EdicaoEspecial::orderBy('nome')->get(),
         ];

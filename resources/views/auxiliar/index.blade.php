@@ -9,7 +9,7 @@
     </div>
 
     <div class="table-responsive">
-        <table class="table table-striped align-middle">
+        <table class="table table-dark align-middle">
             <thead>
                 <tr>
                     <th style="width: 80px">ID</th>
@@ -44,5 +44,5 @@
         </table>
     </div>
 
-    <a href="{{ route('painel.index') }}" class="btn btn-link">Voltar ao painel</a>
+
 @endsection
