@@ -14,12 +14,11 @@
                 <tr>
                     <th>ID</th>
                     <th>Nome</th>
-                    <th>Marca</th>
+                    <th>plataforma</th>
                     <th>Qtd.</th>
                     <th>Estoque</th>
                     <th>Cor</th>
                     <th>Vintage</th>
-                    <th>Dispositivo</th>
                     <th>Estado</th>
                     <th>Edicao</th>
                     <th style="width: 220px">Acoes</th>
@@ -30,7 +29,7 @@
                     <tr>
                         <td>{{ $controle->id }}</td>
                         <td>{{ $controle->nome }}</td>
-                        <td>{{ $controle->marca->nome ?? '-' }}</td>
+                        <td>{{ $controle->plataforma->nome ?? '-' }}</td>
                         <td>{{ $controle->quantidade }}</td>
                         <td>
                             @if ($controle->quantidade > 0)

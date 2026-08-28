@@ -21,9 +21,9 @@ class Acessorio extends Model
         'colecionador',
     ];
 
-    public function console()
+    public function plataforma()
     {
-        return $this->belongsTo(Console::class, 'Plataforma');
+        return $this->belongsTo(plataforma::class, 'Plataforma');
     }
 
     public function usado()

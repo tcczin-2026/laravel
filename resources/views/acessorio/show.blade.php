@@ -7,7 +7,7 @@
 
     <div class="card card-body mb-4">
         <dl class="row mb-0">
-            <dt class="col-sm-3">Plataforma</dt>     <dd class="col-sm-9">{{ $acessorio->console->nome ?? '-' }}</dd>
+            <dt class="col-sm-3">Plataforma</dt>     <dd class="col-sm-9">{{ $acessorio->plataforma->nome ?? '-' }}</dd>
             <dt class="col-sm-3">Quantidade</dt>     <dd class="col-sm-9">{{ $acessorio->quantidade }}</dd>
             <dt class="col-sm-3">Estado</dt>         <dd class="col-sm-9">{{ $acessorio->usado->nome ?? '-' }}</dd>
             <dt class="col-sm-3">Cor</dt>            <dd class="col-sm-9">{{ $acessorio->cor->nome ?? '-' }}</dd>

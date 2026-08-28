@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Controle;
 use App\Models\Cor;
 use App\Models\EdicaoEspecial;
-use App\Models\Marca;
+use App\Models\plataforma;
 use App\Models\Retro;
 use App\Models\Usado;
 use Illuminate\Http\Request;
@@ -16,7 +16,7 @@ class ControleController extends Controller
     public function index()
     {
         $controles = Controle::with([
-            'marca', 'cor', 'retro',  'usado', 'edicaoEspecial',
+            'plataforma', 'cor', 'retro',  'usado', 'edicaoEspecial',
         ])->orderBy('id')->get();
 
         return view('controle.index', ['controles' => $controles]);
@@ -26,7 +26,7 @@ class ControleController extends Controller
     public function show(int $id)
     {
         $controle = Controle::with([
-            'marca', 'cor', 'retro',  'usado', 'edicaoEspecial',
+            'plataforma', 'cor', 'retro',  'usado', 'edicaoEspecial',
         ])->findOrFail($id);
 
         return view('controle.show', ['controle' => $controle]);
@@ -78,11 +78,10 @@ class ControleController extends Controller
     {
         return $request->validate([
             'nome'          => 'required|string|max:100',
-            'MarcaControle' => 'required|exists:marca,id',
+            'plataformaControle' => 'required|exists:plataforma,id',
             'quantidade'    => 'required|integer|min:0',
             'cores'         => 'required|exists:cor,id',
             'vintage'       => 'required|exists:retro,id',
-            'dispositivo'   => 'required|exists:console,id',
             'estado'        => 'required|exists:usado,id',
             'colecionador'  => 'required|exists:edicao_especial,id',
         ]);
@@ -91,7 +90,7 @@ class ControleController extends Controller
     private function listas(): array
     {
         return [
-            'marcas'   => Marca::orderBy('nome')->get(),
+            'plataformas'   => plataforma::orderBy('nome')->get(),
             'cores'    => Cor::orderBy('nome')->get(),
             'retros'   => Retro::orderBy('nome')->get(),
             'usados'   => Usado::orderBy('nome')->get(),

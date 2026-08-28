@@ -13,7 +13,7 @@ class Controle extends Model
     public $timestamps = false;
     protected $fillable = [
         'nome',
-        'MarcaControle',
+        'plataformaControle',
         'quantidade',
         'cores',
         'vintage',
@@ -22,9 +22,9 @@ class Controle extends Model
         'colecionador',
     ];
 
-    public function marca()
+    public function plataforma()
     {
-        return $this->belongsTo(Marca::class, 'MarcaControle');
+        return $this->belongsTo(plataforma::class, 'plataformaControle');
     }
 
     public function cor()

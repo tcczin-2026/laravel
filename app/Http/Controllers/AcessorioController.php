@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Acessorio;
-use App\Models\Console;
+use App\Models\plataforma;
 use App\Models\Cor;
 use App\Models\EdicaoEspecial;
 use App\Models\Retro;
@@ -15,7 +15,7 @@ class AcessorioController extends Controller
     /** READ - lista */
     public function index()
     {
-        $acessorios = Acessorio::with(['console', 'usado', 'retro', 'cor', 'edicaoEspecial'])
+        $acessorios = Acessorio::with(['plataforma', 'usado', 'retro', 'cor', 'edicaoEspecial'])
             ->orderBy('nome')
             ->get();
 
@@ -25,7 +25,7 @@ class AcessorioController extends Controller
     /** READ - detalhe */
     public function show(int $id)
     {
-        $acessorio = Acessorio::with(['console', 'usado', 'retro', 'cor', 'edicaoEspecial'])
+        $acessorio = Acessorio::with(['plataforma', 'usado', 'retro', 'cor', 'edicaoEspecial'])
             ->findOrFail($id);
 
         return view('acessorio.show', ['acessorio' => $acessorio]);
@@ -77,7 +77,7 @@ class AcessorioController extends Controller
     {
         return $request->validate([
             'nome'         => 'required|string|max:100',
-            'Plataforma'   => 'required|exists:console,id',
+            'Plataforma'   => 'required|exists:plataforma,id',
             'quantidade'   => 'required|integer|min:0',
             'estado'       => 'required|exists:usado,id',
             'vintage'      => 'required|exists:retro,id',
@@ -89,7 +89,7 @@ class AcessorioController extends Controller
     private function listas(): array
     {
         return [
-            'consoles' => Console::orderBy('nome')->get(),
+            'plataformas' => plataforma::orderBy('nome')->get(),
             'usados'   => Usado::orderBy('nome')->get(),
             'retros'   => Retro::orderBy('nome')->get(),
             'cores'    => Cor::orderBy('nome')->get(),

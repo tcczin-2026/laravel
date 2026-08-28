@@ -11,11 +11,10 @@ return new class extends Migration
         Schema::create('controle', function (Blueprint $table) {
             $table->id();
             $table->string('nome', 100);
-            $table->foreignId('MarcaControle')->constrained('marca');
+            $table->foreignId('plataformaControle')->constrained('plataforma');
             $table->integer('quantidade')->default(0);
             $table->foreignId('cores')->constrained('cor');
             $table->foreignId('vintage')->constrained('retro');
-            $table->foreignId('dispositivo')->constrained('console');
             $table->foreignId('estado')->constrained('usado');
             $table->foreignId('colecionador')->constrained('edicao_especial');
         });

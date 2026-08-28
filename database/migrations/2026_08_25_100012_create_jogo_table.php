@@ -11,7 +11,7 @@ return new class extends Migration
         Schema::create('jogo', function (Blueprint $table) {
             $table->id();
             $table->string('nome', 100);
-            $table->foreignId('Plataforma')->constrained('console');
+            $table->foreignId('Plataforma')->constrained('plataforma');
             $table->integer('quantidade')->default(0);
             $table->foreignId('estado')->constrained('usado');
             $table->foreignId('vintage')->constrained('retro');

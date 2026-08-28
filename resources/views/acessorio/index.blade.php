@@ -29,7 +29,7 @@
                     <tr>
                         <td>{{ $acessorio->id }}</td>
                         <td>{{ $acessorio->nome }}</td>
-                        <td>{{ $acessorio->console->nome ?? '-' }}</td>
+                        <td>{{ $acessorio->plataforma->nome ?? '-' }}</td>
                         <td>{{ $acessorio->quantidade }}</td>
                         <td>
                             @if ($acessorio->quantidade > 0)
