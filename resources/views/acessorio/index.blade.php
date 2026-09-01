@@ -16,10 +16,10 @@
         </div>
 
         <div class="col-md-2">
-            <select name="plataformaacessorio" class="form-select">
+            <select name="plataforma" class="form-select">
                 <option value="">Todas as plataformas</option>
                 @foreach ($plataformas as $plataforma)
-                    <option value="{{ $plataforma->id }}" @selected(request('plataformaacessorio') == $plataforma->id)>
+                    <option value="{{ $plataforma->id }}" @selected(request('plataforma') == $plataforma->id)>
                         {{ $plataforma->nome }}
                     </option>
                 @endforeach

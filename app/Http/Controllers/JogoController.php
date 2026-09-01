@@ -24,8 +24,8 @@ public function index(Request $request)
     });
 
     // Filtro por plataforma
-    $query->when($request->plataformajogo, function ($q, $plataforma) {
-        $q->where('plataformajogo', $plataforma);
+    $query->when($request->plataforma, function ($q, $plataforma) {
+        $q->where('plataforma', $plataforma);
     });
 
     // Filtro por estado (usado/novo)
