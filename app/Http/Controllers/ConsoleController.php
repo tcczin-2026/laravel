@@ -15,14 +15,43 @@ use Illuminate\Http\Request;
 
 class ConsoleController extends Controller
 {
-    /** READ - lista */
-    public function index()
+    /** READ - lista com filtros */
+    public function index(Request $request)
     {
-        $consoles = Console::with([
+        $query = Console::with([
             'plataforma', 'usado', 'digital', 'cor', 'retro', 'desbloqueado', 'edicaoEspecial',
-        ])->orderBy('id')->get();
+        ]);
 
-        return view('console.index', ['consoles' => $consoles]);
+        // Filtro por nome (busca parcial)
+        $query->when($request->nome, function ($q, $nome) {
+            $q->where('nome', 'like', "%{$nome}%");
+        });
+
+        // Filtro por plataforma
+        $query->when($request->plataformaConsole, function ($q, $plataforma) {
+            $q->where('plataformaConsole', $plataforma);
+        });
+
+        // Filtro por estado (usado/novo)
+        $query->when($request->estado, function ($q, $estado) {
+            $q->where('estado', $estado);
+        });
+
+        // Filtro por cor
+        $query->when($request->cores, function ($q, $cor) {
+            $q->where('cores', $cor);
+        });
+
+        // Filtro por faixa de quantidade em estoque
+        $query->when($request->quantidade_min, function ($q, $min) {
+            $q->where('quantidade', '>=', $min);
+        });
+
+        $consoles = $query->orderBy('id')->get();
+
+        return view('console.index', $this->listas() + [
+            'consoles' => $consoles,
+        ]);
     }
 
     /** READ - detalhe */
@@ -103,13 +132,13 @@ class ConsoleController extends Controller
     private function listas(): array
     {
         return [
-            'plataformas'         => plataforma::orderBy('nome')->get(),
-            'usados'         => Usado::orderBy('nome')->get(),
-            'digitais'       => Digital::orderBy('nome')->get(),
-            'cores'          => Cor::orderBy('nome')->get(),
-            'retros'         => Retro::orderBy('nome')->get(),
-            'desbloqueados'  => Desbloqueado::orderBy('nome')->get(),
-            'edicoes'        => EdicaoEspecial::orderBy('nome')->get(),
+            'plataformas'   => plataforma::orderBy('nome')->get(),
+            'usados'        => Usado::orderBy('nome')->get(),
+            'digitais'      => Digital::orderBy('nome')->get(),
+            'cores'         => Cor::orderBy('nome')->get(),
+            'retros'        => Retro::orderBy('nome')->get(),
+            'desbloqueados' => Desbloqueado::orderBy('nome')->get(),
+            'edicoes'       => EdicaoEspecial::orderBy('nome')->get(),
         ];
     }
 }

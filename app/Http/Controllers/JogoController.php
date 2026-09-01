@@ -11,15 +11,39 @@ use Illuminate\Http\Request;
 
 class JogoController extends Controller
 {
-    /** READ - lista */
-    public function index()
-    {
-        $jogos = Jogo::with(['plataforma', 'usado', 'retro', 'edicaoEspecial'])
-            ->orderBy('nome')
-            ->get();
+/** READ - lista com filtros */
+public function index(Request $request)
+{
+    $query = jogo::with([
+        'plataforma', 'usado', 'retro', 'edicaoEspecial',
+    ]);
 
-        return view('jogo.index', ['jogos' => $jogos]);
-    }
+    // Filtro por nome (busca parcial)
+    $query->when($request->nome, function ($q, $nome) {
+        $q->where('nome', 'like', "%{$nome}%");
+    });
+
+    // Filtro por plataforma
+    $query->when($request->plataformajogo, function ($q, $plataforma) {
+        $q->where('plataformajogo', $plataforma);
+    });
+
+    // Filtro por estado (usado/novo)
+    $query->when($request->estado, function ($q, $estado) {
+        $q->where('estado', $estado);
+    });
+
+    // Filtro por faixa de quantidade em estoque
+    $query->when($request->quantidade_min, function ($q, $min) {
+        $q->where('quantidade', '>=', $min);
+    });
+
+    $jogos = $query->orderBy('id')->get();
+
+    return view('jogo.index', $this->listas() + [
+        'jogos' => $jogos,
+    ]);
+}
 
     /** READ - detalhe */
     public function show(int $id)

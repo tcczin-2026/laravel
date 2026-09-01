@@ -12,15 +12,45 @@ use Illuminate\Http\Request;
 
 class AcessorioController extends Controller
 {
-    /** READ - lista */
-    public function index()
-    {
-        $acessorios = Acessorio::with(['plataforma', 'usado', 'retro', 'cor', 'edicaoEspecial'])
-            ->orderBy('nome')
-            ->get();
 
-        return view('acessorio.index', ['acessorios' => $acessorios]);
-    }
+        /** READ - lista com filtros */
+        public function index(Request $request)
+        {
+            $query = acessorio::with([
+                'plataforma', 'usado', 'cor', 'retro', 'edicaoEspecial',
+            ]);
+    
+            // Filtro por nome (busca parcial)
+            $query->when($request->nome, function ($q, $nome) {
+                $q->where('nome', 'like', "%{$nome}%");
+            });
+    
+            // Filtro por plataforma
+            $query->when($request->plataformaacessorio, function ($q, $plataforma) {
+                $q->where('plataformaacessorio', $plataforma);
+            });
+    
+            // Filtro por estado (usado/novo)
+            $query->when($request->estado, function ($q, $estado) {
+                $q->where('estado', $estado);
+            });
+    
+            // Filtro por cor
+            $query->when($request->cores, function ($q, $cor) {
+                $q->where('cores', $cor);
+            });
+    
+            // Filtro por faixa de quantidade em estoque
+            $query->when($request->quantidade_min, function ($q, $min) {
+                $q->where('quantidade', '>=', $min);
+            });
+    
+            $acessorios = $query->orderBy('id')->get();
+    
+            return view('acessorio.index', $this->listas() + [
+                'acessorios' => $acessorios,
+            ]);
+        }
 
     /** READ - detalhe */
     public function show(int $id)

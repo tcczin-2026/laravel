@@ -12,24 +12,54 @@ use Illuminate\Http\Request;
 
 class ControleController extends Controller
 {
+
+    /** READ - lista com filtros */
+    public function index(Request $request)
+    {
+        $query = controle::with([
+            'plataforma', 'usado', 'cor', 'retro', 'edicaoEspecial',
+        ]);
+
+        // Filtro por nome (busca parcial)
+        $query->when($request->nome, function ($q, $nome) {
+            $q->where('nome', 'like', "%{$nome}%");
+        });
+
+        // Filtro por plataforma
+        $query->when($request->plataformacontrole, function ($q, $plataforma) {
+            $q->where('plataformacontrole', $plataforma);
+        });
+
+        // Filtro por estado (usado/novo)
+        $query->when($request->estado, function ($q, $estado) {
+            $q->where('estado', $estado);
+        });
+
+        // Filtro por cor
+        $query->when($request->cores, function ($q, $cor) {
+            $q->where('cores', $cor);
+        });
+
+        // Filtro por faixa de quantidade em estoque
+        $query->when($request->quantidade_min, function ($q, $min) {
+            $q->where('quantidade', '>=', $min);
+        });
+
+        $controles = $query->orderBy('id')->get();
+
+        return view('controle.index', $this->listas() + [
+            'controles' => $controles,
+        ]);
+    }
+
     /** READ - lista */
-    public function index()
+    public function show(int $id)
     {
         $controles = Controle::with([
             'plataforma', 'cor', 'retro',  'usado', 'edicaoEspecial',
         ])->orderBy('id')->get();
 
         return view('controle.index', ['controles' => $controles]);
-    }
-
-    /** READ - detalhe */
-    public function show(int $id)
-    {
-        $controle = Controle::with([
-            'plataforma', 'cor', 'retro',  'usado', 'edicaoEspecial',
-        ])->findOrFail($id);
-
-        return view('controle.show', ['controle' => $controle]);
     }
 
     /** CREATE - formulario */

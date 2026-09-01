@@ -8,6 +8,98 @@
         <a href="{{ route('console.create') }}" class="btn btn-primary">Novo console</a>
     </div>
 
+    {{-- FORMULÁRIO DE FILTRO --}}
+    <form method="GET" action="{{ route('console.index') }}" class="row g-2 mb-4">
+        <div class="col-md-3">
+            <input type="text" name="nome" class="form-control" placeholder="Buscar por nome"
+                   value="{{ request('nome') }}">
+        </div>
+
+        <div class="col-md-2">
+            <select name="plataformaConsole" class="form-select">
+                <option value="">Todas as plataformas</option>
+                @foreach ($plataformas as $plataforma)
+                    <option value="{{ $plataforma->id }}" @selected(request('plataformaConsole') == $plataforma->id)>
+                        {{ $plataforma->nome }}
+                    </option>
+                @endforeach
+            </select>
+        </div>
+
+        <div class="col-md-2">
+            <select name="estado" class="form-select">
+                <option value="">Todos os estados</option>
+                @foreach ($usados as $usado)
+                    <option value="{{ $usado->id }}" @selected(request('estado') == $usado->id)>
+                        {{ $usado->nome }}
+                    </option>
+                @endforeach
+            </select>
+        </div>
+
+        <div class="col-md-2">
+            <select name="cores" class="form-select">
+                <option value="">Todas as cores</option>
+                @foreach ($cores as $cor)
+                    <option value="{{ $cor->id }}" @selected(request('cores') == $cor->id)>
+                        {{ $cor->nome }}
+                    </option>
+                @endforeach
+            </select>
+        </div>
+
+        <div class="col-md-2">
+            <select name="digitais" class="form-select">
+                <option value="">Todas as digitais</option>
+                @foreach ($digitais as $digital)
+                    <option value="{{ $digital->id }}" @selected(request('digitals') == $digital->id)>
+                        {{ $digital->nome }}
+                    </option>
+                @endforeach
+            </select>
+           </div> 
+
+                    <div class="col-md-2">
+            <select name="desbloqueados" class="form-select">
+                <option value="">Todos desbloqueados</option>
+                @foreach ($desbloqueados as $desbloqueado)
+                    <option value="{{ $desbloqueado->id }}" @selected(request('desbloqueados') == $desbloqueado->id)>
+                        {{ $desbloqueado->nome }}
+                    </option>
+                @endforeach
+            </select>
+        </div>
+
+        <div class="col-md-2">
+            <select name="edicoes" class="form-select">
+                <option value="">Todos edicoes</option>
+                @foreach ($edicoes as $edicao)
+                    <option value="{{ $edicao->id }}" @selected(request('edicoes') == $edicao->id)>
+                        {{ $edicao->nome }}
+                    </option>
+                @endforeach
+            </select>
+        </div>
+
+        <div class="col-md-2">
+            <select name="retros" class="form-select">
+                <option value="">Todas as retros</option>
+                @foreach ($retros as $retro)
+                    <option value="{{ $retro->id }}" @selected(request('retros') == $retro->id)>
+                        {{ $retro->nome }}
+                    </option>
+                @endforeach
+            </select>
+        
+        </div>
+
+        <div class="col-md-3 d-flex gap-2">
+            <button type="submit" class="btn btn-primary flex-fill">Filtrar</button>
+            <a href="{{ route('console.index') }}" class="btn btn-outline-light flex-fill">Limpar</a>
+        </div>
+    </form>
+    {{-- FIM DO FILTRO --}}
+
     <div class="table-responsive">
     <table class="table table-dark align-middle">
             <thead>
