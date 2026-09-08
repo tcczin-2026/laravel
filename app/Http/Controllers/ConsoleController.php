@@ -142,3 +142,4 @@ class ConsoleController extends Controller
         ];
     }
 }
+

@@ -51,6 +51,9 @@
         </div>
     </div>
 
+    {{-- Bloco de histórico de alterações: resources/views/partials/historico.blade.php --}}
+    @include('partials.historico', ['historico' => $console->historico])
+
     <a href="{{ route('console.edit', $console->id) }}" class="btn btn-warning">Editar</a>
     <a href="{{ route('console.index') }}" class="btn btn-secondary">Voltar</a>
 @endsection

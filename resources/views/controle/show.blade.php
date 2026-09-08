@@ -1,3 +1,4 @@
+
 @extends('layouts.app')
 
 @section('titulo', $controle->nome)
@@ -15,6 +16,10 @@
             <dt class="col-sm-3">Edicao especial</dt><dd class="col-sm-9">{{ $controle->edicaoEspecial->nome ?? '-' }}</dd>
         </dl>
     </div>
+
+    {{-- Bloco de histórico de alterações: resources/views/partials/historico.blade.php --}}
+    @include('partials.historico', ['historico' => $controle->historico])
+
 
     <a href="{{ route('controle.edit', $controle->id) }}" class="btn btn-warning">Editar</a>
     <a href="{{ route('controle.index') }}" class="btn btn-secondary">Voltar</a>

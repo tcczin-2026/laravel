@@ -37,11 +37,6 @@ class Controle extends Model
         return $this->belongsTo(Retro::class, 'vintage');
     }
 
-    public function console()
-    {
-        return $this->belongsTo(Console::class, 'dispositivo');
-    }
-
     public function usado()
     {
         return $this->belongsTo(Usado::class, 'estado');
@@ -50,5 +45,10 @@ class Controle extends Model
     public function edicaoEspecial()
     {
         return $this->belongsTo(EdicaoEspecial::class, 'colecionador');
+    }
+
+    public function historico()
+    {
+        return $this->hasMany(controleHistorico::class, 'controle_id')->latest();
     }
 }

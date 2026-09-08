@@ -52,14 +52,22 @@ class ControleController extends Controller
         ]);
     }
 
-    /** READ - lista */
+    /**
+     * READ - detalhe de um único controle.
+     *
+     * Antes esse método buscava TODOS os controles e devolvia pra view
+     * "controle.index" — não batia com a view "controle.show" que você já
+     * tem, que espera um único $controle. Corrigido pra usar findOrFail()
+     * e já carregar 'historico' junto, pra o bloco de histórico funcionar
+     * sem precisar de uma segunda consulta na view.
+     */
     public function show(int $id)
     {
-        $controles = Controle::with([
-            'plataforma', 'cor', 'retro',  'usado', 'edicaoEspecial',
-        ])->orderBy('id')->get();
-
-        return view('controle.index', ['controles' => $controles]);
+        $controle = Controle::with([
+            'plataforma', 'cor', 'retro', 'usado', 'edicaoEspecial', 'historico',
+        ])->findOrFail($id);
+ 
+        return view('controle.show', ['controle' => $controle]);
     }
 
     /** CREATE - formulario */
