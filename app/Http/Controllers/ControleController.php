@@ -40,6 +40,16 @@ class ControleController extends Controller
             $q->where('cores', $cor);
         });
 
+        // Filtro por edição especial
+        $query->when($request->edicoes, function ($q, $edicao) {
+            $q->where('colecionador', $edicao);
+        });
+
+        // Filtro por retrocompatibilidade
+        $query->when($request->retros, function ($q, $retro) {
+            $q->where('vintage', $retro);
+        });
+
         // Filtro por faixa de quantidade em estoque
         $query->when($request->quantidade_min, function ($q, $min) {
             $q->where('quantidade', '>=', $min);

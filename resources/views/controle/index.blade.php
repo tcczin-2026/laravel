@@ -35,8 +35,8 @@
 
     {{-- PAINEL DE FILTRO (controlado 100% via PHP, sem JS) --}}
     @if ($mostrarFiltro)
-        <div class="card bg-dark border-secondary mb-4">
-            <div class="card-header border-secondary d-flex justify-content-between align-items-center">
+        <div class="card mb-4">
+            <div class="card-header d-flex justify-content-between align-items-center">
                 <span><i class="bi bi-funnel"></i> Filtrar controles</span>
                 <a href="{{ $urlFecharFiltro }}" class="btn-close btn-close-white" aria-label="Fechar"></a>
             </div>
@@ -47,75 +47,75 @@
 
                 <div class="card-body">
                     <div class="row g-3">
-                            <div class="col-md-6">
-                                <label class="form-label">Nome</label>
-                                <input type="text" name="nome" class="form-control" placeholder="Buscar por nome"
-                                       value="{{ request('nome') }}">
-                            </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Nome</label>
+                            <input type="text" name="nome" class="form-control" placeholder="Buscar por nome"
+                                   value="{{ request('nome') }}">
+                        </div>
 
-                            <div class="col-md-6">
-                                <label class="form-label">Plataforma</label>
-                                <select name="plataformacontrole" class="form-select">
-                                    <option value="">Todas as plataformas</option>
-                                    @foreach ($plataformas as $plataforma)
-                                        <option value="{{ $plataforma->id }}" @selected(request('plataformacontrole') == $plataforma->id)>
-                                            {{ $plataforma->nome }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Plataforma</label>
+                            <select name="plataformacontrole" class="form-select">
+                                <option value="">Todas as plataformas</option>
+                                @foreach ($plataformas as $plataforma)
+                                    <option value="{{ $plataforma->id }}" @selected(request('plataformacontrole') == $plataforma->id)>
+                                        {{ $plataforma->nome }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
 
-                            <div class="col-md-6">
-                                <label class="form-label">Estado</label>
-                                <select name="estado" class="form-select">
-                                    <option value="">Todos os estados</option>
-                                    @foreach ($usados as $usado)
-                                        <option value="{{ $usado->id }}" @selected(request('estado') == $usado->id)>
-                                            {{ $usado->nome }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Estado</label>
+                            <select name="estado" class="form-select">
+                                <option value="">Todos os estados</option>
+                                @foreach ($usados as $usado)
+                                    <option value="{{ $usado->id }}" @selected(request('estado') == $usado->id)>
+                                        {{ $usado->nome }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
 
-                            <div class="col-md-6">
-                                <label class="form-label">Cor</label>
-                                <select name="cores" class="form-select">
-                                    <option value="">Todas as cores</option>
-                                    @foreach ($cores as $cor)
-                                        <option value="{{ $cor->id }}" @selected(request('cores') == $cor->id)>
-                                            {{ $cor->nome }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Cor</label>
+                            <select name="cores" class="form-select">
+                                <option value="">Todas as cores</option>
+                                @foreach ($cores as $cor)
+                                    <option value="{{ $cor->id }}" @selected(request('cores') == $cor->id)>
+                                        {{ $cor->nome }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
 
-                            <div class="col-md-6">
-                                <label class="form-label">Edição</label>
-                                <select name="edicoes" class="form-select">
-                                    <option value="">Todas as edições</option>
-                                    @foreach ($edicoes as $edicao)
-                                        <option value="{{ $edicao->id }}" @selected(request('edicoes') == $edicao->id)>
-                                            {{ $edicao->nome }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Edição</label>
+                            <select name="edicoes" class="form-select">
+                                <option value="">Todas as edições</option>
+                                @foreach ($edicoes as $edicao)
+                                    <option value="{{ $edicao->id }}" @selected(request('edicoes') == $edicao->id)>
+                                        {{ $edicao->nome }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
 
-                            <div class="col-md-6">
-                                <label class="form-label">Retrocompatibilidade</label>
-                                <select name="retros" class="form-select">
-                                    <option value="">Todas as retros</option>
-                                    @foreach ($retros as $retro)
-                                        <option value="{{ $retro->id }}" @selected(request('retros') == $retro->id)>
-                                            {{ $retro->nome }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Retrocompatibilidade</label>
+                            <select name="retros" class="form-select">
+                                <option value="">Todas as retros</option>
+                                @foreach ($retros as $retro)
+                                    <option value="{{ $retro->id }}" @selected(request('retros') == $retro->id)>
+                                        {{ $retro->nome }}
+                                    </option>
+                                @endforeach
+                            </select>
                         </div>
                     </div>
+                </div>
 
-                <div class="card-footer border-secondary d-flex justify-content-end gap-2">
+                <div class="card-footer d-flex justify-content-end gap-2">
                     <a href="{{ route('controle.index', ['mostrarFiltro' => 1]) }}" class="btn btn-outline-light">Limpar filtros</a>
                     <button type="submit" class="btn btn-primary">
                         <i class="bi bi-check-lg"></i> Aplicar filtros

@@ -42,6 +42,26 @@ class ConsoleController extends Controller
             $q->where('cores', $cor);
         });
 
+        // Filtro por leitor (digital)
+        $query->when($request->digitais, function ($q, $digital) {
+            $q->where('leitor', $digital);
+        });
+
+        // Filtro por desbloqueado
+        $query->when($request->desbloqueados, function ($q, $desbloqueado) {
+            $q->where('aberto', $desbloqueado);
+        });
+
+        // Filtro por edição especial
+        $query->when($request->edicoes, function ($q, $edicao) {
+            $q->where('colecionador', $edicao);
+        });
+
+        // Filtro por retrocompatibilidade
+        $query->when($request->retros, function ($q, $retro) {
+            $q->where('vintage', $retro);
+        });
+
         // Filtro por faixa de quantidade em estoque
         $query->when($request->quantidade_min, function ($q, $min) {
             $q->where('quantidade', '>=', $min);
