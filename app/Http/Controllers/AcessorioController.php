@@ -51,79 +51,88 @@ class AcessorioController extends Controller
                 'acessorios' => $acessorios,
             ]);
         }
-
-    /** READ - detalhe */
+/**
+     * READ - detalhe de um único acessorio.
+     *
+     * Antes esse método buscava TODOS os acessorios e devolvia pra view
+     * "acessorio.index" — não batia com a view "acessorio.show" que você já
+     * tem, que espera um único $acessorio. Corrigido pra usar findOrFail()
+     * e já carregar 'historico' junto, pra o bloco de histórico funcionar
+     * sem precisar de uma segunda consulta na view.
+     */
     public function show(int $id)
     {
-        $acessorio = Acessorio::with(['plataforma', 'usado', 'retro', 'cor', 'edicaoEspecial'])
-            ->findOrFail($id);
-
+        $acessorio = acessorio::with([
+            'plataforma', 'cor', 'retro', 'usado', 'edicaoEspecial', 'historico',
+        ])->findOrFail($id);
+ 
         return view('acessorio.show', ['acessorio' => $acessorio]);
     }
-
+ 
     /** CREATE - formulario */
     public function create()
     {
         return view('acessorio.form', $this->listas() + ['acessorio' => null]);
     }
-
+ 
     /** CREATE - grava */
     public function store(Request $request)
     {
-        Acessorio::create($this->validar($request));
-
+        acessorio::create($this->validar($request));
+ 
         return redirect()
             ->route('acessorio.index')
-            ->with('success', 'Acessorio cadastrado com sucesso!');
+            ->with('success', 'acessorio cadastrado com sucesso!');
     }
-
+ 
     /** UPDATE - formulario */
     public function edit(int $id)
     {
-        return view('acessorio.form', $this->listas() + ['acessorio' => Acessorio::findOrFail($id)]);
+        return view('acessorio.form', $this->listas() + ['acessorio' => acessorio::findOrFail($id)]);
     }
-
+ 
     /** UPDATE - grava */
     public function update(Request $request, int $id)
     {
-        Acessorio::findOrFail($id)->update($this->validar($request));
-
+        acessorio::findOrFail($id)->update($this->validar($request));
+ 
         return redirect()
             ->route('acessorio.index')
-            ->with('success', 'Acessorio atualizado com sucesso!');
+            ->with('success', 'acessorio atualizado com sucesso!');
     }
-
+ 
     /** DELETE */
     public function destroy(int $id)
     {
-        Acessorio::findOrFail($id)->delete();
-
+        acessorio::findOrFail($id)->delete();
+ 
         return redirect()
             ->route('acessorio.index')
-            ->with('success', 'Acessorio excluido com sucesso!');
+            ->with('success', 'acessorio excluido com sucesso!');
     }
-
+ 
     private function validar(Request $request): array
     {
         return $request->validate([
-            'nome'         => 'required|string|max:100',
-            'Plataforma'   => 'required|exists:plataforma,id',
-            'quantidade'   => 'required|integer|min:0',
-            'estado'       => 'required|exists:usado,id',
-            'vintage'      => 'required|exists:retro,id',
-            'cores'        => 'required|exists:cor,id',
-            'colecionador' => 'required|exists:edicao_especial,id',
+            'nome'          => 'required|string|max:100',
+            'Plataforma' => 'required|exists:plataforma,id',
+            'quantidade'    => 'required|integer|min:0',
+            'cores'         => 'required|exists:cor,id',
+            'vintage'       => 'required|exists:retro,id',
+            'estado'        => 'required|exists:usado,id',
+            'colecionador'  => 'required|exists:edicao_especial,id',
         ]);
     }
-
+ 
     private function listas(): array
     {
         return [
-            'plataformas' => plataforma::orderBy('nome')->get(),
-            'usados'   => Usado::orderBy('nome')->get(),
-            'retros'   => Retro::orderBy('nome')->get(),
+            'plataformas'   => plataforma::orderBy('nome')->get(),
             'cores'    => Cor::orderBy('nome')->get(),
+            'retros'   => Retro::orderBy('nome')->get(),
+            'usados'   => Usado::orderBy('nome')->get(),
             'edicoes'  => EdicaoEspecial::orderBy('nome')->get(),
         ];
     }
 }
+ 

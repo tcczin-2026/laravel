@@ -80,5 +80,28 @@ class HistoricoTesteSeeder extends Seeder
                 ],
             ]);
         }
+
+        if ($acessprio) {
+            acessprioHistorico::insert([
+                [
+                    'acessprio_id'    => $acessprio->id,
+                    'acao'           => 'criado',
+                    'campo'          => null,
+                    'valor_anterior' => null,
+                    'valor_novo'     => "nome: {$acessprio->nome}, quantidade: {$acessprio->quantidade}",
+                    'usuario'        => 'Sistema',
+                    'created_at'     => now()->subDays(4)->toDateTimeString(),
+                ],
+                [
+                    'acessprio_id'    => $acessprio->id,
+                    'acao'           => 'atualizado',
+                    'campo'          => 'cores',
+                    'valor_anterior' => '1',
+                    'valor_novo'     => '4',
+                    'usuario'        => 'Sistema',
+                    'created_at'     => now()->subDay()->toDateTimeString(),
+                ],
+            ]);
+        }
     }
 }

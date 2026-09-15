@@ -20,6 +20,18 @@ return new class extends Migration
         });
     }
 
+     /**
+     * Histórico de alterações deste acessorio, do mais recente pro mais
+     * antigo (->latest() ordena por created_at desc). É alimentado
+     * automaticamente pelo acessorioObserver a cada create/update/delete
+     * — você nunca cria um registro de histórico na mão.
+     */
+    public function historico()
+    {
+        return $this->hasMany(AcessorioHistorico::class, 'acessorio_id')->latest();
+    }
+
+
     public function down(): void
     {
         Schema::dropIfExists('acessorio');

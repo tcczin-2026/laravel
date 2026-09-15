@@ -1,21 +1,55 @@
-@extends('layouts.app')
 
-@section('titulo', $acessorio->nome)
+<div class="card card-body mb-4">
+    <h5 class="mb-3">Histórico de alterações</h5>
 
-@section('conteudo')
-    <h1 class="h3 mb-4">{{ $acessorio->nome }}</h1>
+    @if ($historico->isEmpty())
+        {{-- Acontece pra qualquer registro criado antes do Observer existir,
+             ou que ainda não sofreu nenhuma alteração --}}
+        <p class="text-muted mb-0">Nenhuma alteração registrada ainda.</p>
+    @else
+        <div class="table-responsive">
+            <table class="table table-dark table-sm align-middle mb-0">
+                <thead>
+                    <tr>
+                        <th>Data</th>
+                        <th>Ação</th>
+                        <th>Campo</th>
+                        <th>De</th>
+                        <th>Para</th>
+                        <th>Usuário</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($historico as $item)
+                        <tr>
+                            {{-- created_at vem tipado como datetime (casts no model) --}}
+                            <td>{{ $item->created_at->format('d/m/Y H:i') }}</td>
 
-    <div class="card card-body mb-4">
-        <dl class="row mb-0">
-            <dt class="col-sm-3">Plataforma</dt>     <dd class="col-sm-9">{{ $acessorio->plataforma->nome ?? '-' }}</dd>
-            <dt class="col-sm-3">Quantidade</dt>     <dd class="col-sm-9">{{ $acessorio->quantidade }}</dd>
-            <dt class="col-sm-3">Estado</dt>         <dd class="col-sm-9">{{ $acessorio->usado->nome ?? '-' }}</dd>
-            <dt class="col-sm-3">Cor</dt>            <dd class="col-sm-9">{{ $acessorio->cor->nome ?? '-' }}</dd>
-            <dt class="col-sm-3">Vintage</dt>        <dd class="col-sm-9">{{ $acessorio->retro->nome ?? '-' }}</dd>
-            <dt class="col-sm-3">Edicao especial</dt><dd class="col-sm-9">{{ $acessorio->edicaoEspecial->nome ?? '-' }}</dd>
-        </dl>
-    </div>
+                            <td>
+                                {{-- Badge colorido de acordo com o tipo de ação --}}
+                                @switch($item->acao)
+                                    @case('criado')
+                                        <span class="badge bg-success">Criado</span>
+                                        @break
+                                    @case('atualizado')
+                                        <span class="badge bg-warning text-dark">Atualizado</span>
+                                        @break
+                                    @case('excluido')
+                                        <span class="badge bg-danger">Excluído</span>
+                                        @break
+                                @endswitch
+                            </td>
 
-    <a href="{{ route('acessorio.edit', $acessorio->id) }}" class="btn btn-warning">Editar</a>
-    <a href="{{ route('acessorio.index') }}" class="btn btn-secondary">Voltar</a>
-@endsection
+                            {{-- Em 'criado'/'excluido' não há um campo específico,
+                                 então mostramos "-" --}}
+                            <td>{{ $item->campo ?? '-' }}</td>
+                            <td>{{ $item->valor_anterior ?? '-' }}</td>
+                            <td>{{ $item->valor_novo ?? '-' }}</td>
+                            <td>{{ $item->usuario }}</td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+    @endif
+</div>
