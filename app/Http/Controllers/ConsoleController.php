@@ -15,7 +15,7 @@ use Illuminate\Http\Request;
 
 class ConsoleController extends Controller
 {
-    /** READ - lista com filtros */
+    /* READ - lista com filtros */
     public function index(Request $request)
     {
         $query = Console::with([
@@ -74,7 +74,7 @@ class ConsoleController extends Controller
         ]);
     }
 
-    /** READ - detalhe */
+    /* READ - detalhe */
     public function show(int $id)
     {
         $console = Console::with([
@@ -85,13 +85,13 @@ class ConsoleController extends Controller
         return view('console.show', ['console' => $console]);
     }
 
-    /** CREATE - formulario */
+    /* CREATE - formulario */
     public function create()
     {
         return view('console.form', $this->listas() + ['console' => null]);
     }
 
-    /** CREATE - grava */
+    /* CREATE - grava */
     public function store(Request $request)
     {
         Console::create($this->validar($request));
@@ -101,13 +101,13 @@ class ConsoleController extends Controller
             ->with('success', 'Console cadastrado com sucesso!');
     }
 
-    /** UPDATE - formulario */
+    /* UPDATE - formulario */
     public function edit(int $id)
     {
         return view('console.form', $this->listas() + ['console' => Console::findOrFail($id)]);
     }
 
-    /** UPDATE - grava */
+    /* UPDATE - grava */
     public function update(Request $request, int $id)
     {
         Console::findOrFail($id)->update($this->validar($request));
@@ -117,7 +117,7 @@ class ConsoleController extends Controller
             ->with('success', 'Console atualizado com sucesso!');
     }
 
-    /** DELETE */
+    /* DELETE */
     public function destroy(int $id)
     {
         try {

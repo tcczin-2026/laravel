@@ -13,7 +13,7 @@ use Illuminate\Http\Request;
 class ControleController extends Controller
 {
 
-    /** READ - lista com filtros */
+    /* READ - lista com filtros */
     public function index(Request $request)
     {
         $query = controle::with([
@@ -62,7 +62,7 @@ class ControleController extends Controller
         ]);
     }
 
-    /** READ - lista */
+    /* READ - lista */
     public function show(int $id)
     {
         $controles = Controle::with([
@@ -72,13 +72,13 @@ class ControleController extends Controller
         return view('controle.index', ['controles' => $controles]);
     }
 
-    /** CREATE - formulario */
+    /* CREATE - formulario */
     public function create()
     {
         return view('controle.form', $this->listas() + ['controle' => null]);
     }
 
-    /** CREATE - grava */
+    /* CREATE - grava */
     public function store(Request $request)
     {
         Controle::create($this->validar($request));
@@ -88,13 +88,13 @@ class ControleController extends Controller
             ->with('success', 'Controle cadastrado com sucesso!');
     }
 
-    /** UPDATE - formulario */
+    /* UPDATE - formulario */
     public function edit(int $id)
     {
         return view('controle.form', $this->listas() + ['controle' => Controle::findOrFail($id)]);
     }
 
-    /** UPDATE - grava */
+    /* UPDATE - grava */
     public function update(Request $request, int $id)
     {
         Controle::findOrFail($id)->update($this->validar($request));
@@ -104,7 +104,7 @@ class ControleController extends Controller
             ->with('success', 'Controle atualizado com sucesso!');
     }
 
-    /** DELETE */
+    /* DELETE */
     public function destroy(int $id)
     {
         Controle::findOrFail($id)->delete();

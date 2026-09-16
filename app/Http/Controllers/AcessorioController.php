@@ -13,7 +13,7 @@ use Illuminate\Http\Request;
 class AcessorioController extends Controller
 {
 
-    /* READ - lista com filtros */
+    /** READ - lista com filtros */
     public function index(Request $request)
     {
         $query = acessorio::with([
@@ -26,8 +26,8 @@ class AcessorioController extends Controller
         });
 
         // Filtro por plataforma
-        $query->when($request->plataformaacessorio, function ($q, $plataforma) {
-            $q->where('plataformaacessorio', $plataforma);
+        $query->when($request->plataforma, function ($q, $plataforma) {
+            $q->where('Plataforma', $plataforma);
         });
 
         // Filtro por estado (usado/novo)
@@ -62,7 +62,7 @@ class AcessorioController extends Controller
         ]);
     }
 
-    /* READ - detalhe */
+    /** READ - detalhe */
     public function show(int $id)
     {
         $acessorio = Acessorio::with(['plataforma', 'usado', 'retro', 'cor', 'edicaoEspecial'])
@@ -71,13 +71,13 @@ class AcessorioController extends Controller
         return view('acessorio.show', ['acessorio' => $acessorio]);
     }
 
-    /* CREATE - formulario */
+    /** CREATE - formulario */
     public function create()
     {
         return view('acessorio.form', $this->listas() + ['acessorio' => null]);
     }
 
-    /* CREATE - grava */
+    /** CREATE - grava */
     public function store(Request $request)
     {
         Acessorio::create($this->validar($request));
@@ -87,13 +87,13 @@ class AcessorioController extends Controller
             ->with('success', 'Acessorio cadastrado com sucesso!');
     }
 
-    /* UPDATE - formulario */
+    /** UPDATE - formulario */
     public function edit(int $id)
     {
         return view('acessorio.form', $this->listas() + ['acessorio' => Acessorio::findOrFail($id)]);
     }
 
-    /* UPDATE - grava */
+    /** UPDATE - grava */
     public function update(Request $request, int $id)
     {
         Acessorio::findOrFail($id)->update($this->validar($request));
@@ -103,7 +103,7 @@ class AcessorioController extends Controller
             ->with('success', 'Acessorio atualizado com sucesso!');
     }
 
-    /* DELETE */
+    /** DELETE */
     public function destroy(int $id)
     {
         Acessorio::findOrFail($id)->delete();

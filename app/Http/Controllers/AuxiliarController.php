@@ -12,7 +12,7 @@ use App\Models\Usado;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 
-/**
+/*
  * CRUD das sete tabelas auxiliares do diagrama (plataforma, cor, retro, usado,
  * digital, desbloqueado e edicao_especial). Todas tem a mesma estrutura
  * (id + nome), entao um unico controller atende as sete, escolhendo o model
@@ -35,7 +35,7 @@ class AuxiliarController extends Controller
         return self::TIPOS;
     }
 
-    /** READ - lista todos os registros do tipo */
+    /* READ - lista todos os registros do tipo */
     public function index(string $tipo)
     {
         $config = $this->config($tipo);
@@ -48,7 +48,7 @@ class AuxiliarController extends Controller
         ]);
     }
 
-    /** CREATE - formulario */
+    /* CREATE - formulario */
     public function create(string $tipo)
     {
         $config = $this->config($tipo);
@@ -60,7 +60,7 @@ class AuxiliarController extends Controller
         ]);
     }
 
-    /** CREATE - grava */
+    /* CREATE - grava */
     public function store(Request $request, string $tipo)
     {
         $config = $this->config($tipo);
@@ -87,7 +87,7 @@ class AuxiliarController extends Controller
         ]);
     }
 
-    /** UPDATE - grava */
+    /* UPDATE - grava */
     public function update(Request $request, string $tipo, int $id)
     {
         $config = $this->config($tipo);
@@ -102,7 +102,7 @@ class AuxiliarController extends Controller
             ->with('success', 'Registro atualizado com sucesso!');
     }
 
-    /** DELETE */
+    /* DELETE */
     public function destroy(string $tipo, int $id)
     {
         $config = $this->config($tipo);
@@ -120,7 +120,7 @@ class AuxiliarController extends Controller
             ->with('success', 'Registro excluido com sucesso!');
     }
 
-    /** Resolve o tipo da rota ou devolve 404 */
+    /* Resolve o tipo da rota ou devolve 404 */
     private function config(string $tipo): array
     {
         abort_unless(isset(self::TIPOS[$tipo]), 404, "Tabela auxiliar '{$tipo}' nao existe.");

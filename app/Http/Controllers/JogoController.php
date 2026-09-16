@@ -25,7 +25,7 @@ class JogoController extends Controller
 
         // Filtro por plataforma
         $query->when($request->plataformajogo, function ($q, $plataforma) {
-            $q->where('plataformajogo', $plataforma);
+            $q->where('Plataforma', $plataforma);
         });
 
         // Filtro por estado (usado/novo)
@@ -55,7 +55,7 @@ class JogoController extends Controller
         ]);
     }
 
-    /** READ - detalhe */
+    /* READ - detalhe */
     public function show(int $id)
     {
         $jogo = Jogo::with(['plataforma', 'usado', 'retro', 'edicaoEspecial'])->findOrFail($id);
@@ -63,13 +63,13 @@ class JogoController extends Controller
         return view('jogo.show', ['jogo' => $jogo]);
     }
 
-    /** CREATE - formulario */
+    /* CREATE - formulario */
     public function create()
     {
         return view('jogo.form', $this->listas() + ['jogo' => null]);
     }
 
-    /** CREATE - grava */
+    /* CREATE - grava */
     public function store(Request $request)
     {
         Jogo::create($this->validar($request));
@@ -95,7 +95,7 @@ class JogoController extends Controller
             ->with('success', 'Jogo atualizado com sucesso!');
     }
 
-    /** DELETE */
+    /* DELETE */
     public function destroy(int $id)
     {
         Jogo::findOrFail($id)->delete();

@@ -9,7 +9,7 @@ use App\Models\Jogo;
 
 class PainelController extends Controller
 {
-    /** Tela inicial da colecao com os totais de cada tabela */
+    /* Tela inicial da colecao com os totais de cada tabela */
     public function index()
     {
         return view('painel.index', [
