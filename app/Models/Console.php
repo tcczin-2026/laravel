@@ -74,14 +74,14 @@ class Console extends Model
     }
 
        /**
-     * Histórico de alterações deste controle, do mais recente pro mais
+     * Histórico de alterações deste console, do mais recente pro mais
      * antigo (->latest() ordena por created_at desc). É alimentado
-     * automaticamente pelo ControleObserver a cada create/update/delete
+     * automaticamente pelo consoleObserver a cada create/update/delete
      * — você nunca cria um registro de histórico na mão.
      */
 
     public function historico()
     {
-        return $this->hasMany(ControleHistorico::class, 'controle_id')->latest();
+        return $this->hasMany(ConsoleHistorico::class, 'console_id')->latest();
     }
 }

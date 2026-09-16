@@ -1,10 +1,9 @@
 
 <div class="card card-body mb-4">
+@include('partials.historico', ['historico' => $acessorio->historico]) 
     <h5 class="mb-3">Histórico de alterações</h5>
 
     @if ($historico->isEmpty())
-        {{-- Acontece pra qualquer registro criado antes do Observer existir,
-             ou que ainda não sofreu nenhuma alteração --}}
         <p class="text-muted mb-0">Nenhuma alteração registrada ainda.</p>
     @else
         <div class="table-responsive">
@@ -22,11 +21,8 @@
                 <tbody>
                     @foreach ($historico as $item)
                         <tr>
-                            {{-- created_at vem tipado como datetime (casts no model) --}}
                             <td>{{ $item->created_at->format('d/m/Y H:i') }}</td>
-
                             <td>
-                                {{-- Badge colorido de acordo com o tipo de ação --}}
                                 @switch($item->acao)
                                     @case('criado')
                                         <span class="badge bg-success">Criado</span>
@@ -39,9 +35,6 @@
                                         @break
                                 @endswitch
                             </td>
-
-                            {{-- Em 'criado'/'excluido' não há um campo específico,
-                                 então mostramos "-" --}}
                             <td>{{ $item->campo ?? '-' }}</td>
                             <td>{{ $item->valor_anterior ?? '-' }}</td>
                             <td>{{ $item->valor_novo ?? '-' }}</td>

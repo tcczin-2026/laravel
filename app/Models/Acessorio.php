@@ -45,4 +45,9 @@ class Acessorio extends Model
     {
         return $this->belongsTo(EdicaoEspecial::class, 'colecionador');
     }
+
+    public function historico()
+    {
+        return $this->hasMany(AcessorioHistorico::class, 'acessorio_id')->latest();
+    }
 }
