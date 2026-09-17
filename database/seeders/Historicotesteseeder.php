@@ -6,6 +6,8 @@ use App\Models\Console;
 use App\Models\ConsoleHistorico;
 use App\Models\Controle;
 use App\Models\ControleHistorico;
+use App\Models\Acessorio;
+use App\Models\AcessorioHistorico;
 use Illuminate\Database\Seeder;
 
 class HistoricoTesteSeeder extends Seeder
@@ -81,19 +83,19 @@ class HistoricoTesteSeeder extends Seeder
             ]);
         }
 
-        if ($acessprio) {
-            acessprioHistorico::insert([
+        if ($acessorio) {
+            acessorioHistorico::insert([
                 [
-                    'acessprio_id'    => $acessprio->id,
+                    'acessorio_id'    => $acessorio->id,
                     'acao'           => 'criado',
                     'campo'          => null,
                     'valor_anterior' => null,
-                    'valor_novo'     => "nome: {$acessprio->nome}, quantidade: {$acessprio->quantidade}",
+                    'valor_novo'     => "nome: {$acessorio->nome}, quantidade: {$acessorio->quantidade}",
                     'usuario'        => 'Sistema',
                     'created_at'     => now()->subDays(4)->toDateTimeString(),
                 ],
                 [
-                    'acessprio_id'    => $acessprio->id,
+                    'acessorio_id'    => $acessorio->id,
                     'acao'           => 'atualizado',
                     'campo'          => 'cores',
                     'valor_anterior' => '1',

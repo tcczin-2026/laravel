@@ -29,4 +29,6 @@ class AcessorioHistorico extends Model
     {
         return $this->belongsTo(acessorio::class, 'acessorio_id');
     }
+
+    
 }

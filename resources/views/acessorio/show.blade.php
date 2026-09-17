@@ -1,48 +1,27 @@
+@extends('layouts.app')
 
-<div class="card card-body mb-4">
-@include('partials.historico', ['historico' => $acessorio->historico]) 
-    <h5 class="mb-3">Histórico de alterações</h5>
+@section('titulo', $acessorio->nome)
 
-    @if ($historico->isEmpty())
-        <p class="text-muted mb-0">Nenhuma alteração registrada ainda.</p>
-    @else
-        <div class="table-responsive">
-            <table class="table table-dark table-sm align-middle mb-0">
-                <thead>
-                    <tr>
-                        <th>Data</th>
-                        <th>Ação</th>
-                        <th>Campo</th>
-                        <th>De</th>
-                        <th>Para</th>
-                        <th>Usuário</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($historico as $item)
-                        <tr>
-                            <td>{{ $item->created_at->format('d/m/Y H:i') }}</td>
-                            <td>
-                                @switch($item->acao)
-                                    @case('criado')
-                                        <span class="badge bg-success">Criado</span>
-                                        @break
-                                    @case('atualizado')
-                                        <span class="badge bg-warning text-dark">Atualizado</span>
-                                        @break
-                                    @case('excluido')
-                                        <span class="badge bg-danger">Excluído</span>
-                                        @break
-                                @endswitch
-                            </td>
-                            <td>{{ $item->campo ?? '-' }}</td>
-                            <td>{{ $item->valor_anterior ?? '-' }}</td>
-                            <td>{{ $item->valor_novo ?? '-' }}</td>
-                            <td>{{ $item->usuario }}</td>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
-        </div>
-    @endif
-</div>
+@section('conteudo')
+    <h1 class="h3 mb-4">{{ $acessorio->nome }}</h1>
+
+    <div class="card card-body mb-4">
+        <dl class="row mb-0">
+            <dt class="col-sm-3">Nome</dt>       <dd class="col-sm-9">{{ $acessorio->nome }}</dd>
+            <dt class="col-sm-3">Quantidade</dt> <dd class="col-sm-9">{{ $acessorio->quantidade ?? '-' }}</dd>
+            <dt class="col-sm-3">Estado</dt>     <dd class="col-sm-9">{{ $acessorio->usado->nome ?? '-' }}</dd>
+            <dt class="col-sm-3">Cor</dt>        <dd class="col-sm-9">{{ $acessorio->cor->nome ?? '-' }}</dd>
+        </dl>
+    </div>
+
+    {{-- Histórico de alterações --}}
+    @include('partials.historico', ['historico' => $acessorio->historico])
+
+    <a href="{{ route('acessorio.edit', $acessorio->id) }}" class="btn btn-warning">
+        Editar
+    </a>
+
+    <a href="{{ route('acessorio.index') }}" class="btn btn-secondary">
+        Voltar
+    </a>
+@endsection

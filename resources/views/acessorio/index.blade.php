@@ -1,3 +1,5 @@
+<!-- index -->
+
 @extends('layouts.app')
 
 @section('titulo', 'Acessorios')

@@ -81,4 +81,11 @@ class acessorioObserver
         // return auth()->check() ? auth()->user()->name : 'Sistema';
         return 'Sistema';
     }
+
+
+    public function boot(): void
+    {
+        Acessorio::observe(AcessorioObserver::class);
+        // Console::observe(ConsoleObserver::class); ← provavelmente já está aqui
+    }
 }
