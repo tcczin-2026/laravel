@@ -86,7 +86,7 @@
                     <tr>
                         <td>{{ $jogo->id }}</td>
                         <td>{{ $jogo->nome }}</td>
-                        <td>{{ $jogo->jogo->nome ?? '-' }}</td>
+                        <td>{{ $jogo->plataforma->nome ?? '-' }}</td>
                         <td>{{ $jogo->quantidade }}</td>
                         <td>
                             @if ($jogo->quantidade > 0)

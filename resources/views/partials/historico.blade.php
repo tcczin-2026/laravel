@@ -7,14 +7,16 @@
     Como usar:
         @include('partials.historico', ['historico' => $console->historico])
         @include('partials.historico', ['historico' => $controle->historico])
+        @include('partials.historico', ['historico' => $jogo->historico])
 --}}
+@php
+    $historico = $historico ?? collect();
+@endphp
 
 <div class="card card-body mb-4">
     <h5 class="mb-3">Histórico de alterações</h5>
 
     @if ($historico->isEmpty())
-        {{-- Acontece pra qualquer registro criado antes do Observer existir,
-             ou que ainda não sofreu nenhuma alteração --}}
         <p class="text-muted mb-0">Nenhuma alteração registrada ainda.</p>
     @else
         <div class="table-responsive">

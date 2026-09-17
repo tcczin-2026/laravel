@@ -6,6 +6,8 @@ use App\Models\Console;
 use App\Models\ConsoleHistorico;
 use App\Models\Controle;
 use App\Models\ControleHistorico;
+use App\Models\Jogo;
+use App\Models\JogoHistorico;
 use Illuminate\Database\Seeder;
 
 class HistoricoTesteSeeder extends Seeder
@@ -94,6 +96,28 @@ class HistoricoTesteSeeder extends Seeder
                 ],
                 [
                     'acessprio_id'    => $acessprio->id,
+                    'acao'           => 'atualizado',
+                    'campo'          => 'cores',
+                    'valor_anterior' => '1',
+                    'valor_novo'     => '4',
+                    'usuario'        => 'Sistema',
+                    'created_at'     => now()->subDay()->toDateTimeString(),
+                ],
+            ]);
+        }
+        if ($jogo) {
+            JogoHistorico::insert([
+                [
+                    'jogo_id'    => $jogo->id,
+                    'acao'           => 'criado',
+                    'campo'          => null,
+                    'valor_anterior' => null,
+                    'valor_novo'     => "nome: {$jogo->nome}, quantidade: {$jogo->quantidade}",
+                    'usuario'        => 'Sistema',
+                    'created_at'     => now()->subDays(4)->toDateTimeString(),
+                ],
+                [
+                    'jogo_id'    => $jogo->id,
                     'acao'           => 'atualizado',
                     'campo'          => 'cores',
                     'valor_anterior' => '1',
