@@ -62,16 +62,6 @@ class ControleController extends Controller
         ]);
     }
 
-    /** READ - detalhe de um único controle */
-    public function show(int $id)
-    {
-        $controle = Controle::with([
-            'plataforma', 'cor', 'retro', 'usado', 'edicaoEspecial', 'historico',
-        ])->findOrFail($id);
-
-        return view('controle.show', ['controle' => $controle]);
-    }
-
     /** CREATE - formulario */
     public function create()
     {
