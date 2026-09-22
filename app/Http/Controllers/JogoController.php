@@ -14,7 +14,7 @@ class JogoController extends Controller
 /** READ - lista com filtros */
 public function index(Request $request)
 {
-    $query = jogo::with([
+    $query = Jogo::with([
         'plataforma', 'usado', 'retro', 'edicaoEspecial',
     ]);
 
