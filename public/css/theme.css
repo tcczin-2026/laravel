@@ -255,3 +255,21 @@ dl dt { color: var(--text-dim); font-weight: 600; }
 dl dd { color: var(--text); }
 
 .stat-card .display-6 { background: linear-gradient(135deg, var(--brand-a), var(--brand-c)); -webkit-background-clip: text; background-clip: text; color: transparent; font-weight: 800; }
+
+/* ---------- modal ---------- */
+.modal-content {
+    background: var(--panel) !important;
+    color: var(--text) !important;
+    border: 1px solid var(--border) !important;
+    border-radius: var(--radius) !important;
+}
+
+.modal-header, .modal-footer {
+    border-color: var(--border) !important;
+}
+
+.modal-title { color: var(--text); }
+
+.modal-backdrop.show {
+    opacity: 0.7 !important;
+}
