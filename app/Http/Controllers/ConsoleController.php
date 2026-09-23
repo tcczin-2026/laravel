@@ -19,7 +19,7 @@ class ConsoleController extends Controller
     public function index(Request $request)
     {
         $query = Console::with([
-            'plataforma', 'usado', 'digital', 'cor', 'retro', 'desbloqueado', 'edicaoEspecial',
+            'plataforma', 'usado', 'digital', 'cor', 'retro', 'desbloqueado', 'edicaoEspecial','historico',
         ]);
 
         // Filtro por nome (busca parcial)
@@ -54,16 +54,6 @@ class ConsoleController extends Controller
         ]);
     }
 
-    /** READ - detalhe */
-    public function show(int $id)
-    {
-        $console = Console::with([
-            'plataforma', 'usado', 'digital', 'cor', 'retro', 'desbloqueado', 'edicaoEspecial',
-            'controles', 'jogos', 'acessorios',
-        ])->findOrFail($id);
-
-        return view('console.show', ['console' => $console]);
-    }
 
     /** CREATE - formulario */
     public function create()

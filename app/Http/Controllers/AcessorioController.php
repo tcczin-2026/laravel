@@ -17,7 +17,7 @@ class AcessorioController extends Controller
         public function index(Request $request)
         {
             $query = acessorio::with([
-                'plataforma', 'usado', 'cor', 'retro', 'edicaoEspecial',
+                'plataforma', 'usado', 'cor', 'retro', 'edicaoEspecial','historico',
             ]);
     
             // Filtro por nome (busca parcial)
@@ -51,23 +51,7 @@ class AcessorioController extends Controller
                 'acessorios' => $acessorios,
             ]);
         }
-/**
-     * READ - detalhe de um único acessorio.
-     *
-     * Antes esse método buscava TODOS os acessorios e devolvia pra view
-     * "acessorio.index" — não batia com a view "acessorio.show" que você já
-     * tem, que espera um único $acessorio. Corrigido pra usar findOrFail()
-     * e já carregar 'historico' junto, pra o bloco de histórico funcionar
-     * sem precisar de uma segunda consulta na view.
-     */
-    public function show(int $id)
-    {
-        $acessorio = acessorio::with([
-            'plataforma', 'cor', 'retro', 'usado', 'edicaoEspecial', 'historico',
-        ])->findOrFail($id);
- 
-        return view('acessorio.show', ['acessorio' => $acessorio]);
-    }
+
  
     /** CREATE - formulario */
     public function create()

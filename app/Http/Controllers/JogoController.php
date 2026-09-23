@@ -15,7 +15,7 @@ class JogoController extends Controller
 public function index(Request $request)
 {
     $query = Jogo::with([
-        'plataforma', 'usado', 'retro', 'edicaoEspecial',
+        'plataforma', 'usado', 'retro', 'edicaoEspecial','historico',
     ]);
 
     // Filtro por nome (busca parcial)
@@ -44,14 +44,6 @@ public function index(Request $request)
         'jogos' => $jogos,
     ]);
 }
-
-    /** READ - detalhe */
-    public function show(int $id)
-    {
-        $jogo = Jogo::with(['plataforma', 'usado', 'retro', 'edicaoEspecial'])->findOrFail($id);
-
-        return view('jogo.show', ['jogo' => $jogo]);
-    }
 
     /** CREATE - formulario */
     public function create()
