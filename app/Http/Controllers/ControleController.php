@@ -17,7 +17,7 @@ class ControleController extends Controller
     public function index(Request $request)
     {
         $query = controle::with([
-            'plataforma', 'usado', 'cor', 'retro', 'edicaoEspecial',
+            'plataforma', 'usado', 'cor', 'retro', 'edicaoEspecial', 'historico',
         ]);
 
         // Filtro por nome (busca parcial)
@@ -40,6 +40,16 @@ class ControleController extends Controller
             $q->where('cores', $cor);
         });
 
+        // Filtro por edição especial
+        $query->when($request->edicoes, function ($q, $edicao) {
+            $q->where('colecionador', $edicao);
+        });
+
+        // Filtro por retrocompatibilidade
+        $query->when($request->retros, function ($q, $retro) {
+            $q->where('vintage', $retro);
+        });
+
         // Filtro por faixa de quantidade em estoque
         $query->when($request->quantidade_min, function ($q, $min) {
             $q->where('quantidade', '>=', $min);
@@ -50,24 +60,6 @@ class ControleController extends Controller
         return view('controle.index', $this->listas() + [
             'controles' => $controles,
         ]);
-    }
-
-    /**
-     * READ - detalhe de um único controle.
-     *
-     * Antes esse método buscava TODOS os controles e devolvia pra view
-     * "controle.index" — não batia com a view "controle.show" que você já
-     * tem, que espera um único $controle. Corrigido pra usar findOrFail()
-     * e já carregar 'historico' junto, pra o bloco de histórico funcionar
-     * sem precisar de uma segunda consulta na view.
-     */
-    public function show(int $id)
-    {
-        $controle = Controle::with([
-            'plataforma', 'cor', 'retro', 'usado', 'edicaoEspecial', 'historico',
-        ])->findOrFail($id);
- 
-        return view('controle.show', ['controle' => $controle]);
     }
 
     /** CREATE - formulario */

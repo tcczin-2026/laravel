@@ -16,8 +16,6 @@ use App\Http\Middleware\LogAcessoMiddleware;
 Route::get('/', [App\Http\Controllers\Principal::class, 'principal']);
 
 
-
-
 /*
 |--------------------------------------------------------------------------
 | Colecao de games - CRUD
@@ -31,7 +29,6 @@ Route::resource('console', App\Http\Controllers\ConsoleController::class)->excep
 Route::get('console/{console}', [App\Http\Controllers\ConsoleController::class, 'show'])->name('console.show');
 
 Route::resource('controle', App\Http\Controllers\ControleController::class)->except('show');
-Route::get('controle/{controle}', [App\Http\Controllers\ControleController::class, 'show'])->name('controle.show');
 
 Route::resource('jogo', App\Http\Controllers\JogoController::class)->except('show');
 Route::get('jogo/{jogo}', [App\Http\Controllers\JogoController::class, 'show'])->name('jogo.show');
