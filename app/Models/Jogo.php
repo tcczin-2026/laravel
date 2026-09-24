@@ -39,4 +39,12 @@ class Jogo extends Model
     {
         return $this->belongsTo(EdicaoEspecial::class, 'colecionador');
     }
+
+    /**
+     * Histórico de alterações deste jogo, do mais recente pro mais antigo.
+     */
+    public function historico()
+    {
+        return $this->hasMany(JogoHistorico::class, 'jogo_id')->latest();
+    }
 }

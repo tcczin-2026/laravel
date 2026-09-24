@@ -131,8 +131,8 @@
                     <th>Cor</th>
                     <th>Vintage</th>
                     <th>Estado</th>
-                    <th>Edicao</th>
-                    <th style="width: 260px">Acoes</th>
+                    <th>Edição</th>
+                    <th style="width: 260px">Ações</th>
                 </tr>
             </thead>
             <tbody>

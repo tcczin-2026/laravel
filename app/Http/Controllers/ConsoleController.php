@@ -19,7 +19,7 @@ class ConsoleController extends Controller
     public function index(Request $request)
     {
         $query = Console::with([
-            'plataforma', 'usado', 'digital', 'cor', 'retro', 'desbloqueado', 'edicaoEspecial',
+            'plataforma', 'usado', 'digital', 'cor', 'retro', 'desbloqueado', 'edicaoEspecial', 'historico',
         ]);
 
         // Filtro por nome (busca parcial)
@@ -42,6 +42,26 @@ class ConsoleController extends Controller
             $q->where('cores', $cor);
         });
 
+        // Filtro por leitor (digital)
+        $query->when($request->digitais, function ($q, $digital) {
+            $q->where('leitor', $digital);
+        });
+
+        // Filtro por desbloqueado
+        $query->when($request->desbloqueados, function ($q, $desbloqueado) {
+            $q->where('aberto', $desbloqueado);
+        });
+
+        // Filtro por edição especial
+        $query->when($request->edicoes, function ($q, $edicao) {
+            $q->where('colecionador', $edicao);
+        });
+
+        // Filtro por retrocompatibilidade
+        $query->when($request->retros, function ($q, $retro) {
+            $q->where('vintage', $retro);
+        });
+
         // Filtro por faixa de quantidade em estoque
         $query->when($request->quantidade_min, function ($q, $min) {
             $q->where('quantidade', '>=', $min);
@@ -52,17 +72,6 @@ class ConsoleController extends Controller
         return view('console.index', $this->listas() + [
             'consoles' => $consoles,
         ]);
-    }
-
-    /** READ - detalhe */
-    public function show(int $id)
-    {
-        $console = Console::with([
-            'plataforma', 'usado', 'digital', 'cor', 'retro', 'desbloqueado', 'edicaoEspecial',
-            'controles', 'jogos', 'acessorios',
-        ])->findOrFail($id);
-
-        return view('console.show', ['console' => $console]);
     }
 
     /** CREATE - formulario */
@@ -142,4 +151,3 @@ class ConsoleController extends Controller
         ];
     }
 }
-

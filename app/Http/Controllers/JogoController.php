@@ -11,46 +11,48 @@ use Illuminate\Http\Request;
 
 class JogoController extends Controller
 {
-/** READ - lista com filtros */
-public function index(Request $request)
-{
-    $query = jogo::with([
-        'plataforma', 'usado', 'retro', 'edicaoEspecial',
-    ]);
-
-    // Filtro por nome (busca parcial)
-    $query->when($request->nome, function ($q, $nome) {
-        $q->where('nome', 'like', "%{$nome}%");
-    });
-
-    // Filtro por plataforma
-    $query->when($request->plataforma, function ($q, $plataforma) {
-        $q->where('plataforma', $plataforma);
-    });
-
-    // Filtro por estado (usado/novo)
-    $query->when($request->estado, function ($q, $estado) {
-        $q->where('estado', $estado);
-    });
-
-    // Filtro por faixa de quantidade em estoque
-    $query->when($request->quantidade_min, function ($q, $min) {
-        $q->where('quantidade', '>=', $min);
-    });
-
-    $jogos = $query->orderBy('id')->get();
-
-    return view('jogo.index', $this->listas() + [
-        'jogos' => $jogos,
-    ]);
-}
-
-    /** READ - detalhe */
-    public function show(int $id)
+    /** READ - lista com filtros */
+    public function index(Request $request)
     {
-        $jogo = Jogo::with(['plataforma', 'usado', 'retro', 'edicaoEspecial'])->findOrFail($id);
+        $query = jogo::with([
+            'plataforma', 'usado', 'retro', 'edicaoEspecial', 'historico',
+        ]);
 
-        return view('jogo.show', ['jogo' => $jogo]);
+        // Filtro por nome (busca por prefixo: "começa com")
+        $query->when($request->nome, function ($q, $nome) {
+            $q->where('nome', 'like', "{$nome}%");
+        });
+
+        // Filtro por plataforma
+        $query->when($request->plataformajogo, function ($q, $plataforma) {
+            $q->where('Plataforma', $plataforma);
+        });
+
+        // Filtro por estado (usado/novo)
+        $query->when($request->estado, function ($q, $estado) {
+            $q->where('estado', $estado);
+        });
+
+        // Filtro por edição especial
+        $query->when($request->edicoes, function ($q, $edicao) {
+            $q->where('colecionador', $edicao);
+        });
+
+        // Filtro por retrocompatibilidade
+        $query->when($request->retros, function ($q, $retro) {
+            $q->where('vintage', $retro);
+        });
+
+        // Filtro por faixa de quantidade em estoque
+        $query->when($request->quantidade_min, function ($q, $min) {
+            $q->where('quantidade', '>=', $min);
+        });
+
+        $jogos = $query->orderBy('id')->get();
+
+        return view('jogo.index', $this->listas() + [
+            'jogos' => $jogos,
+        ]);
     }
 
     /** CREATE - formulario */

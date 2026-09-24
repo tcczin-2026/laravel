@@ -26,12 +26,10 @@ Route::get('/colecao', [App\Http\Controllers\PainelController::class, 'index'])-
 
 // Tabelas principais: console, controle, jogo e acessorio
 Route::resource('console', App\Http\Controllers\ConsoleController::class)->except('show');
-Route::get('console/{console}', [App\Http\Controllers\ConsoleController::class, 'show'])->name('console.show');
 
 Route::resource('controle', App\Http\Controllers\ControleController::class)->except('show');
 
 Route::resource('jogo', App\Http\Controllers\JogoController::class)->except('show');
-Route::get('jogo/{jogo}', [App\Http\Controllers\JogoController::class, 'show'])->name('jogo.show');
 
 Route::resource('acessorio', App\Http\Controllers\AcessorioController::class)->except('show');
 Route::get('acessorio/{acessorio}', [App\Http\Controllers\AcessorioController::class, 'show'])->name('acessorio.show');
