@@ -14,7 +14,7 @@
             <dt class="col-sm-3">Edicao especial</dt><dd class="col-sm-9">{{ $jogo->edicaoEspecial->nome ?? '-' }}</dd>
         </dl>
     </div>
-
+controle
     {{-- Bloco de histórico de alterações: resources/views/partials/historico.blade.php --}}
     @include('partials.historico', ['historico' => $jogo->historico])
 

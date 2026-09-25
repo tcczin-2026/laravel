@@ -29,4 +29,19 @@
             </div>
         @endforeach
     </div>
+
+        <h5 class="text-muted mt-5">Últimas alterações</h5>
+    <ul class="list-group">
+        @forelse ($historico as $item)
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                <span>
+                    <strong>{{ $item['tipo'] }}</strong> "{{ $item['nome'] }}" — {{ $item['acao'] }}
+                </span>
+                <small class="text-muted">{{ $item['quando']->diffForHumans() }}</small>
+            </li>
+        @empty
+            <li class="list-group-item text-muted">Nenhuma alteração registrada ainda.</li>
+        @endforelse
+    </ul>
+
 @endsection

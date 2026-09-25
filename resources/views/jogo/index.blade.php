@@ -93,7 +93,7 @@
         </div>
 
         <div class="card-footer d-flex justify-content-end gap-2">
-                    <a href="{{ route('controle.index', ['mostrarFiltro' => 1]) }}" class="btn btn-outline-light">Limpar filtros</a>
+                    <a href="{{ route('jogo.index', ['mostrarFiltro' => 1]) }}" class="btn btn-outline-light">Limpar filtros</a>
                     <button type="submit" class="btn btn-primary">
                         <i class="bi bi-check-lg"></i> Aplicar filtros
                     </button>
@@ -123,7 +123,7 @@
                     <tr>
                         <td>{{ $jogo->id }}</td>
                         <td>{{ $jogo->nome }}</td>
-                        <td>{{ $jogo->jogo->nome ?? '-' }}</td>
+                        <td>{{ $jogo->plataforma->nome ?? '-' }}</td>
                         <td>{{ $jogo->quantidade }}</td>
                         <td>
                             @if ($jogo->quantidade > 0)
@@ -136,7 +136,7 @@
                         <td>{{ $jogo->retro->nome ?? '-' }}</td>
                         <td>{{ $jogo->edicaoEspecial->nome ?? '-' }}</td>
                         <td>
-                        <button type="button" class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#verModal{{ $controle->id }}">
+                        <button type="button" class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#verModal{{ $jogo->id }}">
                                 Ver
                             </button>
                             <a href="{{ route('jogo.edit', $jogo->id) }}" class="btn btn-sm btn-warning">Editar</a>
@@ -178,9 +178,6 @@
 
                             <dt class="col-sm-4">Estado</dt>
                             <dd class="col-sm-8">{{ $jogo->usado->nome ?? '-' }}</dd>
-
-                            <dt class="col-sm-4">Cor</dt>
-                            <dd class="col-sm-8">{{ $jogo->cor->nome ?? '-' }}</dd>
 
                             <dt class="col-sm-4">Vintage</dt>
                             <dd class="col-sm-8">{{ $jogo->retro->nome ?? '-' }}</dd>

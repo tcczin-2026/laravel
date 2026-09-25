@@ -14,7 +14,7 @@
         $urlAbrirFiltro = request()->fullUrlWithQuery(['mostrarFiltro' => 1]);
         $urlFecharFiltro = request()->fullUrlWithQuery(['mostrarFiltro' => null]);
     @endphp
-
+<link rel="stylesheet" href="App\Http\resources\css\app.css">
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h1 class="h3 mb-0">Consoles</h1>
         <div class="d-flex gap-2">
@@ -126,7 +126,7 @@
         
         </div>
         <div class="card-footer d-flex justify-content-end gap-2">
-                    <a href="{{ route('acessorio.index', ['mostrarFiltro' => 1]) }}" class="btn btn-outline-light">Limpar filtros</a>
+                    <a href="{{ route('console.index', ['mostrarFiltro' => 1]) }}" class="btn btn-outline-light">Limpar filtros</a>
                     <button type="submit" class="btn btn-primary">
                         <i class="bi bi-check-lg"></i> Aplicar filtros
                     </button>
@@ -135,7 +135,7 @@
         </div>
     @endif
     {{-- FIM DO FILTRO --}}
-
+ 
     <div class="table-responsive">
     <table class="table table-dark align-middle">
             <thead>
@@ -175,7 +175,7 @@
                         <td>{{ $console->desbloqueado->nome ?? '-' }}</td>
                         <td>{{ $console->edicaoEspecial->nome ?? '-' }}</td>
                         <td>
-                        <button type="button" class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#verModal{{ $acessorio->id }}">
+                        <button type="button" class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#verModal{{ $console->id }}">
                                 Ver
                             </button>
                             <a href="{{ route('console.edit', $console->id) }}" class="btn btn-sm btn-warning">Editar</a>

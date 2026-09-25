@@ -40,9 +40,9 @@
             </ul>
         </div>
         <div class="col-md-4">
-            <h5>Acessorios ({{ $console->acessorios->count() }})</h5>
+            <h5>consoles ({{ $console->consoles->count() }})</h5>
             <ul class="list-group mb-3">
-                @forelse ($console->acessorios as $item)
+                @forelse ($console->consoles as $item)
                     <li class="list-group-item">{{ $item->nome }}</li>
                 @empty
                     <li class="list-group-item text-muted">Nenhum.</li>
