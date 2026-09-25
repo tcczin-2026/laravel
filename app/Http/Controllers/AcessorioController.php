@@ -12,105 +12,97 @@ use Illuminate\Http\Request;
 
 class AcessorioController extends Controller
 {
-
-        /** READ - lista com filtros */
-        public function index(Request $request)
-        {
-            $query = acessorio::with([
-                'plataforma', 'usado', 'cor', 'retro', 'edicaoEspecial',
-            ]);
-    
-            // Filtro por nome (busca parcial)
-            $query->when($request->nome, function ($q, $nome) {
-                $q->where('nome', 'like', "%{$nome}%");
-            });
-    
-            // Filtro por plataforma
-            $query->when($request->plataformaacessorio, function ($q, $plataforma) {
-                $q->where('plataformaacessorio', $plataforma);
-            });
-    
-            // Filtro por estado (usado/novo)
-            $query->when($request->estado, function ($q, $estado) {
-                $q->where('estado', $estado);
-            });
-    
-            // Filtro por cor
-            $query->when($request->cores, function ($q, $cor) {
-                $q->where('cores', $cor);
-            });
-    
-            // Filtro por faixa de quantidade em estoque
-            $query->when($request->quantidade_min, function ($q, $min) {
-                $q->where('quantidade', '>=', $min);
-            });
-    
-            $acessorios = $query->orderBy('id')->get();
-    
-            return view('acessorio.index', $this->listas() + [
-                'acessorios' => $acessorios,
-            ]);
-        }
-/**
-     * READ - detalhe de um único acessorio.
-     *
-     * Antes esse método buscava TODOS os acessorios e devolvia pra view
-     * "acessorio.index" — não batia com a view "acessorio.show" que você já
-     * tem, que espera um único $acessorio. Corrigido pra usar findOrFail()
-     * e já carregar 'historico' junto, pra o bloco de histórico funcionar
-     * sem precisar de uma segunda consulta na view.
-     */
-    public function show(int $id)
+    /** READ - lista com filtros */
+    public function index(Request $request)
     {
-        $acessorio = acessorio::with([
-            'plataforma', 'cor', 'retro', 'usado', 'edicaoEspecial', 'historico',
-        ])->findOrFail($id);
- 
-        return view('acessorio.show', ['acessorio' => $acessorio]);
+        $query = acessorio::with([
+            'plataforma', 'usado', 'cor', 'retro', 'edicaoEspecial', 'historico',
+        ]);
+
+        // Filtro por nome (busca parcial)
+        $query->when($request->nome, function ($q, $nome) {
+            $q->where('nome', 'like', "%{$nome}%");
+        });
+
+        // Filtro por plataforma
+        $query->when($request->plataforma, function ($q, $plataforma) {
+            $q->where('Plataforma', $plataforma);
+        });
+
+        // Filtro por estado (usado/novo)
+        $query->when($request->estado, function ($q, $estado) {
+            $q->where('estado', $estado);
+        });
+
+        // Filtro por cor
+        $query->when($request->cores, function ($q, $cor) {
+            $q->where('cores', $cor);
+        });
+
+        // Filtro por edição especial
+        $query->when($request->edicoes, function ($q, $edicao) {
+            $q->where('colecionador', $edicao);
+        });
+
+        // Filtro por retrocompatibilidade
+        $query->when($request->retros, function ($q, $retro) {
+            $q->where('vintage', $retro);
+        });
+
+        // Filtro por faixa de quantidade em estoque
+        $query->when($request->quantidade_min, function ($q, $min) {
+            $q->where('quantidade', '>=', $min);
+        });
+
+        $acessorios = $query->orderBy('id')->get();
+
+        return view('acessorio.index', $this->listas() + [
+            'acessorios' => $acessorios,
+        ]);
     }
- 
+
     /** CREATE - formulario */
     public function create()
     {
         return view('acessorio.form', $this->listas() + ['acessorio' => null]);
     }
- 
+
     /** CREATE - grava */
     public function store(Request $request)
     {
         acessorio::create($this->validar($request));
- 
+
         return redirect()
             ->route('acessorio.index')
             ->with('success', 'acessorio cadastrado com sucesso!');
     }
- 
+
     /** UPDATE - formulario */
     public function edit(int $id)
     {
         return view('acessorio.form', $this->listas() + ['acessorio' => acessorio::findOrFail($id)]);
     }
- 
+
     /** UPDATE - grava */
     public function update(Request $request, int $id)
     {
         acessorio::findOrFail($id)->update($this->validar($request));
- 
+
         return redirect()
             ->route('acessorio.index')
             ->with('success', 'acessorio atualizado com sucesso!');
     }
- 
+
     /** DELETE */
     public function destroy(int $id)
     {
         acessorio::findOrFail($id)->delete();
- 
+
         return redirect()
             ->route('acessorio.index')
             ->with('success', 'acessorio excluido com sucesso!');
     }
- 
+
     private function validar(Request $request): array
     {
         return $request->validate([
@@ -123,7 +115,7 @@ class AcessorioController extends Controller
             'colecionador'  => 'required|exists:edicao_especial,id',
         ]);
     }
- 
+
     private function listas(): array
     {
         return [
@@ -135,4 +127,3 @@ class AcessorioController extends Controller
         ];
     }
 }
- 

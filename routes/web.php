@@ -32,7 +32,6 @@ Route::resource('controle', App\Http\Controllers\ControleController::class)->exc
 Route::resource('jogo', App\Http\Controllers\JogoController::class)->except('show');
 
 Route::resource('acessorio', App\Http\Controllers\AcessorioController::class)->except('show');
-Route::get('acessorio/{acessorio}', [App\Http\Controllers\AcessorioController::class, 'show'])->name('acessorio.show');
 
 // Tabelas auxiliares: marca, cor, retro, usado, digital, desbloqueado, edicao_especial
 Route::prefix('auxiliar/{tipo}')->name('auxiliar.')->group(function () {
