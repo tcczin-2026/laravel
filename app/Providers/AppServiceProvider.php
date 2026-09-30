@@ -5,8 +5,10 @@ use App\Models\Console;
 use App\Models\Controle;
 use App\Observers\ConsoleObserver;
 use App\Observers\ControleObserver;
-    use App\Models\Acessorio;
+use App\Models\Acessorio;
 use App\Observers\AcessorioObserver;
+use App\Models\Jogo;
+use App\Observers\JogoObserver;
 
 use Illuminate\Support\ServiceProvider;
 
@@ -29,6 +31,7 @@ class AppServiceProvider extends ServiceProvider
         Console::observe(ConsoleObserver::class);
         Controle::observe(ControleObserver::class);
         Acessorio::observe(AcessorioObserver::class);
+        Jogo::observe(JogoObserver::class);
     }
 
 

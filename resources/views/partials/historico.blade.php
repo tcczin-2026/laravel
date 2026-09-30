@@ -7,6 +7,8 @@
     Como usar:
         @include('partials.historico', ['historico' => $console->historico])
         @include('partials.historico', ['historico' => $controle->historico])
+        @include('partials.historico', ['historico' => $acessorio->historico])
+        @include('partials.historico', ['historico' => $jogo->historico])
 --}}
 
 <div class="card card-body mb-4">
