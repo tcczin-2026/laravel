@@ -11,65 +11,47 @@ use Illuminate\Http\Request;
 
 class JogoController extends Controller
 {
-    /** READ - lista com filtros */
-    public function index(Request $request)
-    {
-        $query = jogo::with([
-            'plataforma', 'usado', 'retro', 'edicaoEspecial',
-        ]);
+/** READ - lista com filtros */
+public function index(Request $request)
+{
+    $query = Jogo::with([
+        'plataforma', 'usado', 'retro', 'edicaoEspecial','historico',
+    ]);
 
-        // Filtro por nome (busca parcial)
-        $query->when($request->nome, function ($q, $nome) {
-            $q->where('nome', 'like', "%{$nome}%");
-        });
+    // Filtro por nome (busca parcial)
+    $query->when($request->nome, function ($q, $nome) {
+        $q->where('nome', 'like', "%{$nome}%");
+    });
 
-        // Filtro por plataforma
-        $query->when($request->plataformajogo, function ($q, $plataforma) {
-            $q->where('Plataforma', $plataforma);
-        });
+    // Filtro por plataforma
+    $query->when($request->plataforma, function ($q, $plataforma) {
+        $q->where('plataforma', $plataforma);
+    });
 
-        // Filtro por estado (usado/novo)
-        $query->when($request->estado, function ($q, $estado) {
-            $q->where('estado', $estado);
-        });
+    // Filtro por estado (usado/novo)
+    $query->when($request->estado, function ($q, $estado) {
+        $q->where('estado', $estado);
+    });
 
-        // Filtro por edição especial
-        $query->when($request->edicoes, function ($q, $edicao) {
-            $q->where('colecionador', $edicao);
-        });
+    // Filtro por faixa de quantidade em estoque
+    $query->when($request->quantidade_min, function ($q, $min) {
+        $q->where('quantidade', '>=', $min);
+    });
 
-        // Filtro por retrocompatibilidade
-        $query->when($request->retros, function ($q, $retro) {
-            $q->where('vintage', $retro);
-        });
+    $jogos = $query->orderBy('id')->get();
 
-        // Filtro por faixa de quantidade em estoque
-        $query->when($request->quantidade_min, function ($q, $min) {
-            $q->where('quantidade', '>=', $min);
-        });
+    return view('jogo.index', $this->listas() + [
+        'jogos' => $jogos,
+    ]);
+}
 
-        $jogos = $query->orderBy('id')->get();
-
-        return view('jogo.index', $this->listas() + [
-            'jogos' => $jogos,
-        ]);
-    }
-
-    /* READ - detalhe */
-    public function show(int $id)
-    {
-        $jogo = Jogo::with(['plataforma', 'usado', 'retro', 'edicaoEspecial'])->findOrFail($id);
-
-        return view('jogo.show', ['jogo' => $jogo]);
-    }
-
-    /* CREATE - formulario */
+    /** CREATE - formulario */
     public function create()
     {
         return view('jogo.form', $this->listas() + ['jogo' => null]);
     }
 
-    /* CREATE - grava */
+    /** CREATE - grava */
     public function store(Request $request)
     {
         Jogo::create($this->validar($request));
@@ -95,7 +77,7 @@ class JogoController extends Controller
             ->with('success', 'Jogo atualizado com sucesso!');
     }
 
-    /* DELETE */
+    /** DELETE */
     public function destroy(int $id)
     {
         Jogo::findOrFail($id)->delete();

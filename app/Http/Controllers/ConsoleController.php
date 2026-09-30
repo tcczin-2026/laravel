@@ -15,11 +15,11 @@ use Illuminate\Http\Request;
 
 class ConsoleController extends Controller
 {
-    /* READ - lista com filtros */
+    /** READ - lista com filtros */
     public function index(Request $request)
     {
         $query = Console::with([
-            'plataforma', 'usado', 'digital', 'cor', 'retro', 'desbloqueado', 'edicaoEspecial',
+            'plataforma', 'usado', 'digital', 'cor', 'retro', 'desbloqueado', 'edicaoEspecial', 'historico',
         ]);
 
         // Filtro por nome (busca parcial)
@@ -74,24 +74,13 @@ class ConsoleController extends Controller
         ]);
     }
 
-    /* READ - detalhe */
-    public function show(int $id)
-    {
-        $console = Console::with([
-            'plataforma', 'usado', 'digital', 'cor', 'retro', 'desbloqueado', 'edicaoEspecial',
-            'controles', 'jogos', 'acessorios',
-        ])->findOrFail($id);
-
-        return view('console.show', ['console' => $console]);
-    }
-
-    /* CREATE - formulario */
+    /** CREATE - formulario */
     public function create()
     {
         return view('console.form', $this->listas() + ['console' => null]);
     }
 
-    /* CREATE - grava */
+    /** CREATE - grava */
     public function store(Request $request)
     {
         Console::create($this->validar($request));
@@ -101,13 +90,13 @@ class ConsoleController extends Controller
             ->with('success', 'Console cadastrado com sucesso!');
     }
 
-    /* UPDATE - formulario */
+    /** UPDATE - formulario */
     public function edit(int $id)
     {
         return view('console.form', $this->listas() + ['console' => Console::findOrFail($id)]);
     }
 
-    /* UPDATE - grava */
+    /** UPDATE - grava */
     public function update(Request $request, int $id)
     {
         Console::findOrFail($id)->update($this->validar($request));
@@ -117,7 +106,7 @@ class ConsoleController extends Controller
             ->with('success', 'Console atualizado com sucesso!');
     }
 
-    /* DELETE */
+    /** DELETE */
     public function destroy(int $id)
     {
         try {

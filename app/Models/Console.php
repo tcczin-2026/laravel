@@ -72,4 +72,16 @@ class Console extends Model
     {
         return $this->hasMany(Acessorio::class, 'Plataforma');
     }
+
+       /**
+     * Histórico de alterações deste console, do mais recente pro mais
+     * antigo (->latest() ordena por created_at desc). É alimentado
+     * automaticamente pelo consoleObserver a cada create/update/delete
+     * — você nunca cria um registro de histórico na mão.
+     */
+
+    public function historico()
+    {
+        return $this->hasMany(ConsoleHistorico::class, 'console_id')->latest();
+    }
 }
