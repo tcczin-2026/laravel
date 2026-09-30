@@ -19,7 +19,7 @@ class ConsoleController extends Controller
     public function index(Request $request)
     {
         $query = Console::with([
-            'plataforma', 'usado', 'digital', 'cor', 'retro', 'desbloqueado', 'edicaoEspecial','historico',
+            'plataforma', 'usado', 'digital', 'cor', 'retro', 'desbloqueado', 'edicaoEspecial', 'historico',
         ]);
 
         // Filtro por nome (busca parcial)
