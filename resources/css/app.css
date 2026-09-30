@@ -1,0 +1,32 @@
+/* Fonte fluida: acompanha o tamanho da tela sem quebrar o layout */
+.table {
+    font-size: clamp(0.75rem, 0.65rem + 0.4vw, 0.95rem);
+}
+
+/* Evita que células com nomes longos estourem a largura da coluna */
+.table td,
+.table th {
+    white-space: normal;
+    word-break: break-word;
+}
+
+/* Botões de ação: empilham/quebram em vez de espremer o texto */
+.table td:last-child {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+}
+
+/* Em telas bem pequenas, reduz ainda mais o padding das células */
+@media (max-width: 576px) {
+    .table td,
+    .table th {
+        padding: 0.4rem;
+        font-size: 0.75rem;
+    }
+
+    .btn-sm {
+        padding: 0.2rem 0.4rem;
+        font-size: 0.7rem;
+    }
+}

@@ -3,10 +3,11 @@
 @section('titulo', 'Jogos')
 
 @section('conteudo')
-    @php
+
+@php
         $mostrarFiltro = request()->boolean('mostrarFiltro');
 
-        $filtrosAtivos = collect(request()->only(['nome', 'plataformajogo', 'estado', 'edicoes', 'retros']))
+        $filtrosAtivos = collect(request()->only(['nome','plataformajogo','estado','cores','edicoes','retros']))
             ->filter(fn($v) => filled($v))
             ->count();
 
@@ -35,6 +36,17 @@
                 <span><i class="bi bi-funnel"></i> Filtrar jogos</span>
                 <a href="{{ $urlFecharFiltro }}" class="btn-close btn-close-white" aria-label="Fechar"></a>
             </div>
+
+            <form method="GET" action="{{ route('jogo.index') }}">
+                <input type="hidden" name="mostrarFiltro" value="1">
+
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Nome</label>
+            <input type="text" name="nome" class="form-control" placeholder="Buscar por nome"
+                   value="{{ request('nome') }}">
+        </div>
 
             <form method="GET" action="{{ route('jogo.index') }}">
                 <input type="hidden" name="mostrarFiltro" value="1">
@@ -106,6 +118,7 @@
             </form>
         </div>
     @endif
+    {{-- FIM DO FILTRO --}}
 
     <div class="table-responsive">
         <table class="table table-dark align-middle">
@@ -169,6 +182,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="verModalLabel{{ $jogo->id }}">{{ $jogo->nome }}</h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
                     </div>
 
                     <div class="modal-body">

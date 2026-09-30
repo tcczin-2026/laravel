@@ -74,6 +74,7 @@ class ConsoleController extends Controller
         ]);
     }
 
+
     /** CREATE - formulario */
     public function create()
     {

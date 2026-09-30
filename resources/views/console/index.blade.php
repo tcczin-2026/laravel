@@ -16,6 +16,7 @@
         $urlFecharFiltro = request()->fullUrlWithQuery(['mostrarFiltro' => null]);
     @endphp
 
+<link rel="stylesheet" href="App\Http\resources\css\app.css">
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h1 class="h3 mb-0">Consoles</h1>
         <div class="d-flex gap-2">
@@ -37,6 +38,17 @@
                 <span><i class="bi bi-funnel"></i> Filtrar consoles</span>
                 <a href="{{ $urlFecharFiltro }}" class="btn-close btn-close-white" aria-label="Fechar"></a>
             </div>
+
+            <form method="GET" action="{{ route('console.index') }}">
+                <input type="hidden" name="mostrarFiltro" value="1">
+
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Nome</label>
+            <input type="text" name="nome" class="form-control" placeholder="Buscar por nome"
+                   value="{{ request('nome') }}">
+        </div>
 
             <form method="GET" action="{{ route('console.index') }}">
                 <input type="hidden" name="mostrarFiltro" value="1">
@@ -144,7 +156,8 @@
             </form>
         </div>
     @endif
-
+    {{-- FIM DO FILTRO --}}
+ 
     <div class="table-responsive">
         <table class="table table-dark align-middle">
             <thead>
@@ -213,6 +226,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="verModalLabel{{ $console->id }}">{{ $console->nome }}</h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
                     </div>
 
                     <div class="modal-body">

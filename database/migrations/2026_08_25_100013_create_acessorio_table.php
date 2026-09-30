@@ -18,7 +18,12 @@ return new class extends Migration
             $table->foreignId('cores')->constrained('cor');
             $table->foreignId('colecionador')->constrained('edicao_especial');
         });
+
+        
     }
+
+
+
 
     public function down(): void
     {
