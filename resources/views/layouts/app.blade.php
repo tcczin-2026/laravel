@@ -9,11 +9,26 @@
 </head>
 <body>
 
+{{-- Barra do topo: só aparece em telas pequenas (abaixo de lg) --}}
+<header class="app-mobilebar d-lg-none">
+    <div class="app-brand">
+        <div class="logo-dot"></div>
+        <div class="wordmark">Colecao Games<span>Acervo retro</span></div>
+    </div>
+    <button class="btn btn-secondary app-menu-btn" type="button"
+            data-bs-toggle="offcanvas" data-bs-target="#appSidebar" aria-controls="appSidebar" aria-label="Abrir menu">
+        &#9776;
+    </button>
+</header>
+
 <div class="app-shell">
-    <aside class="app-sidebar">
+    {{-- Em telas grandes é a sidebar fixa; em telas pequenas vira um menu lateral (offcanvas) --}}
+    <aside class="app-sidebar offcanvas-lg offcanvas-start" tabindex="-1" id="appSidebar">
         <div class="app-brand">
             <div class="logo-dot"></div>
             <div class="wordmark">Colecao Games<span>Acervo retro</span></div>
+            <button type="button" class="btn-close btn-close-white ms-auto d-lg-none"
+                    data-bs-dismiss="offcanvas" data-bs-target="#appSidebar" aria-label="Fechar"></button>
         </div>
 
         <nav class="app-nav">

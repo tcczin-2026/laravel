@@ -14,7 +14,7 @@
         $urlFecharFiltro = request()->fullUrlWithQuery(['mostrarFiltro' => null]);
     @endphp
 
-    <div class="d-flex justify-content-between align-items-center mb-3">
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
         <h1 class="h3 mb-0">Controles</h1>
         <div class="d-flex gap-2">
             <a href="{{ $urlAbrirFiltro }}" class="btn btn-outline-light position-relative">
@@ -124,6 +124,7 @@
             <thead>
                 <tr>
                     <th>ID</th>
+                    <th style="width: 90px">Imagem</th>
                     <th>Nome</th>
                     <th>plataforma</th>
                     <th>Qtd.</th>
@@ -139,6 +140,17 @@
                 @forelse ($controles as $controle)
                     <tr>
                         <td>{{ $controle->id }}</td>
+                        <td>
+                            @if ($controle->imagem_url)
+                                <img src="{{ $controle->imagem_url }}" alt="{{ $controle->nome }}"
+                                    style="width: 70px; height: 70px; object-fit: cover;" class="rounded">
+                            @else
+                                <div class="bg-secondary rounded d-flex align-items-center justify-content-center"
+                                    style="width: 70px; height: 70px;">
+                                    <i class="bi bi-controller"></i>
+                                </div>
+                            @endif
+                        </td>
                         <td>{{ $controle->nome }}</td>
                         <td>{{ $controle->plataforma->nome ?? '-' }}</td>
                         <td>{{ $controle->quantidade }}</td>
@@ -168,11 +180,14 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="10" class="text-center text-muted">Nenhum controle cadastrado.</td>
+                        <td colspan="11" class="text-center text-muted">Nenhum controle cadastrado.</td>
                     </tr>
                 @endforelse
             </tbody>
         </table>
+    </div>
+    <div class="d-flex justify-content-center mt-3">
+        {{ $controles->links() }}
     </div>
     {{-- A TABELA TERMINA AQUI. Os modais abaixo NÃO são mais filhos dela. --}}
 

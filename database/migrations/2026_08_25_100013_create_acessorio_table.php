@@ -17,6 +17,7 @@ return new class extends Migration
             $table->foreignId('vintage')->constrained('retro');
             $table->foreignId('cores')->constrained('cor');
             $table->foreignId('colecionador')->constrained('edicao_especial');
+            $table->string('imagem')->nullable();
         });
 
         

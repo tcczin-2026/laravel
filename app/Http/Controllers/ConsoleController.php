@@ -12,6 +12,7 @@ use App\Models\Retro;
 use App\Models\Usado;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class ConsoleController extends Controller
 {
@@ -19,7 +20,7 @@ class ConsoleController extends Controller
     public function index(Request $request)
     {
         $query = Console::with([
-            'plataforma', 'usado', 'digital', 'cor', 'retro', 'desbloqueado', 'edicaoEspecial','historico',
+            'plataforma', 'usado', 'digital', 'cor', 'retro', 'desbloqueado', 'edicaoEspecial', 'historico',
         ]);
 
         // Filtro por nome (busca parcial)
@@ -47,7 +48,7 @@ class ConsoleController extends Controller
             $q->where('quantidade', '>=', $min);
         });
 
-        $consoles = $query->orderBy('id')->get();
+        $consoles = $query->orderBy('id')->paginate(10)->withQueryString();
 
         return view('console.index', $this->listas() + [
             'consoles' => $consoles,
@@ -64,10 +65,17 @@ class ConsoleController extends Controller
     /** CREATE - grava */
     public function store(Request $request)
     {
-        Console::create($this->validar($request));
+        $dados = $this->validar($request);
 
-        return redirect()
-            ->route('console.index')
+        if ($request->hasFile('imagem')) {
+            $dados['imagem'] = $request->file('imagem')->store('consoles', 'public');
+        }
+
+
+
+        Console::create($dados);
+
+        return redirect()->route('console.index')
             ->with('success', 'Console cadastrado com sucesso!');
     }
 
@@ -80,10 +88,19 @@ class ConsoleController extends Controller
     /** UPDATE - grava */
     public function update(Request $request, int $id)
     {
-        Console::findOrFail($id)->update($this->validar($request));
+        $console = Console::findOrFail($id);
+        $dados = $this->validar($request);
 
-        return redirect()
-            ->route('console.index')
+        if ($request->hasFile('imagem')) {
+            if ($console->imagem) {
+                Storage::disk('public')->delete($console->imagem); // apaga a antiga
+            }
+            $dados['imagem'] = $request->file('imagem')->store('consoles', 'public');
+        }
+
+        $console->update($dados);
+
+        return redirect()->route('console.index')
             ->with('success', 'Console atualizado com sucesso!');
     }
 
@@ -115,6 +132,7 @@ class ConsoleController extends Controller
             'vintage'      => 'required|exists:retro,id',
             'aberto'       => 'required|exists:desbloqueado,id',
             'colecionador' => 'required|exists:edicao_especial,id',
+            'imagem' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
         ]);
     }
 

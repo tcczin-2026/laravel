@@ -8,6 +8,7 @@ use App\Models\Jogo;
 use App\Models\Retro;
 use App\Models\Usado;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class JogoController extends Controller
 {
@@ -38,7 +39,7 @@ public function index(Request $request)
         $q->where('quantidade', '>=', $min);
     });
 
-    $jogos = $query->orderBy('id')->get();
+    $jogos = $query->orderBy('id')->paginate(10)->withQueryString();
 
     return view('jogo.index', $this->listas() + [
         'jogos' => $jogos,
@@ -54,7 +55,13 @@ public function index(Request $request)
     /** CREATE - grava */
     public function store(Request $request)
     {
-        Jogo::create($this->validar($request));
+        $dados = $this->validar($request);
+
+        if ($request->hasFile('imagem')) {
+            $dados['imagem'] = $request->file('imagem')->store('jogos', 'public');
+        }
+
+        Jogo::create($dados);
 
         return redirect()
             ->route('jogo.index')
@@ -70,7 +77,17 @@ public function index(Request $request)
     /** UPDATE - grava */
     public function update(Request $request, int $id)
     {
-        Jogo::findOrFail($id)->update($this->validar($request));
+        $jogo = Jogo::findOrFail($id);
+        $dados = $this->validar($request);
+
+        if ($request->hasFile('imagem')) {
+            if ($jogo->imagem) {
+                Storage::disk('public')->delete($jogo->imagem); // apaga a antiga
+            }
+            $dados['imagem'] = $request->file('imagem')->store('jogos', 'public');
+        }
+
+        $jogo->update($dados);
 
         return redirect()
             ->route('jogo.index')
@@ -96,6 +113,7 @@ public function index(Request $request)
             'estado'       => 'required|exists:usado,id',
             'vintage'      => 'required|exists:retro,id',
             'colecionador' => 'required|exists:edicao_especial,id',
+            'imagem'       => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
         ]);
     }
 

@@ -7,7 +7,8 @@
 
     <form method="post"
           action="{{ $console ? route('console.update', $console->id) : route('console.store') }}"
-          class="card card-body">
+        enctype="multipart/form-data"  
+        class="card card-body">
         @csrf
         @if ($console)
             @method('PUT')
@@ -24,6 +25,20 @@
                 <label for="quantidade" class="form-label">Quantidade</label>
                 <input type="number" name="quantidade" id="quantidade" min="0" required
                        class="form-control" value="{{ old('quantidade', $console->quantidade ?? 1) }}">
+            </div>
+
+            <div class="col-md-12 mb-3">
+                <label for="imagem" class="form-label">Imagem</label>
+                @if ($console && $console->imagem_url)
+                    <div class="mb-2">
+                        <img src="{{ $console->imagem_url }}" alt="{{ $console->nome }}"
+                            style="max-height: 120px; min-height: 70px;" class="rounded">
+                    </div>
+                @endif
+                <input type="file" name="imagem" id="imagem" accept="image/*" class="form-control">
+                @error('imagem')
+                    <div class="text-danger small">{{ $message }}</div>
+                @enderror
             </div>
 
             @include('partials.select', ['campo' => 'plataformaConsole', 'rotulo' => 'plataforma',        'opcoes' => $plataformas,        'selecionado' => $console->plataformaConsole ?? null])

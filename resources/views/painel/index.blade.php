@@ -8,7 +8,7 @@
     <h5 class="text-muted">Cadastros principais</h5>
     <div class="row g-3 mb-5">
         @foreach ($totais as $rota => $total)
-            <div class="col-md-3">
+            <div class="col-6 col-md-3">
                 <div class="card h-100">
                     <div class="card-body">
                         <h5 class="card-title text-capitalize">{{ $rota }}</h5>
@@ -23,7 +23,7 @@
     <h5 class="text-muted">Tabelas auxiliares</h5>
     <div class="row g-3">
         @foreach ($auxiliares as $tipo => $config)
-            <div class="col-md-3">
+            <div class="col-6 col-md-3">
                 <a href="{{ route('auxiliar.index', $tipo) }}"
                    class="btn btn-outline-secondary w-100">{{ $config['titulo'] }}</a>
             </div>
@@ -33,7 +33,7 @@
         <h5 class="text-muted mt-5">Últimas alterações</h5>
     <ul class="list-group">
         @forelse ($historico as $item)
-            <li class="list-group-item d-flex justify-content-between align-items-center">
+            <li class="list-group-item d-flex flex-wrap justify-content-between align-items-center gap-1">
                 <span>
                     <strong>{{ $item['tipo'] }}</strong> "{{ $item['nome'] }}" — {{ $item['acao'] }}
                 </span>
@@ -43,5 +43,9 @@
             <li class="list-group-item text-muted">Nenhuma alteração registrada ainda.</li>
         @endforelse
     </ul>
+
+    <div class="d-flex justify-content-center mt-3">
+        {{ $historico->links() }}
+    </div>
 
 @endsection

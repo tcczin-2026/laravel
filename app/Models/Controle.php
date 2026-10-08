@@ -20,6 +20,7 @@ class Controle extends Model
         'dispositivo',
         'estado',
         'colecionador',
+        'imagem',
     ];
 
     public function plataforma()
@@ -45,6 +46,11 @@ class Controle extends Model
     public function edicaoEspecial()
     {
         return $this->belongsTo(EdicaoEspecial::class, 'colecionador');
+    }
+
+    public function getImagemUrlAttribute(): ?string
+    {
+        return $this->imagem ? asset('storage/' . $this->imagem) : null;
     }
 
     public function historico()

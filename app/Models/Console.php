@@ -21,6 +21,9 @@ class Console extends Model
         'vintage',
         'aberto',
         'colecionador',
+        'imagem',
+        'historico',
+
     ];
 
     public function plataforma()
@@ -72,6 +75,11 @@ class Console extends Model
     {
         return $this->hasMany(Acessorio::class, 'Plataforma');
     }
+
+    public function getImagemUrlAttribute(): ?string
+    {   
+        return $this->imagem ? asset('storage/' . $this->imagem) : null;
+    }   
 
        /**
      * Histórico de alterações deste console, do mais recente pro mais

@@ -18,6 +18,7 @@ class Jogo extends Model
         'estado',
         'vintage',
         'colecionador',
+        'imagem',
     ];
 
     public function plataforma()
@@ -39,6 +40,11 @@ class Jogo extends Model
     {
         return $this->belongsTo(EdicaoEspecial::class, 'colecionador');
     }
+    public function getImagemUrlAttribute(): ?string
+    {
+        return $this->imagem ? asset('storage/' . $this->imagem) : null;
+    }
+
     public function historico()
     {
         return $this->hasMany(JogoHistorico::class, 'jogo_id')->latest();

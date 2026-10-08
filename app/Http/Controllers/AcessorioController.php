@@ -9,6 +9,7 @@ use App\Models\EdicaoEspecial;
 use App\Models\Retro;
 use App\Models\Usado;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class AcessorioController extends Controller
 {
@@ -45,7 +46,7 @@ class AcessorioController extends Controller
                 $q->where('quantidade', '>=', $min);
             });
     
-            $acessorios = $query->orderBy('id')->get();
+            $acessorios = $query->orderBy('id')->paginate(10)->withQueryString();
     
             return view('acessorio.index', $this->listas() + [
                 'acessorios' => $acessorios,
@@ -62,26 +63,43 @@ class AcessorioController extends Controller
     /** CREATE - grava */
     public function store(Request $request)
     {
-        acessorio::create($this->validar($request));
- 
-        return redirect()
-            ->route('acessorio.index')
+        $dados = $this->validar($request);
+
+        if ($request->hasFile('imagem')) {
+            $dados['imagem'] = $request->file('imagem')->store('acessorios', 'public');
+        }
+
+
+
+        acessorio::create($dados);
+
+        return redirect()->route('acessorio.index')
             ->with('success', 'acessorio cadastrado com sucesso!');
     }
+
  
     /** UPDATE - formulario */
     public function edit(int $id)
     {
         return view('acessorio.form', $this->listas() + ['acessorio' => acessorio::findOrFail($id)]);
     }
- 
+
     /** UPDATE - grava */
     public function update(Request $request, int $id)
     {
-        acessorio::findOrFail($id)->update($this->validar($request));
- 
-        return redirect()
-            ->route('acessorio.index')
+        $acessorio = acessorio::findOrFail($id);
+        $dados = $this->validar($request);
+
+        if ($request->hasFile('imagem')) {
+            if ($acessorio->imagem) {
+                Storage::disk('public')->delete($acessorio->imagem); // apaga a antiga
+            }
+            $dados['imagem'] = $request->file('imagem')->store('acessorios', 'public');
+        }
+
+        $acessorio->update($dados);
+
+        return redirect()->route('acessorio.index')
             ->with('success', 'acessorio atualizado com sucesso!');
     }
  
@@ -105,6 +123,7 @@ class AcessorioController extends Controller
             'vintage'       => 'required|exists:retro,id',
             'estado'        => 'required|exists:usado,id',
             'colecionador'  => 'required|exists:edicao_especial,id',
+            'imagem' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
         ]);
     }
  

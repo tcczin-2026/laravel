@@ -3,7 +3,7 @@
 @section('titulo', $titulo)
 
 @section('conteudo')
-    <div class="d-flex justify-content-between align-items-center mb-3">
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
         <h1 class="h3 mb-0">{{ $titulo }}</h1>
         <a href="{{ route('auxiliar.create', $tipo) }}" class="btn btn-primary">Novo</a>
     </div>

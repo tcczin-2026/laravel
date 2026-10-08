@@ -9,6 +9,7 @@ use App\Models\plataforma;
 use App\Models\Retro;
 use App\Models\Usado;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class ControleController extends Controller
 {
@@ -55,7 +56,7 @@ class ControleController extends Controller
             $q->where('quantidade', '>=', $min);
         });
 
-        $controles = $query->orderBy('id')->get();
+        $controles = $query->orderBy('id')->paginate(10)->withQueryString();
 
         return view('controle.index', $this->listas() + [
             'controles' => $controles,
@@ -71,7 +72,13 @@ class ControleController extends Controller
     /** CREATE - grava */
     public function store(Request $request)
     {
-        Controle::create($this->validar($request));
+        $dados = $this->validar($request);
+
+        if ($request->hasFile('imagem')) {
+            $dados['imagem'] = $request->file('imagem')->store('controles', 'public');
+        }
+
+        Controle::create($dados);
 
         return redirect()
             ->route('controle.index')
@@ -87,7 +94,17 @@ class ControleController extends Controller
     /** UPDATE - grava */
     public function update(Request $request, int $id)
     {
-        Controle::findOrFail($id)->update($this->validar($request));
+        $controle = Controle::findOrFail($id);
+        $dados = $this->validar($request);
+
+        if ($request->hasFile('imagem')) {
+            if ($controle->imagem) {
+                Storage::disk('public')->delete($controle->imagem); // apaga a antiga
+            }
+            $dados['imagem'] = $request->file('imagem')->store('controles', 'public');
+        }
+
+        $controle->update($dados);
 
         return redirect()
             ->route('controle.index')
@@ -114,6 +131,7 @@ class ControleController extends Controller
             'vintage'       => 'required|exists:retro,id',
             'estado'        => 'required|exists:usado,id',
             'colecionador'  => 'required|exists:edicao_especial,id',
+            'imagem'        => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
         ]);
     }
 

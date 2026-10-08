@@ -15,7 +15,7 @@
         $urlFecharFiltro = request()->fullUrlWithQuery(['mostrarFiltro' => null]);
     @endphp
 
-    <div class="d-flex justify-content-between align-items-center mb-3">
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
         <h1 class="h3 mb-0">Jogos</h1>
         <div class="d-flex gap-2">
             <a href="{{ $urlAbrirFiltro }}" class="btn btn-outline-light position-relative">
@@ -108,6 +108,7 @@
             <thead>
                 <tr>
                     <th>ID</th>
+                    <th style="width: 90px">Imagem</th>
                     <th>Nome</th>
                     <th>Plataforma</th>
                     <th>Qtd.</th>
@@ -122,6 +123,17 @@
                 @forelse ($jogos as $jogo)
                     <tr>
                         <td>{{ $jogo->id }}</td>
+                        <td>
+                            @if ($jogo->imagem_url)
+                                <img src="{{ $jogo->imagem_url }}" alt="{{ $jogo->nome }}"
+                                    style="width: 70px; height: 70px; object-fit: cover;" class="rounded">
+                            @else
+                                <div class="bg-secondary rounded d-flex align-items-center justify-content-center"
+                                    style="width: 70px; height: 70px;">
+                                    <i class="bi bi-controller"></i>
+                                </div>
+                            @endif
+                        </td>
                         <td>{{ $jogo->nome }}</td>
                         <td>{{ $jogo->plataforma->nome ?? '-' }}</td>
                         <td>{{ $jogo->quantidade }}</td>
@@ -150,11 +162,14 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="9" class="text-center text-muted">Nenhum jogo cadastrado.</td>
+                        <td colspan="10" class="text-center text-muted">Nenhum jogo cadastrado.</td>
                     </tr>
                 @endforelse
             </tbody>
         </table>
+    </div>
+    <div class="d-flex justify-content-center mt-3">
+        {{ $jogos->links() }}
     </div>
     {{-- A TABELA TERMINA AQUI. Os modais abaixo NÃO são mais filhos dela. --}}
 

@@ -17,7 +17,7 @@
         $urlFecharFiltro = request()->fullUrlWithQuery(['mostrarFiltro' => null]);
     @endphp
 
-    <div class="d-flex justify-content-between align-items-center mb-3">
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
         <h1 class="h3 mb-0">Acessorios</h1>
         <div class="d-flex gap-2">
             <a href="{{ $urlAbrirFiltro }}" class="btn btn-outline-light position-relative">
@@ -121,6 +121,7 @@
             <thead>
                 <tr>
                     <th>ID</th>
+                    <th style="width: 90px">Imagem</th>
                     <th>Nome</th>
                     <th>Plataforma</th>
                     <th>Qtd.</th>
@@ -136,6 +137,17 @@
                 @forelse ($acessorios as $acessorio)
                     <tr>
                         <td>{{ $acessorio->id }}</td>
+                        <td>
+                            @if ($acessorio->imagem_url)
+                                <img src="{{ $acessorio->imagem_url }}" alt="{{ $acessorio->nome }}"
+                                    style="width: 70px; height: 70px; object-fit: cover;" class="rounded">
+                            @else
+                                <div class="bg-secondary rounded d-flex align-items-center justify-content-center"
+                                    style="width: 70px; height: 70px;">
+                                    <i class="bi bi-controller"></i>
+                                </div>
+                            @endif
+                        </td>
                         <td>{{ $acessorio->nome }}</td>
                         <td>{{ $acessorio->plataforma->nome ?? '-' }}</td>
                         <td>{{ $acessorio->quantidade }}</td>
@@ -172,6 +184,9 @@
             </tbody>
             
         </table>
+    </div>
+    <div class="d-flex justify-content-center mt-3">
+        {{ $acessorios->links() }}
     </div>
     {{-- A TABELA TERMINA AQUI. Os modais abaixo NÃO são mais filhos dela. --}}
 

@@ -19,6 +19,7 @@ class Acessorio extends Model
         'vintage',
         'cores',
         'colecionador',
+        'imagem',
     ];
 
     public function plataforma()
@@ -44,6 +45,11 @@ class Acessorio extends Model
     public function edicaoEspecial()
     {
         return $this->belongsTo(EdicaoEspecial::class, 'colecionador');
+    }
+
+        public function getImagemUrlAttribute(): ?string
+    {   
+        return $this->imagem ? asset('storage/' . $this->imagem) : null;
     }
 
     public function historico()

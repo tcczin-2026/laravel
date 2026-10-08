@@ -10,11 +10,13 @@ use App\Models\ConsoleHistorico;
 use App\Models\ControleHistorico;
 use App\Models\JogoHistorico;
 use App\Models\AcessorioHistorico;
+use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class PainelController extends Controller
 {
     /** Tela inicial da colecao com os totais de cada tabela */
-    public function index()
+    public function index(Request $request)
     {
         $totais = [
             'console'   => Console::count(),
@@ -25,23 +27,43 @@ class PainelController extends Controller
 
         $auxiliares = AuxiliarController::tipos();
 
-        $historico = collect()
-            ->merge($this->historicoDe(ConsoleHistorico::class, 'console', 'Console'))
-            ->merge($this->historicoDe(ControleHistorico::class, 'controle', 'Controle'))
-            ->merge($this->historicoDe(JogoHistorico::class, 'jogo', 'Jogo'))
-            ->merge($this->historicoDe(AcessorioHistorico::class, 'acessorio', 'Acessório'))
-            ->sortByDesc('quando')
-            ->take(10)
-            ->values();
+        // O histórico fica em 4 tabelas, então a paginação é montada na mão:
+        // pega de cada tabela os registros até o fim da página atual,
+        // junta, ordena por data e recorta só a fatia da página.
+        $porPagina = 10;
+        $pagina    = LengthAwarePaginator::resolveCurrentPage();
+        $limite    = $pagina * $porPagina;
+
+        $fontes = [
+            [ConsoleHistorico::class, 'console', 'Console'],
+            [ControleHistorico::class, 'controle', 'Controle'],
+            [JogoHistorico::class, 'jogo', 'Jogo'],
+            [AcessorioHistorico::class, 'acessorio', 'Acessório'],
+        ];
+
+        $itens = collect();
+        $total = 0;
+        foreach ($fontes as [$model, $relacao, $tipo]) {
+            $itens = $itens->merge($this->historicoDe($model, $relacao, $tipo, $limite));
+            $total += $model::count();
+        }
+
+        $historico = new LengthAwarePaginator(
+            $itens->sortByDesc('quando')->slice(($pagina - 1) * $porPagina, $porPagina)->values(),
+            $total,
+            $porPagina,
+            $pagina,
+            ['path' => $request->url()]
+        );
 
         return view('painel.index', compact('totais', 'auxiliares', 'historico'));
     }
 
-    private function historicoDe(string $model, string $relacao, string $tipo)
+    private function historicoDe(string $model, string $relacao, string $tipo, int $limite)
     {
         return $model::with($relacao)
             ->latest('created_at')
-            ->take(10)
+            ->take($limite)
             ->get()
             ->map(function ($h) use ($relacao, $tipo) {
                 return [
