@@ -248,6 +248,7 @@ a:hover { color: #86adff; }
 }
 .stock-pill--ok { background: var(--ok-bg); color: var(--ok); }
 .stock-pill--out { background: var(--danger-bg); color: var(--danger); }
+.stock-pill--low { background: rgba(255, 190, 90, 0.14); color: #ffcd80; }
 
 /* ---------- misc ---------- */
 .text-muted { color: var(--text-dim) !important; }
