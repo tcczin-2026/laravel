@@ -11,6 +11,9 @@ class Console extends Model
 
     protected $table = 'console';
     public $timestamps = false;
+
+    // Ação gravada no histórico no próximo save (ex: 'revertido'). Não é coluna do banco.
+    public ?string $acaoHistorico = null;
     protected $fillable = [
         'nome',
         'plataformaConsole',

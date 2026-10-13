@@ -44,7 +44,7 @@ class ConsoleObserver
 
             ConsoleHistorico::create([
                 'console_id'     => $console->id,
-                'acao'           => 'atualizado',
+                'acao'           => $console->acaoHistorico ?? 'atualizado',
                 'campo'          => $campo,
                 'valor_anterior' => $console->getOriginal($campo),
                 'valor_novo'     => $valorNovo,

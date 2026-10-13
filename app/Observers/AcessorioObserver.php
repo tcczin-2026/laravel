@@ -44,7 +44,7 @@ class acessorioObserver
 
             AcessorioHistorico::create([
                 'acessorio_id'     => $acessorio->id,
-                'acao'           => 'atualizado',
+                'acao'           => $acessorio->acaoHistorico ?? 'atualizado',
                 'campo'          => $campo,
                 'valor_anterior' => $acessorio->getOriginal($campo),
                 'valor_novo'     => $valorNovo,

@@ -6,6 +6,7 @@
 
     Como usar:
         @include('partials.historico', ['historico' => $console->historico])
+        (passe 'tipo' => 'console' para mostrar os botões de reverter)
         @include('partials.historico', ['historico' => $controle->historico])
         @include('partials.historico', ['historico' => $acessorio->historico])
         @include('partials.historico', ['historico' => $jogo->historico])
@@ -29,10 +30,11 @@
                         <th>De</th>
                         <th>Para</th>
                         <th>Usuário</th>
+                        @isset($tipo)<th>Reverter</th>@endisset
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($historico as $item)
+                    @foreach ($historico->sortByDesc('id') as $item)
                         <tr>
                             {{-- created_at vem tipado como datetime (casts no model) --}}
                             <td>{{ $item->created_at->format('d/m/Y H:i') }}</td>
@@ -46,6 +48,9 @@
                                     @case('atualizado')
                                         <span class="badge bg-warning text-dark">Atualizado</span>
                                         @break
+                                    @case('revertido')
+                                        <span class="badge bg-info text-dark">Revertido</span>
+                                        @break
                                     @case('excluido')
                                         <span class="badge bg-danger">Excluído</span>
                                         @break
@@ -58,6 +63,9 @@
                             <td>{{ $item->valor_anterior ?? '-' }}</td>
                             <td>{{ $item->valor_novo ?? '-' }}</td>
                             <td>{{ $item->usuario }}</td>
+                            @isset($tipo)
+                                <td>@include('partials.historico-acoes', ['item' => $item, 'ultimo' => $loop->first])</td>
+                            @endisset
                         </tr>
                     @endforeach
                 </tbody>

@@ -15,7 +15,7 @@
     </div>
 
     {{-- Histórico de alterações --}}
-    @include('partials.historico', ['historico' => $acessorio->historico])
+    @include('partials.historico', ['historico' => $acessorio->historico, 'tipo' => 'acessorio'])
 
     <a href="{{ route('acessorio.edit', $acessorio->id) }}" class="btn btn-warning">
         Editar

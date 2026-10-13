@@ -36,6 +36,10 @@ Route::get('jogo/{jogo}', [App\Http\Controllers\JogoController::class, 'show'])-
 Route::resource('acessorio', App\Http\Controllers\AcessorioController::class)->except('show');
 Route::get('acessorio/{acessorio}', [App\Http\Controllers\AcessorioController::class, 'show'])->name('acessorio.show');
 
+// Reverter alterações pelo histórico (tipo: console, controle, jogo, acessorio; id: linha do histórico)
+Route::post('historico/{tipo}/{id}/desfazer', [App\Http\Controllers\HistoricoController::class, 'desfazer'])->name('historico.desfazer');
+Route::post('historico/{tipo}/{id}/restaurar', [App\Http\Controllers\HistoricoController::class, 'restaurar'])->name('historico.restaurar');
+
 // Tabelas auxiliares: marca, cor, retro, usado, digital, desbloqueado, edicao_especial
 Route::prefix('auxiliar/{tipo}')->name('auxiliar.')->group(function () {
     Route::get('/', [App\Http\Controllers\AuxiliarController::class, 'index'])->name('index');

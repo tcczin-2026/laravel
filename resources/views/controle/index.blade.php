@@ -155,8 +155,10 @@
                         <td>{{ $controle->plataforma->nome ?? '-' }}</td>
                         <td>{{ $controle->quantidade }}</td>
                         <td>
-                            @if ($controle->quantidade > 0)
+                            @if ($controle->quantidade > 10)
                                 <span class="stock-pill stock-pill--ok">Em estoque</span>
+                            @elseif ($controle->quantidade > 0)
+                                <span class="stock-pill stock-pill--low">Pouco restante</span>
                             @else
                                 <span class="stock-pill stock-pill--out">Esgotado</span>
                             @endif
@@ -237,10 +239,11 @@
                                             <th>De</th>
                                             <th>Para</th>
                                             <th>Usuário</th>
+                                            <th>Reverter</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($controle->historico->sortByDesc('created_at') as $item)
+                                        @foreach ($controle->historico->sortByDesc('id') as $item)
                                             <tr>
                                                 <td>{{ $item->created_at?->format('d/m/Y H:i') }}</td>
                                                 <td>
@@ -248,6 +251,8 @@
                                                         <span class="badge bg-success">Criado</span>
                                                     @elseif ($item->acao === 'excluido')
                                                         <span class="badge bg-danger">Excluído</span>
+                                                    @elseif ($item->acao === 'revertido')
+                                                        <span class="badge bg-info text-dark">Revertido</span>
                                                     @else
                                                         <span class="badge bg-warning text-dark">Atualizado</span>
                                                     @endif
@@ -256,6 +261,7 @@
                                                 <td>{{ $item->valor_anterior ?? '-' }}</td>
                                                 <td>{{ $item->valor_novo ?? '-' }}</td>
                                                 <td>{{ $item->usuario ?? 'Sistema' }}</td>
+                                                <td>@include('partials.historico-acoes', ['tipo' => 'controle', 'item' => $item, 'ultimo' => $loop->first])</td>
                                             </tr>
                                         @endforeach
                                     </tbody>

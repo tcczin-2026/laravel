@@ -30,7 +30,7 @@ class ControleObserver
 
             ControleHistorico::create([
                 'controle_id'    => $controle->id,
-                'acao'           => 'atualizado',
+                'acao'           => $controle->acaoHistorico ?? 'atualizado',
                 'campo'          => $campo,
                 'valor_anterior' => $controle->getOriginal($campo),
                 'valor_novo'     => $valorNovo,

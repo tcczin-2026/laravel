@@ -30,7 +30,7 @@ class JogoObserver
 
             JogoHistorico::create([
                 'jogo_id'    => $jogo->id,
-                'acao'           => 'atualizado',
+                'acao'           => $jogo->acaoHistorico ?? 'atualizado',
                 'campo'          => $campo,
                 'valor_anterior' => $jogo->getOriginal($campo),
                 'valor_novo'     => $valorNovo,

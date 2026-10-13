@@ -11,6 +11,9 @@ class Jogo extends Model
 
     protected $table = 'jogo';
     public $timestamps = false;
+
+    // Ação gravada no histórico no próximo save (ex: 'revertido'). Não é coluna do banco.
+    public ?string $acaoHistorico = null;
     protected $fillable = [
         'nome',
         'Plataforma',

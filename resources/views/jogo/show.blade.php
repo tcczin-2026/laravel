@@ -16,7 +16,7 @@
     </div>
 controle
     {{-- Bloco de histórico de alterações: resources/views/partials/historico.blade.php --}}
-    @include('partials.historico', ['historico' => $jogo->historico])
+    @include('partials.historico', ['historico' => $jogo->historico, 'tipo' => 'jogo'])
 
     <a href="{{ route('jogo.edit', $jogo->id) }}" class="btn btn-warning">Editar</a>
     <a href="{{ route('jogo.index') }}" class="btn btn-secondary">Voltar</a>

@@ -11,6 +11,9 @@ class Controle extends Model
 
     protected $table = 'controle';
     public $timestamps = false;
+
+    // Ação gravada no histórico no próximo save (ex: 'revertido'). Não é coluna do banco.
+    public ?string $acaoHistorico = null;
     protected $fillable = [
         'nome',
         'plataformaControle',
