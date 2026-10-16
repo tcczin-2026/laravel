@@ -9,7 +9,7 @@
 @php
         $mostrarFiltro = request()->boolean('mostrarFiltro');
 
-        $filtrosAtivos = collect(request()->only(['nome','plataformaacessorio','estado','cores','edicoes','retros']))
+        $filtrosAtivos = collect(request()->only(['nome','plataforma','estado','cores','edicoes','retros']))
             ->filter(fn($v) => filled($v))
             ->count();
 

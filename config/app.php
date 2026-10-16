@@ -56,7 +56,9 @@ return [
 
     'url' => env('APP_URL', 'http://localhost'),
 
-    'asset_url' => env('ASSET_URL', '/'),
+    // Vazio = o Laravel monta o endereço do CSS/imagens a partir da página atual,
+    // então funciona tanto no "artisan serve" quanto no Apache (localhost/laravel/public)
+    'asset_url' => env('ASSET_URL'),
 
     /*
     |--------------------------------------------------------------------------
@@ -82,7 +84,7 @@ return [
     |
     */
 
-    'locale' => 'en',
+    'locale' => 'pt_BR',
 
     /*
     |--------------------------------------------------------------------------

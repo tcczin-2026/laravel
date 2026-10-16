@@ -76,9 +76,7 @@ class ConsoleObserver
 
     private function usuarioAtual(): string
     {
-        // Ainda não existe login no projeto, então tudo fica como "Sistema".
-        // Quando implementar autenticação, troque a linha abaixo por:
-        // return auth()->check() ? auth()->user()->name : 'Sistema';
-        return 'Sistema';
+        // Nome de quem está logado ("Sistema" se rodar fora de uma requisição, ex: seeder)
+        return auth()->check() ? auth()->user()->name : 'Sistema';
     }
 }

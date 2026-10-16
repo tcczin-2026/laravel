@@ -27,8 +27,18 @@ class AcessorioController extends Controller
             });
     
             // Filtro por plataforma
-            $query->when($request->plataformaacessorio, function ($q, $plataforma) {
-                $q->where('plataformaacessorio', $plataforma);
+            $query->when($request->plataforma, function ($q, $plataforma) {
+                $q->where('Plataforma', $plataforma);
+            });
+
+            // Filtro por edição especial
+            $query->when($request->edicoes, function ($q, $edicao) {
+                $q->where('colecionador', $edicao);
+            });
+
+            // Filtro por retrocompatibilidade
+            $query->when($request->retros, function ($q, $retro) {
+                $q->where('vintage', $retro);
             });
     
             // Filtro por estado (usado/novo)
@@ -54,6 +64,12 @@ class AcessorioController extends Controller
         }
 
  
+    /** READ - detalhes de um item, com o histórico de alterações */
+    public function show(int $id)
+    {
+        return view('acessorio.show', ['acessorio' => Acessorio::with('historico')->findOrFail($id)]);
+    }
+
     /** CREATE - formulario */
     public function create()
     {

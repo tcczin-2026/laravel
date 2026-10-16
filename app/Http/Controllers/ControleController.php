@@ -28,7 +28,7 @@ class ControleController extends Controller
 
         // Filtro por plataforma
         $query->when($request->plataformacontrole, function ($q, $plataforma) {
-            $q->where('plataformacontrole', $plataforma);
+            $q->where('plataformaControle', $plataforma);
         });
 
         // Filtro por estado (usado/novo)

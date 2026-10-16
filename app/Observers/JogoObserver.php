@@ -58,8 +58,7 @@ class JogoObserver
 
     private function usuarioAtual(): string
     {
-        // Sem login ainda -> "Sistema". Depois de ter autenticação, troque por:
-        // return auth()->check() ? auth()->user()->name : 'Sistema';
-        return 'Sistema';
+        // Nome de quem está logado ("Sistema" se rodar fora de uma requisição, ex: seeder)
+        return auth()->check() ? auth()->user()->name : 'Sistema';
     }
 }

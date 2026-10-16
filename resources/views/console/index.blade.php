@@ -7,7 +7,7 @@
 @php
         $mostrarFiltro = request()->boolean('mostrarFiltro');
 
-        $filtrosAtivos = collect(request()->only(['nome','plataformaconsole','estado','cores','edicoes','retros']))
+        $filtrosAtivos = collect(request()->only(['nome','plataformaConsole','estado','cores','digitais','desbloqueados','edicoes','retros']))
             ->filter(fn($v) => filled($v))
             ->count();
 
@@ -85,7 +85,7 @@
             <select name="digitais" class="form-select">
                 <option value="">Todas as digitais</option>
                 @foreach ($digitais as $digital)
-                    <option value="{{ $digital->id }}" @selected(request('digitals') == $digital->id)>
+                    <option value="{{ $digital->id }}" @selected(request('digitais') == $digital->id)>
                         {{ $digital->nome }}
                     </option>
                 @endforeach

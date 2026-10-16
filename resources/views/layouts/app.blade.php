@@ -48,14 +48,35 @@
                 <span class="icon">&#127911;</span> Acessorios
             </a>
 
-            <div class="app-nav-label">Tabelas auxiliares</div>
-            @foreach (\App\Http\Controllers\AuxiliarController::tipos() as $tipoNav => $configNav)
-                <a href="{{ route('auxiliar.index', $tipoNav) }}"
-                   class="{{ request()->routeIs('auxiliar.*') && request()->route('tipo') === $tipoNav ? 'active' : '' }}">
-                    <span class="icon">&#8226;</span> {{ $configNav['titulo'] }}
+            {{-- Só o gerente vê (e acessa) usuários e tabelas auxiliares --}}
+            @if (auth()->user()?->isGerente())
+                <div class="app-nav-label">Administração</div>
+                <a href="{{ route('usuario.index') }}" class="{{ request()->routeIs('usuario.*') ? 'active' : '' }}">
+                    <span class="icon">&#128100;</span> Usuários
                 </a>
-            @endforeach
+
+                <div class="app-nav-label">Tabelas auxiliares</div>
+                @foreach (\App\Http\Controllers\AuxiliarController::tipos() as $tipoNav => $configNav)
+                    <a href="{{ route('auxiliar.index', $tipoNav) }}"
+                       class="{{ request()->routeIs('auxiliar.*') && request()->route('tipo') === $tipoNav ? 'active' : '' }}">
+                        <span class="icon">&#8226;</span> {{ $configNav['titulo'] }}
+                    </a>
+                @endforeach
+            @endif
         </nav>
+
+        @auth
+            <div class="app-user">
+                <div class="app-user-info">
+                    <strong>{{ auth()->user()->name }}</strong>
+                    <span>{{ \App\Models\User::PERFIS[auth()->user()->perfil] ?? auth()->user()->perfil }}</span>
+                </div>
+                <form action="{{ route('logout') }}" method="post">
+                    @csrf
+                    <button type="submit" class="btn btn-sm btn-secondary w-100">Sair</button>
+                </form>
+            </div>
+        @endauth
     </aside>
 
     <div class="app-main">

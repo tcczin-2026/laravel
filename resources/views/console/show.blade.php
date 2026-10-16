@@ -30,9 +30,9 @@
             </ul>
         </div>
         <div class="col-md-4">
-            <h5>Jogos ({{ $console->jogos->count() }})</h5>
+            <h5>Jogos da plataforma ({{ $jogos->count() }})</h5>
             <ul class="list-group mb-3">
-                @forelse ($console->jogos as $item)
+                @forelse ($jogos as $item)
                     <li class="list-group-item">{{ $item->nome }}</li>
                 @empty
                     <li class="list-group-item text-muted">Nenhum.</li>
@@ -40,9 +40,9 @@
             </ul>
         </div>
         <div class="col-md-4">
-            <h5>consoles ({{ $console->consoles->count() }})</h5>
+            <h5>Acessórios da plataforma ({{ $acessorios->count() }})</h5>
             <ul class="list-group mb-3">
-                @forelse ($console->consoles as $item)
+                @forelse ($acessorios as $item)
                     <li class="list-group-item">{{ $item->nome }}</li>
                 @empty
                     <li class="list-group-item text-muted">Nenhum.</li>

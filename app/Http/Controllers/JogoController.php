@@ -24,9 +24,19 @@ public function index(Request $request)
         $q->where('nome', 'like', "%{$nome}%");
     });
 
-    // Filtro por plataforma
-    $query->when($request->plataforma, function ($q, $plataforma) {
-        $q->where('plataforma', $plataforma);
+    // Filtro por plataforma (o formulário envia "plataformajogo")
+    $query->when($request->plataformajogo, function ($q, $plataforma) {
+        $q->where('Plataforma', $plataforma);
+    });
+
+    // Filtro por edição especial
+    $query->when($request->edicoes, function ($q, $edicao) {
+        $q->where('colecionador', $edicao);
+    });
+
+    // Filtro por retrocompatibilidade
+    $query->when($request->retros, function ($q, $retro) {
+        $q->where('vintage', $retro);
     });
 
     // Filtro por estado (usado/novo)
@@ -45,6 +55,12 @@ public function index(Request $request)
         'jogos' => $jogos,
     ]);
 }
+
+    /** READ - detalhes de um item, com o histórico de alterações */
+    public function show(int $id)
+    {
+        return view('jogo.show', ['jogo' => Jogo::with('historico')->findOrFail($id)]);
+    }
 
     /** CREATE - formulario */
     public function create()

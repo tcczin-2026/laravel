@@ -7,7 +7,7 @@
 @php
         $mostrarFiltro = request()->boolean('mostrarFiltro');
 
-        $filtrosAtivos = collect(request()->only(['nome','plataformajogo','estado','cores','edicoes','retros']))
+        $filtrosAtivos = collect(request()->only(['nome','plataformajogo','estado','edicoes','retros']))
             ->filter(fn($v) => filled($v))
             ->count();
 

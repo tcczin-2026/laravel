@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Acessorio;
 use App\Models\Console;
+use App\Models\Jogo;
 use App\Models\Cor;
 use App\Models\Desbloqueado;
 use App\Models\Digital;
@@ -43,6 +45,26 @@ class ConsoleController extends Controller
             $q->where('cores', $cor);
         });
 
+        // Filtro por leitor (digital)
+        $query->when($request->digitais, function ($q, $digital) {
+            $q->where('leitor', $digital);
+        });
+
+        // Filtro por desbloqueado
+        $query->when($request->desbloqueados, function ($q, $desbloqueado) {
+            $q->where('aberto', $desbloqueado);
+        });
+
+        // Filtro por edição especial
+        $query->when($request->edicoes, function ($q, $edicao) {
+            $q->where('colecionador', $edicao);
+        });
+
+        // Filtro por retrocompatibilidade
+        $query->when($request->retros, function ($q, $retro) {
+            $q->where('vintage', $retro);
+        });
+
         // Filtro por faixa de quantidade em estoque
         $query->when($request->quantidade_min, function ($q, $min) {
             $q->where('quantidade', '>=', $min);
@@ -55,6 +77,20 @@ class ConsoleController extends Controller
         ]);
     }
 
+
+    /** READ - detalhes de um item, com o histórico de alterações */
+    public function show(int $id)
+    {
+        $console = Console::with('historico', 'controles')->findOrFail($id);
+
+        // Jogos e acessórios ficam ligados à plataforma (não ao console),
+        // então mostramos os da mesma plataforma deste console
+        return view('console.show', [
+            'console'    => $console,
+            'jogos'      => Jogo::where('Plataforma', $console->plataformaConsole)->orderBy('nome')->get(),
+            'acessorios' => Acessorio::where('Plataforma', $console->plataformaConsole)->orderBy('nome')->get(),
+        ]);
+    }
 
     /** CREATE - formulario */
     public function create()

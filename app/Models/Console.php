@@ -69,15 +69,8 @@ class Console extends Model
         return $this->hasMany(Controle::class, 'dispositivo');
     }
 
-    public function jogos()
-    {
-        return $this->hasMany(Jogo::class, 'Plataforma');
-    }
-
-    public function acessorios()
-    {
-        return $this->hasMany(Acessorio::class, 'Plataforma');
-    }
+    // Jogos e acessórios não ligam no console, e sim na plataforma
+    // (coluna "Plataforma" = id da tabela plataforma). Veja ConsoleController@show.
 
     public function getImagemUrlAttribute(): ?string
     {   

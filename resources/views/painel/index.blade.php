@@ -20,6 +20,7 @@
         @endforeach
     </div>
 
+    @if (auth()->user()->isGerente())
     <h5 class="text-muted">Tabelas auxiliares</h5>
     <div class="row g-3">
         @foreach ($auxiliares as $tipo => $config)
@@ -29,6 +30,7 @@
             </div>
         @endforeach
     </div>
+    @endif
 
         <h5 class="text-muted mt-5">Últimas alterações</h5>
     <ul class="list-group">
