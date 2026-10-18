@@ -56,7 +56,7 @@ class ControleController extends Controller
             $q->where('quantidade', '>=', $min);
         });
 
-        $controles = $query->orderBy('id')->paginate(10)->withQueryString();
+        $controles = $query->orderBy('id')->paginate($this->porPagina())->withQueryString();
 
         return view('controle.index', $this->listas() + [
             'controles' => $controles,
@@ -123,10 +123,13 @@ class ControleController extends Controller
 
     private function validar(Request $request): array
     {
+        $this->normalizarValor($request);
+
         return $request->validate([
             'nome'          => 'required|string|max:100',
             'plataformaControle' => 'required|exists:plataforma,id',
             'quantidade'    => 'required|integer|min:0',
+            'valor'         => self::REGRA_VALOR,
             'cores'         => 'required|exists:cor,id',
             'vintage'       => 'required|exists:retro,id',
             'estado'        => 'required|exists:usado,id',

@@ -293,8 +293,6 @@ dl dd { color: var(--text); }
 .app-mobilebar .app-brand .logo-dot { width: 30px; height: 30px; }
 .app-menu-btn { font-size: 1.2rem; line-height: 1; padding: 6px 12px; }
 
-/* Botões de ação das tabelas ficam numa linha só (a tabela rola de lado) */
-.table td:last-child { white-space: nowrap; }
 
 @media (max-width: 991.98px) {
     /* A sidebar vira um menu que desliza da esquerda (offcanvas do Bootstrap) */
@@ -339,3 +337,115 @@ dl dd { color: var(--text); }
 }
 .app-user-info strong { display: block; color: var(--text); font-size: 0.9rem; }
 .app-user-info span { color: var(--text-muted); font-size: 0.75rem; }
+
+/* ---------- paginação (no lugar do branco/azul padrão do Bootstrap) ---------- */
+.paginacao nav { width: 100%; gap: 12px; flex-wrap: wrap; }
+.paginacao nav p { margin: 0; color: var(--text-muted) !important; }
+.paginacao nav p .fw-semibold { color: var(--text); }
+
+.pagination {
+    gap: 6px;
+    margin: 0;
+    flex-wrap: wrap;
+    --bs-pagination-color: var(--text-muted);
+    --bs-pagination-bg: var(--panel);
+    --bs-pagination-border-color: var(--border);
+    --bs-pagination-hover-color: var(--text);
+    --bs-pagination-hover-bg: var(--panel-alt);
+    --bs-pagination-hover-border-color: var(--border);
+    --bs-pagination-focus-color: var(--text);
+    --bs-pagination-focus-bg: var(--panel-alt);
+    --bs-pagination-focus-box-shadow: 0 0 0 3px rgba(123, 47, 247, 0.25);
+    --bs-pagination-disabled-color: var(--text-dim);
+    --bs-pagination-disabled-bg: var(--panel);
+    --bs-pagination-disabled-border-color: var(--border-soft);
+}
+
+/* botões separados e arredondados, como os outros botões do tema */
+.pagination .page-item .page-link {
+    border-radius: 999px !important;
+    margin-left: 0;
+    min-width: 38px;
+    text-align: center;
+    font-weight: 600;
+    font-size: 0.85rem;
+}
+
+/* página atual com o mesmo degradê do botão principal */
+.pagination .page-item.active .page-link {
+    background: linear-gradient(135deg, var(--brand-a), var(--brand-b));
+    border-color: transparent;
+    color: #fff;
+    box-shadow: 0 4px 14px rgba(255, 63, 164, 0.3);
+}
+
+/* "Itens por página" e "Ir para" ao lado da paginação */
+.pag-form { display: flex; align-items: center; gap: 6px; margin: 0; }
+.pag-form label { color: var(--text-muted); white-space: nowrap; margin: 0; }
+.pag-form .form-select { width: auto; min-width: 72px; }
+.pag-form input[type="number"] { width: 76px; }
+
+/* ---------- listagens principais (sem barra de rolagem lateral) ---------- */
+.tabela-lista { table-layout: auto; }
+.tabela-lista .col-img { width: 72px; }
+.tabela-lista .col-acoes { width: 1%; } /* só a largura dos botões */
+.tabela-lista .col-nome { min-width: 140px; }
+
+.lista-img {
+    width: 56px;
+    height: 56px;
+    object-fit: cover;
+    border-radius: 10px;
+    display: block;
+}
+.lista-img--vazia {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--panel-alt);
+    border: 1px solid var(--border);
+    font-size: 1.4rem;
+}
+
+/* Ver / Editar / Excluir empilhados */
+.acoes { display: flex; flex-direction: column; gap: 4px; min-width: 76px; }
+.acoes form { margin: 0; }
+.acoes .btn { width: 100%; padding: 3px 10px; }
+
+/* estoque numa linha só */
+.stock-pill { white-space: nowrap; }
+
+/* características como etiquetas que quebram linha */
+.chips { display: flex; flex-wrap: wrap; gap: 4px; }
+.chip {
+    font-size: 0.72rem;
+    padding: 2px 9px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    white-space: nowrap;
+}
+
+@media (max-width: 575.98px) {
+    .stock-pill { padding: 4px 10px; font-size: 0.72rem; }
+    .tabela-lista .col-nome { min-width: 0; }
+    /* miniatura menor no celular (continua aparecendo) */
+    .tabela-lista .col-img { width: 48px; padding-right: 0; }
+    .lista-img { width: 40px; height: 40px; border-radius: 8px; }
+    .lista-img--vazia { font-size: 1.1rem; }
+}
+
+/* ---------- tabela de histórico (modal "Ver" e página de detalhes) ---------- */
+.tabela-historico td { overflow-wrap: anywhere; }      /* textos longos quebram em vez de alargar */
+.tabela-historico .col-acoes { width: 1%; }
+.tabela-historico .acoes { min-width: 96px; }
+.tabela-historico .acoes .btn { white-space: normal; line-height: 1.2; }
+
+/* celulares bem estreitos (até ~380px): aperta espaçamentos pra não rolar de lado */
+@media (max-width: 399.98px) {
+    .tabela-lista > :not(caption) > * > * { padding: 0.4rem 0.3rem; }
+    .acoes { min-width: 60px; }
+    .acoes .btn { padding: 3px 6px; font-size: 0.75rem; }
+    .tabela-lista .col-nome .stock-pill { white-space: normal; }
+}

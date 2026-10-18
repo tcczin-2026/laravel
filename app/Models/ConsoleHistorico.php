@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\FormataHistorico;
 use Illuminate\Database\Eloquent\Model;
 
 class ConsoleHistorico extends Model
 {
+    use FormataHistorico; // $item->campo_rotulo, de_texto, para_texto (nomes em vez de ids)
+
     protected $table = 'console_historico';
 
     // A tabela só tem created_at (sem updated_at) -> desliga o padrão do Eloquent

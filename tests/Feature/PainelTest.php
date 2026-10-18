@@ -38,8 +38,81 @@ class PainelTest extends TestCase
         $pagina1 = $this->actingAs($usuario)->get('/colecao')->assertOk()->assertSee('pagination')->getContent();
         $pagina2 = $this->actingAs($usuario)->get('/colecao?page=2')->assertOk()->getContent();
 
-        $this->assertSame(10, substr_count($pagina1, '"Mega Drive"'));
-        $this->assertSame(5, substr_count($pagina2, '"Mega Drive"'));
+        $this->assertSame(10, substr_count($pagina1, '>Mega Drive</a>'));
+        $this->assertSame(5, substr_count($pagina2, '>Mega Drive</a>'));
+    }
+
+    public function test_historico_do_painel_mostra_alteracao_usuario_e_link(): void
+    {
+        $aux = $this->auxiliares();
+        $console = Console::create([
+            'nome' => 'Mega Drive', 'quantidade' => 15,
+            'plataformaConsole' => $aux['plataforma'], 'estado' => $aux['usado'], 'leitor' => $aux['digital'],
+            'cores' => $aux['cor'], 'vintage' => $aux['retro'], 'aberto' => $aux['desbloqueado'],
+            'colecionador' => $aux['edicao_especial'],
+        ]);
+        $ana = \App\Models\User::factory()->create(['name' => 'Ana']);
+        $this->actingAs($ana);
+        $console->update(['quantidade' => 17]);
+
+        $this->get('/colecao')
+            ->assertSeeInOrder(['Mega Drive', 'Atualizado', 'quantidade:', '15', '17', 'Ana'])
+            ->assertSee(route('console.index', ['nome' => 'Mega Drive']), false)
+            ->assertDontSee('list-group-item'); // não usa mais a lista branca do Bootstrap
+    }
+
+    public function test_contagem_ignora_itens_com_quantidade_zero(): void
+    {
+        $aux = $this->auxiliares();
+        foreach (['Com estoque' => 3, 'Pouco' => 1, 'Esgotado' => 0, 'Outro esgotado' => 0] as $nome => $qtd) {
+            DB::table('jogo')->insert([
+                'nome' => $nome, 'quantidade' => $qtd, 'Plataforma' => $aux['plataforma'],
+                'estado' => $aux['usado'], 'vintage' => $aux['retro'], 'colecionador' => $aux['edicao_especial'],
+            ]);
+        }
+
+        $html = $this->actingAs($this->funcionario())->get('/colecao')->getContent();
+
+        // card "jogo" mostra 2 (os 2 esgotados não contam)
+        $this->assertMatchesRegularExpression('#jogo</h5>\s*<p class="display-6 mb-0">2</p>#', $html);
+    }
+
+    public function test_historico_mostra_nomes_e_nao_ids(): void
+    {
+        $aux   = $this->auxiliares();
+        $azul  = DB::table('cor')->insertGetId(['nome' => 'azul']);
+        $verde = DB::table('cor')->insertGetId(['nome' => 'verde']);
+        $console = Console::create([
+            'nome' => 'Mega Drive', 'quantidade' => 1,
+            'plataformaConsole' => $aux['plataforma'], 'estado' => $aux['usado'], 'leitor' => $aux['digital'],
+            'cores' => $azul, 'vintage' => $aux['retro'], 'aberto' => $aux['desbloqueado'],
+            'colecionador' => $aux['edicao_especial'],
+        ]);
+        $usuario = $this->funcionario();
+        $this->actingAs($usuario);
+        $console->update(['cores' => $verde]);
+
+        // painel
+        $this->get('/colecao')->assertSeeInOrder(['cor:', 'azul', 'verde'])->assertDontSee('cores:');
+
+        // modal da listagem e tela de detalhes
+        $this->get('/console')->assertSeeInOrder(['tabela-historico', 'cor:', 'azul', 'verde'], false);
+        $this->get("/console/{$console->id}")->assertSeeInOrder(['tabela-historico', 'cor:', 'azul', 'verde'], false);
+
+        // a reversão continua usando o id guardado no banco
+        $linha = ConsoleHistorico::where('campo', 'cores')->first();
+        $this->assertSame((string) $azul, (string) $linha->valor_anterior);
+        $this->post(route('historico.desfazer', ['console', $linha->id]));
+        $this->assertSame($azul, (int) $console->refresh()->cores);
+    }
+
+    public function test_valor_auxiliar_excluido_aparece_como_id(): void
+    {
+        $linha = new ConsoleHistorico(['campo' => 'cores', 'valor_anterior' => 999, 'valor_novo' => null]);
+
+        $this->assertSame('cor', $linha->campo_rotulo);
+        $this->assertSame('#999 (excluído)', $linha->de_texto);
+        $this->assertNull($linha->para_texto);
     }
 
     public static function tiposAuxiliares(): array

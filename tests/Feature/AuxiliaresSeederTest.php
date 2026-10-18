@@ -15,8 +15,8 @@ class AuxiliaresSeederTest extends TestCase
     {
         $this->seed(AuxiliaresSeeder::class);
 
-        $this->assertSame(3, DB::table('plataforma')->count());
-        $this->assertSame(11, DB::table('cor')->count());
+        $this->assertSame(4, DB::table('plataforma')->count());
+        $this->assertSame(12, DB::table('cor')->count());
         $this->assertSame(2, DB::table('retro')->count());
         $this->assertSame(2, DB::table('usado')->count());
         $this->assertSame(2, DB::table('digital')->count());
@@ -25,6 +25,8 @@ class AuxiliaresSeederTest extends TestCase
 
         $this->assertDatabaseHas('cor', ['id' => 7, 'nome' => 'preto']);
         $this->assertDatabaseHas('plataforma', ['id' => 3, 'nome' => 'nintendo']);
+        $this->assertDatabaseHas('plataforma', ['id' => 4, 'nome' => 'sega']);
+        $this->assertDatabaseHas('cor', ['id' => 12, 'nome' => 'azul e vermelho']);
     }
 
     public function test_rodar_duas_vezes_nao_duplica(): void
@@ -32,7 +34,7 @@ class AuxiliaresSeederTest extends TestCase
         $this->seed(AuxiliaresSeeder::class);
         $this->seed(AuxiliaresSeeder::class);
 
-        $this->assertSame(11, DB::table('cor')->count());
+        $this->assertSame(12, DB::table('cor')->count());
     }
 
     public function test_corrige_nome_alterado_sem_mudar_o_id(): void

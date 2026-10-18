@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\DB;
 
 /**
  * Preenche as 7 tabelas auxiliares com os valores usados no sistema
- * (copiados do banco em 16/10/2026).
+ * (copiados do banco em 16/10/2026, atualizados em 18/10/2026).
  *
  * Os ids são fixos de propósito: console, controle, jogo e acessorio
  * guardam o id (ex: cores = 7 é "preto"), então mudar o id mudaria o
@@ -23,6 +23,7 @@ class AuxiliaresSeeder extends Seeder
             1 => 'playstation',
             2 => 'xbox',
             3 => 'nintendo',
+            4 => 'sega',
         ],
         'cor' => [
             1  => 'azul',
@@ -36,6 +37,7 @@ class AuxiliaresSeeder extends Seeder
             9  => 'roxo',
             10 => 'verde',
             11 => 'vermelho',
+            12 => 'azul e vermelho',
         ],
         'retro' => [
             1 => 'retro',

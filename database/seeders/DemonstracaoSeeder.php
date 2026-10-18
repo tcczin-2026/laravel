@@ -38,6 +38,36 @@ class DemonstracaoSeeder extends Seeder
 
     private array $idsAux = [];
 
+    /** Preço (R$) de cada item da demonstração */
+    private const VALORES = [
+        // consoles
+        'PlayStation 2 Slim' => 699.90, 'PlayStation 3 Super Slim' => 899.90, 'PlayStation 5 Digital' => 3299.90,
+        'PS5 Edição 30 Anos' => 5999.90, 'Xbox Clássico' => 799.90, 'Xbox One S' => 1499.90,
+        'Xbox Series X Halo Edition' => 5499.90, 'Super Nintendo' => 1199.90, 'Nintendo 64' => 1399.90,
+        'GameCube' => 1299.90, 'Nintendo Switch OLED' => 2299.90, 'Switch OLED Zelda Edition' => 2799.90,
+        // controles
+        'DualShock 2' => 129.90, 'DualSense' => 449.90, 'DualSense Edge' => 1299.90,
+        'Controle Xbox Duke' => 349.90, 'Controle Xbox Wireless' => 499.90, 'Controle N64' => 199.90,
+        'Joy-Con Neon' => 579.90, 'Pro Controller Switch' => 499.90,
+        // jogos
+        'God of War Ragnarök' => 249.90, 'The Last of Us Part II' => 149.90, 'Gran Turismo 7' => 299.90,
+        'Shadow of the Colossus' => 119.90, 'Crash Bandicoot' => 179.90, 'Halo Infinite Steelbook' => 349.90,
+        'Forza Horizon 5' => 229.90, 'Gears 5' => 99.90, 'The Legend of Zelda: Tears of the Kingdom' => 349.90,
+        'Mario Kart 8 Deluxe' => 299.90, 'Super Mario Odyssey' => 249.90, 'Pokémon Scarlet' => 299.90,
+        'Super Mario 64' => 289.90, 'GoldenEye 007' => 399.90,
+        // acessórios
+        'Headset Pulse 3D' => 699.90, 'Estação de carga DualSense' => 229.90, 'Volante Logitech G29' => 1899.90,
+        'Memory Card PS2 8MB' => 59.90, 'Headset Xbox Wireless' => 799.90, 'Bateria recarregável Xbox' => 149.90,
+        'Case de viagem Switch' => 99.90, 'Expansion Pak N64' => 249.90,
+    ];
+
+    /** Armazenamento interno (GB) dos consoles; os retrô não têm */
+    private const ARMAZENAMENTO = [
+        'PlayStation 3 Super Slim' => 500, 'PlayStation 5 Digital' => 825, 'PS5 Edição 30 Anos' => 2000,
+        'Xbox Clássico' => 8, 'Xbox One S' => 1000, 'Xbox Series X Halo Edition' => 2000,
+        'Nintendo Switch OLED' => 64, 'Switch OLED Zelda Edition' => 64,
+    ];
+
     public function run(): void
     {
         if (Storage::exists(self::ARQUIVO)) {
@@ -111,7 +141,7 @@ class DemonstracaoSeeder extends Seeder
         $criados = [];
         foreach ($lista as $i => [$nome, $plat, $qtd, $estado, $leitor, $cor, $retro, $aberto, $edicao]) {
             $criados[$nome] = $this->como($i % 2 ? $carla : $bruno, $this->diasAtras(9 - intdiv($i, 2), 9 + $i), fn () => Console::create([
-                'nome' => $nome, 'quantidade' => $qtd,
+                'nome' => $nome, 'quantidade' => $qtd, 'valor' => self::VALORES[$nome], 'armazenamento' => self::ARMAZENAMENTO[$nome] ?? null,
                 'plataformaConsole' => $this->aux('plataforma', $plat), 'estado' => $this->aux('usado', $estado),
                 'leitor' => $this->aux('digital', $leitor), 'cores' => $this->aux('cor', $cor),
                 'vintage' => $this->aux('retro', $retro), 'aberto' => $this->aux('desbloqueado', $aberto),
@@ -139,7 +169,7 @@ class DemonstracaoSeeder extends Seeder
 
         foreach ($lista as $i => [$nome, $plat, $qtd, $estado, $cor, $retro, $edicao, $console]) {
             $controle = $this->como($i % 2 ? $bruno : $carla, $this->diasAtras(6 - intdiv($i, 3), 10 + $i), fn () => Controle::create([
-                'nome' => $nome, 'quantidade' => $qtd, 'dispositivo' => $consoles[$console]->id,
+                'nome' => $nome, 'quantidade' => $qtd, 'valor' => self::VALORES[$nome], 'dispositivo' => $consoles[$console]->id,
                 'plataformaControle' => $this->aux('plataforma', $plat), 'estado' => $this->aux('usado', $estado),
                 'cores' => $this->aux('cor', $cor), 'vintage' => $this->aux('retro', $retro),
                 'colecionador' => $this->aux('edicao_especial', $edicao),
@@ -171,7 +201,7 @@ class DemonstracaoSeeder extends Seeder
         $criados = [];
         foreach ($lista as $i => [$nome, $plat, $qtd, $estado, $retro, $edicao]) {
             $criados[$nome] = $this->como($i % 3 ? $bruno : $carla, $this->diasAtras(8 - intdiv($i, 2), 11 + $i % 7), fn () => Jogo::create([
-                'nome' => $nome, 'quantidade' => $qtd,
+                'nome' => $nome, 'quantidade' => $qtd, 'valor' => self::VALORES[$nome],
                 'Plataforma' => $this->aux('plataforma', $plat), 'estado' => $this->aux('usado', $estado),
                 'vintage' => $this->aux('retro', $retro), 'colecionador' => $this->aux('edicao_especial', $edicao),
             ]));
@@ -198,7 +228,7 @@ class DemonstracaoSeeder extends Seeder
         $criados = [];
         foreach ($lista as $i => [$nome, $plat, $qtd, $estado, $cor, $retro, $edicao]) {
             $criados[$nome] = $this->como($i % 2 ? $carla : $bruno, $this->diasAtras(5 - intdiv($i, 3), 13 + $i), fn () => Acessorio::create([
-                'nome' => $nome, 'quantidade' => $qtd,
+                'nome' => $nome, 'quantidade' => $qtd, 'valor' => self::VALORES[$nome],
                 'Plataforma' => $this->aux('plataforma', $plat), 'estado' => $this->aux('usado', $estado),
                 'cores' => $this->aux('cor', $cor), 'vintage' => $this->aux('retro', $retro),
                 'colecionador' => $this->aux('edicao_especial', $edicao),
@@ -230,6 +260,9 @@ class DemonstracaoSeeder extends Seeder
             'estado' => $this->aux('usado', 'semi-novo'), 'quantidade' => 7,
         ]));
         $this->como($carla, $this->diasAtras(1, 11), fn () => $consoles['Xbox One S']->update(['nome' => 'Xbox One S 1TB']));
+
+        // Promoção: baixou o preço
+        $this->como($ana, $this->diasAtras(2, 15), fn () => $consoles['Nintendo Switch OLED']->update(['valor' => 2199.90]));
 
         // Esgotou hoje cedo
         $this->como($bruno, Carbon::today()->setTime(9, 15), fn () => $acessorios['Memory Card PS2 8MB']->update(['quantidade' => 0]));

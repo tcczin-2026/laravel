@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\FormataHistorico;
 use Illuminate\Database\Eloquent\Model;
 
 class JogoHistorico extends Model
 {
+    use FormataHistorico; // $item->campo_rotulo, de_texto, para_texto (nomes em vez de ids)
+
     protected $table = 'jogo_historico';
 
     public $timestamps = false;

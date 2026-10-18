@@ -224,7 +224,8 @@ class CadastrosTest extends TestCase
         $usuario = $this->funcionario();
 
         $this->actingAs($usuario)->get("/{$entidade}")
-            ->assertOk()->assertSee('Item 10')->assertDontSee('Item 11')->assertSee('pagination');
+            ->assertOk()->assertSee('Item 10')->assertDontSee('Item 11')->assertSee('pagination')
+            ->assertSee('paginacao')->assertSeeInOrder(['Mostrando', '1', 'a', '10', 'de', '12', 'resultados'])->assertDontSee('Showing');
 
         $this->actingAs($usuario)->get("/{$entidade}?page=2")
             ->assertOk()->assertSee('Item 12')->assertDontSee('Item 01');
@@ -239,9 +240,10 @@ class CadastrosTest extends TestCase
 
         $html = $this->actingAs($this->funcionario())->get("/{$entidade}")->getContent();
 
-        $this->assertSame(1, substr_count($html, 'stock-pill--ok'), '11 unidades = Em estoque');
-        $this->assertSame(1, substr_count($html, 'stock-pill--low'), '10 unidades = Pouco restante');
-        $this->assertSame(1, substr_count($html, 'stock-pill--out'), '0 unidades = Esgotado');
+        // 2 por item: uma na coluna Estoque (tablet/computador) e outra embaixo do nome (celular)
+        $this->assertSame(2, substr_count($html, 'stock-pill--ok'), '11 unidades = Em estoque');
+        $this->assertSame(2, substr_count($html, 'stock-pill--low'), '10 unidades = Pouco restante');
+        $this->assertSame(2, substr_count($html, 'stock-pill--out'), '0 unidades = Esgotado');
     }
 
     // -------------------------------------------------------------- filtros

@@ -49,7 +49,7 @@ public function index(Request $request)
         $q->where('quantidade', '>=', $min);
     });
 
-    $jogos = $query->orderBy('id')->paginate(10)->withQueryString();
+    $jogos = $query->orderBy('id')->paginate($this->porPagina())->withQueryString();
 
     return view('jogo.index', $this->listas() + [
         'jogos' => $jogos,
@@ -122,10 +122,13 @@ public function index(Request $request)
 
     private function validar(Request $request): array
     {
+        $this->normalizarValor($request);
+
         return $request->validate([
             'nome'         => 'required|string|max:100',
             'Plataforma'   => 'required|exists:plataforma,id',
             'quantidade'   => 'required|integer|min:0',
+            'valor'         => self::REGRA_VALOR,
             'estado'       => 'required|exists:usado,id',
             'vintage'      => 'required|exists:retro,id',
             'colecionador' => 'required|exists:edicao_especial,id',

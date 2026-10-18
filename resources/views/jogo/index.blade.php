@@ -103,74 +103,17 @@
     @endif
     {{-- FIM DO FILTRO --}}
 
-    <div class="table-responsive">
-        <table class="table table-dark align-middle">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th style="width: 90px">Imagem</th>
-                    <th>Nome</th>
-                    <th>Plataforma</th>
-                    <th>Qtd.</th>
-                    <th>Estoque</th>
-                    <th>Estado</th>
-                    <th>Vintage</th>
-                    <th>Edicao</th>
-                    <th style="width: 220px">Acoes</th>
-                </tr>
-            </thead>
-            <tbody>
-                @forelse ($jogos as $jogo)
-                    <tr>
-                        <td>{{ $jogo->id }}</td>
-                        <td>
-                            @if ($jogo->imagem_url)
-                                <img src="{{ $jogo->imagem_url }}" alt="{{ $jogo->nome }}"
-                                    style="width: 70px; height: 70px; object-fit: cover;" class="rounded">
-                            @else
-                                <div class="bg-secondary rounded d-flex align-items-center justify-content-center"
-                                    style="width: 70px; height: 70px;">
-                                    <i class="bi bi-controller"></i>
-                                </div>
-                            @endif
-                        </td>
-                        <td>{{ $jogo->nome }}</td>
-                        <td>{{ $jogo->plataforma->nome ?? '-' }}</td>
-                        <td>{{ $jogo->quantidade }}</td>
-                        <td>
-                            @if ($jogo->quantidade > 10)
-                                <span class="stock-pill stock-pill--ok">Em estoque</span>
-                            @elseif ($jogo->quantidade > 0)
-                                <span class="stock-pill stock-pill--low">Pouco restante</span>
-                            @else
-                                <span class="stock-pill stock-pill--out">Esgotado</span>
-                            @endif
-                        </td>
-                        <td>{{ $jogo->usado->nome ?? '-' }}</td>
-                        <td>{{ $jogo->retro->nome ?? '-' }}</td>
-                        <td>{{ $jogo->edicaoEspecial->nome ?? '-' }}</td>
-                        <td>
-                        <button type="button" class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#verModal{{ $jogo->id }}">
-                                Ver
-                            </button>
-                            <a href="{{ route('jogo.edit', $jogo->id) }}" class="btn btn-sm btn-warning">Editar</a>
-                            <form action="{{ route('jogo.destroy', $jogo->id) }}" method="post"
-                                  class="d-inline" onsubmit="return confirm('Excluir este jogo?')">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-sm btn-danger">Excluir</button>
-                            </form>
-                        </td>
-                    </tr>
-                @empty
-                    <tr>
-                        <td colspan="10" class="text-center text-muted">Nenhum jogo cadastrado.</td>
-                    </tr>
-                @endforelse
-            </tbody>
-        </table>
-    </div>
-    <div class="d-flex justify-content-center mt-3">
+    @include('partials.lista.tabela', [
+        'itens'   => $jogos,
+        'tipo'    => 'jogo',
+        'artigo'  => 'este jogo',
+        'vazio'   => 'Nenhum jogo cadastrado.',
+        'caracteristicas' => fn ($c) => [
+            'estado' => $c->usado->nome ?? null, 'retrô' => $c->retro->nome ?? null, 'edição' => $c->edicaoEspecial->nome ?? null,
+        ],
+    ])
+
+    <div class="paginacao mt-3">
         {{ $jogos->links() }}
     </div>
     {{-- A TABELA TERMINA AQUI. Os modais abaixo NÃO são mais filhos dela. --}}
@@ -193,6 +136,9 @@
                             <dt class="col-sm-4">Quantidade</dt>
                             <dd class="col-sm-8">{{ $jogo->quantidade }}</dd>
 
+                            <dt class="col-sm-4">Valor</dt>
+                            <dd class="col-sm-8">{{ $jogo->valor_formatado }}</dd>
+
                             <dt class="col-sm-4">Estado</dt>
                             <dd class="col-sm-8">{{ $jogo->usado->nome ?? '-' }}</dd>
 
@@ -205,48 +151,7 @@
 
                         <h6 class="mb-3">Histórico de alterações</h6>
 
-                        @if ($jogo->historico->isEmpty())
-                            <p class="text-muted mb-0">Nenhuma alteração registrada.</p>
-                        @else
-                            <div class="table-responsive">
-                                <table class="table table-dark table-sm align-middle mb-0">
-                                    <thead>
-                                        <tr>
-                                            <th>Data</th>
-                                            <th>Ação</th>
-                                            <th>Campo</th>
-                                            <th>De</th>
-                                            <th>Para</th>
-                                            <th>Usuário</th>
-                                            <th>Reverter</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach ($jogo->historico->sortByDesc('id') as $item)
-                                            <tr>
-                                                <td>{{ $item->created_at?->format('d/m/Y H:i') }}</td>
-                                                <td>
-                                                    @if ($item->acao === 'criado')
-                                                        <span class="badge bg-success">Criado</span>
-                                                    @elseif ($item->acao === 'excluido')
-                                                        <span class="badge bg-danger">Excluído</span>
-                                                    @elseif ($item->acao === 'revertido')
-                                                        <span class="badge bg-info text-dark">Revertido</span>
-                                                    @else
-                                                        <span class="badge bg-warning text-dark">Atualizado</span>
-                                                    @endif
-                                                </td>
-                                                <td>{{ $item->campo ?? '-' }}</td>
-                                                <td>{{ $item->valor_anterior ?? '-' }}</td>
-                                                <td>{{ $item->valor_novo ?? '-' }}</td>
-                                                <td>{{ $item->usuario ?? 'Sistema' }}</td>
-                                                <td>@include('partials.historico-acoes', ['tipo' => 'jogo', 'item' => $item, 'ultimo' => $loop->first])</td>
-                                            </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
-                            </div>
-                        @endif
+                        @include('partials.historico-tabela', ['historico' => $jogo->historico, 'tipo' => 'jogo'])
                     </div>
 
                     <div class="modal-footer">

@@ -2,12 +2,13 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\TemValor;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Controle extends Model
 {
-    use HasFactory;
+    use HasFactory, TemValor;
 
     protected $table = 'controle';
     public $timestamps = false;
@@ -18,6 +19,7 @@ class Controle extends Model
         'nome',
         'plataformaControle',
         'quantidade',
+        'valor',
         'cores',
         'vintage',
         'dispositivo',

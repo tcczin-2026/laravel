@@ -56,7 +56,7 @@ class AcessorioController extends Controller
                 $q->where('quantidade', '>=', $min);
             });
     
-            $acessorios = $query->orderBy('id')->paginate(10)->withQueryString();
+            $acessorios = $query->orderBy('id')->paginate($this->porPagina())->withQueryString();
     
             return view('acessorio.index', $this->listas() + [
                 'acessorios' => $acessorios,
@@ -131,10 +131,13 @@ class AcessorioController extends Controller
  
     private function validar(Request $request): array
     {
+        $this->normalizarValor($request);
+
         return $request->validate([
             'nome'          => 'required|string|max:100',
             'Plataforma' => 'required|exists:plataforma,id',
             'quantidade'    => 'required|integer|min:0',
+            'valor'         => self::REGRA_VALOR,
             'cores'         => 'required|exists:cor,id',
             'vintage'       => 'required|exists:retro,id',
             'estado'        => 'required|exists:usado,id',

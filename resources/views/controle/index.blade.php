@@ -119,76 +119,18 @@
         </div>
     @endif
 
-    <div class="table-responsive">
-        <table class="table table-dark align-middle">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th style="width: 90px">Imagem</th>
-                    <th>Nome</th>
-                    <th>plataforma</th>
-                    <th>Qtd.</th>
-                    <th>Estoque</th>
-                    <th>Cor</th>
-                    <th>Vintage</th>
-                    <th>Estado</th>
-                    <th>Edicao</th>
-                    <th style="width: 260px">Acoes</th>
-                </tr>
-            </thead>
-            <tbody>
-                @forelse ($controles as $controle)
-                    <tr>
-                        <td>{{ $controle->id }}</td>
-                        <td>
-                            @if ($controle->imagem_url)
-                                <img src="{{ $controle->imagem_url }}" alt="{{ $controle->nome }}"
-                                    style="width: 70px; height: 70px; object-fit: cover;" class="rounded">
-                            @else
-                                <div class="bg-secondary rounded d-flex align-items-center justify-content-center"
-                                    style="width: 70px; height: 70px;">
-                                    <i class="bi bi-controller"></i>
-                                </div>
-                            @endif
-                        </td>
-                        <td>{{ $controle->nome }}</td>
-                        <td>{{ $controle->plataforma->nome ?? '-' }}</td>
-                        <td>{{ $controle->quantidade }}</td>
-                        <td>
-                            @if ($controle->quantidade > 10)
-                                <span class="stock-pill stock-pill--ok">Em estoque</span>
-                            @elseif ($controle->quantidade > 0)
-                                <span class="stock-pill stock-pill--low">Pouco restante</span>
-                            @else
-                                <span class="stock-pill stock-pill--out">Esgotado</span>
-                            @endif
-                        </td>
-                        <td>{{ $controle->cor->nome ?? '-' }}</td>
-                        <td>{{ $controle->retro->nome ?? '-' }}</td>
-                        <td>{{ $controle->usado->nome ?? '-' }}</td>
-                        <td>{{ $controle->edicaoEspecial->nome ?? '-' }}</td>
-                        <td>
-                            <button type="button" class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#verModal{{ $controle->id }}">
-                                Ver
-                            </button>
-                            <a href="{{ route('controle.edit', $controle->id) }}" class="btn btn-sm btn-warning">Editar</a>
-                            <form action="{{ route('controle.destroy', $controle->id) }}" method="post"
-                                  class="d-inline" onsubmit="return confirm('Excluir este controle?')">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-sm btn-danger">Excluir</button>
-                            </form>
-                        </td>
-                    </tr>
-                @empty
-                    <tr>
-                        <td colspan="11" class="text-center text-muted">Nenhum controle cadastrado.</td>
-                    </tr>
-                @endforelse
-            </tbody>
-        </table>
-    </div>
-    <div class="d-flex justify-content-center mt-3">
+    @include('partials.lista.tabela', [
+        'itens'   => $controles,
+        'tipo'    => 'controle',
+        'artigo'  => 'este controle',
+        'vazio'   => 'Nenhum controle cadastrado.',
+        'caracteristicas' => fn ($c) => [
+            'estado' => $c->usado->nome ?? null, 'cor' => $c->cor->nome ?? null,
+            'retrô' => $c->retro->nome ?? null, 'edição' => $c->edicaoEspecial->nome ?? null,
+        ],
+    ])
+
+    <div class="paginacao mt-3">
         {{ $controles->links() }}
     </div>
     {{-- A TABELA TERMINA AQUI. Os modais abaixo NÃO são mais filhos dela. --}}
@@ -211,6 +153,9 @@
                             <dt class="col-sm-4">Quantidade</dt>
                             <dd class="col-sm-8">{{ $controle->quantidade }}</dd>
 
+                            <dt class="col-sm-4">Valor</dt>
+                            <dd class="col-sm-8">{{ $controle->valor_formatado }}</dd>
+
                             <dt class="col-sm-4">Estado</dt>
                             <dd class="col-sm-8">{{ $controle->usado->nome ?? '-' }}</dd>
 
@@ -226,48 +171,7 @@
 
                         <h6 class="mb-3">Histórico de alterações</h6>
 
-                        @if ($controle->historico->isEmpty())
-                            <p class="text-muted mb-0">Nenhuma alteração registrada.</p>
-                        @else
-                            <div class="table-responsive">
-                                <table class="table table-dark table-sm align-middle mb-0">
-                                    <thead>
-                                        <tr>
-                                            <th>Data</th>
-                                            <th>Ação</th>
-                                            <th>Campo</th>
-                                            <th>De</th>
-                                            <th>Para</th>
-                                            <th>Usuário</th>
-                                            <th>Reverter</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach ($controle->historico->sortByDesc('id') as $item)
-                                            <tr>
-                                                <td>{{ $item->created_at?->format('d/m/Y H:i') }}</td>
-                                                <td>
-                                                    @if ($item->acao === 'criado')
-                                                        <span class="badge bg-success">Criado</span>
-                                                    @elseif ($item->acao === 'excluido')
-                                                        <span class="badge bg-danger">Excluído</span>
-                                                    @elseif ($item->acao === 'revertido')
-                                                        <span class="badge bg-info text-dark">Revertido</span>
-                                                    @else
-                                                        <span class="badge bg-warning text-dark">Atualizado</span>
-                                                    @endif
-                                                </td>
-                                                <td>{{ $item->campo ?? '-' }}</td>
-                                                <td>{{ $item->valor_anterior ?? '-' }}</td>
-                                                <td>{{ $item->valor_novo ?? '-' }}</td>
-                                                <td>{{ $item->usuario ?? 'Sistema' }}</td>
-                                                <td>@include('partials.historico-acoes', ['tipo' => 'controle', 'item' => $item, 'ultimo' => $loop->first])</td>
-                                            </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
-                            </div>
-                        @endif
+                        @include('partials.historico-tabela', ['historico' => $controle->historico, 'tipo' => 'controle'])
                     </div>
 
                     <div class="modal-footer">

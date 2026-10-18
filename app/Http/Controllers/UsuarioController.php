@@ -12,7 +12,7 @@ class UsuarioController extends Controller
     public function index()
     {
         return view('usuario.index', [
-            'usuarios' => User::orderBy('name')->paginate(10),
+            'usuarios' => User::orderBy('name')->paginate($this->porPagina())->withQueryString(),
         ]);
     }
 

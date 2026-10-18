@@ -9,6 +9,7 @@
         <dl class="row mb-0">
             <dt class="col-sm-3">Plataforma</dt>     <dd class="col-sm-9">{{ $jogo->plataforma->nome ?? '-' }}</dd>
             <dt class="col-sm-3">Quantidade</dt>     <dd class="col-sm-9">{{ $jogo->quantidade }}</dd>
+            <dt class="col-sm-3">Valor</dt>          <dd class="col-sm-9">{{ $jogo->valor_formatado }}</dd>
             <dt class="col-sm-3">Estado</dt>         <dd class="col-sm-9">{{ $jogo->usado->nome ?? '-' }}</dd>
             <dt class="col-sm-3">Vintage</dt>        <dd class="col-sm-9">{{ $jogo->retro->nome ?? '-' }}</dd>
             <dt class="col-sm-3">Edicao especial</dt><dd class="col-sm-9">{{ $jogo->edicaoEspecial->nome ?? '-' }}</dd>

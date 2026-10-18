@@ -34,8 +34,9 @@ class AppServiceProvider extends ServiceProvider
         Acessorio::observe(AcessorioObserver::class);
         Jogo::observe(JogoObserver::class);
 
-        // Links de paginação no estilo do Bootstrap 5 (o padrão é Tailwind)
+        // Bootstrap 5 como base + a nossa paginação (5 números, "ir para" e itens por página)
         Paginator::useBootstrapFive();
+        Paginator::defaultView('vendor.pagination.colecao');
     }
 
 

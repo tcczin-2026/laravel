@@ -2,12 +2,13 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\TemValor;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Console extends Model
 {
-    use HasFactory;
+    use HasFactory, TemValor;
 
     protected $table = 'console';
     public $timestamps = false;
@@ -18,6 +19,8 @@ class Console extends Model
         'nome',
         'plataformaConsole',
         'quantidade',
+        'valor',
+        'armazenamento',
         'estado',
         'leitor',
         'cores',
@@ -71,6 +74,20 @@ class Console extends Model
 
     // Jogos e acessórios não ligam no console, e sim na plataforma
     // (coluna "Plataforma" = id da tabela plataforma). Veja ConsoleController@show.
+
+    /** "825 GB", "1 TB", "1,5 TB" (ou "-" se não tem) */
+    public function getArmazenamentoFormatadoAttribute(): string
+    {
+        $gb = $this->armazenamento;
+
+        if (! $gb) {
+            return '-';
+        }
+
+        return $gb >= 1000
+            ? rtrim(rtrim(number_format($gb / 1000, 1, ',', '.'), '0'), ',') . ' TB'
+            : $gb . ' GB';
+    }
 
     public function getImagemUrlAttribute(): ?string
     {   

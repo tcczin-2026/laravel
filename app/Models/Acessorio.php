@@ -2,12 +2,13 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\TemValor;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Acessorio extends Model
 {
-    use HasFactory;
+    use HasFactory, TemValor;
 
     protected $table = 'acessorio';
     public $timestamps = false;
@@ -18,6 +19,7 @@ class Acessorio extends Model
         'nome',
         'Plataforma',
         'quantidade',
+        'valor',
         'estado',
         'vintage',
         'cores',

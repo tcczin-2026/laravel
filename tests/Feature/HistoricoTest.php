@@ -167,7 +167,7 @@ class HistoricoTest extends TestCase
         ]);
 
         // e o painel mostra a exclusão com o nome que o item tinha
-        $this->actingAs($joao)->get('/colecao')->assertSee('"PS2" — excluido', false);
+        $this->actingAs($joao)->get('/colecao')->assertSeeInOrder(['PS2', 'Excluído', 'João']);
     }
 
     public function test_excluir_jogo_com_historico_funciona(): void

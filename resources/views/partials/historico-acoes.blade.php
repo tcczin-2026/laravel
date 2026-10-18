@@ -7,10 +7,10 @@
     - Desfazer: volta só este campo para o valor "De".
     - Restaurar até aqui: desfaz tudo que foi alterado depois desta linha.
 --}}
-<div class="d-flex flex-wrap gap-1">
+<div class="acoes">
     @if (in_array($item->acao, ['atualizado', 'revertido']) && $item->campo && $item->campo !== 'imagem')
         <form action="{{ route('historico.desfazer', [$tipo, $item->id]) }}" method="post"
-              onsubmit="return confirm(@js('Voltar "' . $item->campo . '" para "' . ($item->valor_anterior ?? 'vazio') . '"?'))">
+              onsubmit="return confirm(@js('Voltar "' . $item->campo_rotulo . '" para "' . ($item->de_texto ?? 'vazio') . '"?'))">
             @csrf
             <button type="submit" class="btn btn-sm btn-warning" title="Volta este campo para o valor anterior">Desfazer</button>
         </form>

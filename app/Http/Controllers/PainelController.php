@@ -15,14 +15,14 @@ use Illuminate\Pagination\LengthAwarePaginator;
 
 class PainelController extends Controller
 {
-    /** Tela inicial da colecao com os totais de cada tabela */
+    /** Tela inicial da colecao com os totais de cada tabela (só itens com estoque) */
     public function index(Request $request)
     {
         $totais = [
-            'console'   => Console::count(),
-            'controle'  => Controle::count(),
-            'jogo'      => Jogo::count(),
-            'acessorio' => Acessorio::count(),
+            'console'   => Console::where('quantidade', '>', 0)->count(),
+            'controle'  => Controle::where('quantidade', '>', 0)->count(),
+            'jogo'      => Jogo::where('quantidade', '>', 0)->count(),
+            'acessorio' => Acessorio::where('quantidade', '>', 0)->count(),
         ];
 
         $auxiliares = AuxiliarController::tipos();
@@ -30,7 +30,7 @@ class PainelController extends Controller
         // O histórico fica em 4 tabelas, então a paginação é montada na mão:
         // pega de cada tabela os registros até o fim da página atual,
         // junta, ordena por data e recorta só a fatia da página.
-        $porPagina = 10;
+        $porPagina = $this->porPagina();
         $pagina    = LengthAwarePaginator::resolveCurrentPage();
         $limite    = $pagina * $porPagina;
 
@@ -55,6 +55,7 @@ class PainelController extends Controller
             $pagina,
             ['path' => $request->url()]
         );
+        $historico->withQueryString(); // mantém o ?por_pagina= ao trocar de página
 
         return view('painel.index', compact('totais', 'auxiliares', 'historico'));
     }
@@ -67,10 +68,16 @@ class PainelController extends Controller
             ->get()
             ->map(function ($h) use ($relacao, $tipo) {
                 return [
-                    'tipo'   => $tipo,
-                    'nome'   => $h->$relacao->nome ?? $this->nomeDoResumo($h),
-                    'acao'   => $h->acao,
-                    'quando' => $h->created_at,
+                    'tipo'     => $tipo,
+                    'nome'     => $h->$relacao->nome ?? $this->nomeDoResumo($h),
+                    // link pra listagem já filtrada pelo item (só se ele ainda existe)
+                    'link'     => $h->$relacao ? route("{$relacao}.index", ['nome' => $h->$relacao->nome]) : null,
+                    'acao'     => $h->acao,
+                    'campo'    => $h->campo_rotulo, // nomes em vez de ids (trait FormataHistorico)
+                    'de'       => $h->de_texto,
+                    'para'     => $h->para_texto,
+                    'usuario'  => $h->usuario ?? 'Sistema',
+                    'quando'   => $h->created_at,
                 ];
             });
     }

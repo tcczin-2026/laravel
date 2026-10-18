@@ -13,6 +13,7 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call(AuxiliaresSeeder::class);
+        $this->call(AcervoSeeder::class); // itens reais (consoles, controles, jogos, acessórios)
 
         // $this->call(FornecedorSeeder::class);
         // $this->call(ContatoSeeder::class);

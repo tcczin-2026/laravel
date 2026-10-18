@@ -1,75 +1,14 @@
 {{--
-    Bloco reutilizável de histórico de alterações.
-    Funciona tanto pra console quanto pra controle, porque só espera
-    uma coleção de registros com os campos: acao, campo, valor_anterior,
-    valor_novo, usuario, created_at.
+    Card "Histórico de alterações" das páginas de detalhes (show).
+    A tabela em si fica em partials/historico-tabela (a mesma do modal "Ver").
 
     Como usar:
-        @include('partials.historico', ['historico' => $console->historico])
-        (passe 'tipo' => 'console' para mostrar os botões de reverter)
-        @include('partials.historico', ['historico' => $controle->historico])
-        @include('partials.historico', ['historico' => $acessorio->historico])
-        @include('partials.historico', ['historico' => $jogo->historico])
+        @include('partials.historico', ['historico' => $console->historico, 'tipo' => 'console'])
+    (sem 'tipo', não mostra os botões de reverter)
 --}}
 
 <div class="card card-body mb-4">
     <h5 class="mb-3">Histórico de alterações</h5>
 
-    @if ($historico->isEmpty())
-        {{-- Acontece pra qualquer registro criado antes do Observer existir,
-             ou que ainda não sofreu nenhuma alteração --}}
-        <p class="text-muted mb-0">Nenhuma alteração registrada ainda.</p>
-    @else
-        <div class="table-responsive">
-            <table class="table table-dark table-sm align-middle mb-0">
-                <thead>
-                    <tr>
-                        <th>Data</th>
-                        <th>Ação</th>
-                        <th>Campo</th>
-                        <th>De</th>
-                        <th>Para</th>
-                        <th>Usuário</th>
-                        @isset($tipo)<th>Reverter</th>@endisset
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($historico->sortByDesc('id') as $item)
-                        <tr>
-                            {{-- created_at vem tipado como datetime (casts no model) --}}
-                            <td>{{ $item->created_at->format('d/m/Y H:i') }}</td>
-
-                            <td>
-                                {{-- Badge colorido de acordo com o tipo de ação --}}
-                                @switch($item->acao)
-                                    @case('criado')
-                                        <span class="badge bg-success">Criado</span>
-                                        @break
-                                    @case('atualizado')
-                                        <span class="badge bg-warning text-dark">Atualizado</span>
-                                        @break
-                                    @case('revertido')
-                                        <span class="badge bg-info text-dark">Revertido</span>
-                                        @break
-                                    @case('excluido')
-                                        <span class="badge bg-danger">Excluído</span>
-                                        @break
-                                @endswitch
-                            </td>
-
-                            {{-- Em 'criado'/'excluido' não há um campo específico,
-                                 então mostramos "-" --}}
-                            <td>{{ $item->campo ?? '-' }}</td>
-                            <td>{{ $item->valor_anterior ?? '-' }}</td>
-                            <td>{{ $item->valor_novo ?? '-' }}</td>
-                            <td>{{ $item->usuario }}</td>
-                            @isset($tipo)
-                                <td>@include('partials.historico-acoes', ['item' => $item, 'ultimo' => $loop->first])</td>
-                            @endisset
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
-        </div>
-    @endif
+    @include('partials.historico-tabela', ['historico' => $historico, 'tipo' => $tipo ?? null])
 </div>

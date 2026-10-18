@@ -70,7 +70,7 @@ class ConsoleController extends Controller
             $q->where('quantidade', '>=', $min);
         });
 
-        $consoles = $query->orderBy('id')->paginate(10)->withQueryString();
+        $consoles = $query->orderBy('id')->paginate($this->porPagina())->withQueryString();
 
         return view('console.index', $this->listas() + [
             'consoles' => $consoles,
@@ -158,10 +158,14 @@ class ConsoleController extends Controller
 
     private function validar(Request $request): array
     {
+        $this->normalizarValor($request);
+
         return $request->validate([
             'nome'         => 'required|string|max:100',
             'plataformaConsole' => 'required|exists:plataforma,id',
             'quantidade'   => 'required|integer|min:0',
+            'valor'         => self::REGRA_VALOR,
+            'armazenamento' => 'nullable|integer|min:1|max:100000', // em GB
             'estado'       => 'required|exists:usado,id',
             'leitor'       => 'required|exists:digital,id',
             'cores'        => 'required|exists:cor,id',

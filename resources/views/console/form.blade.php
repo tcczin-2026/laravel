@@ -15,16 +15,35 @@
         @endif
 
         <div class="row">
-            <div class="col-md-8 mb-3">
+            <div class="col-md-5 mb-3">
                 <label for="nome" class="form-label">Nome</label>
                 <input type="text" name="nome" id="nome" maxlength="100" required
                        class="form-control" value="{{ old('nome', $console->nome ?? '') }}">
             </div>
 
-            <div class="col-md-4 mb-3">
+            <div class="col-md-2 mb-3">
                 <label for="quantidade" class="form-label">Quantidade</label>
                 <input type="number" name="quantidade" id="quantidade" min="0" required
                        class="form-control" value="{{ old('quantidade', $console->quantidade ?? 1) }}">
+            </div>
+            <div class="col-md-2 mb-3">
+                <label for="valor" class="form-label">Valor (R$)</label>
+                <input type="number" name="valor" id="valor" min="0" step="0.01"
+                       class="form-control" placeholder="0,00"
+                       value="{{ old('valor', $console->valor ?? '') }}">
+                @error('valor')
+                    <div class="text-danger small">{{ $message }}</div>
+                @enderror
+            </div>
+
+            <div class="col-md-3 mb-3">
+                <label for="armazenamento" class="form-label">Armazenamento (GB)</label>
+                <input type="number" name="armazenamento" id="armazenamento" min="1" step="1"
+                       class="form-control" placeholder="ex: 825 ou 1000"
+                       value="{{ old('armazenamento', $console->armazenamento ?? '') }}">
+                @error('armazenamento')
+                    <div class="text-danger small">{{ $message }}</div>
+                @enderror
             </div>
 
             <div class="col-md-12 mb-3">

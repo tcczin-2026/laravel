@@ -116,78 +116,18 @@
     {{-- FIM DO FILTRO --}}
 
 
-    <div class="table-responsive">
-        <table class="table table-striped align-middle">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th style="width: 90px">Imagem</th>
-                    <th>Nome</th>
-                    <th>Plataforma</th>
-                    <th>Qtd.</th>
-                    <th>Estoque</th>
-                    <th>Estado</th>
-                    <th>Vintage</th>
-                    <th>Cor</th>
-                    <th>Edicao</th>
-                    <th style="width: 220px">Acoes</th>
-                </tr>
-            </thead>
-            <tbody>
-                @forelse ($acessorios as $acessorio)
-                    <tr>
-                        <td>{{ $acessorio->id }}</td>
-                        <td>
-                            @if ($acessorio->imagem_url)
-                                <img src="{{ $acessorio->imagem_url }}" alt="{{ $acessorio->nome }}"
-                                    style="width: 70px; height: 70px; object-fit: cover;" class="rounded">
-                            @else
-                                <div class="bg-secondary rounded d-flex align-items-center justify-content-center"
-                                    style="width: 70px; height: 70px;">
-                                    <i class="bi bi-controller"></i>
-                                </div>
-                            @endif
-                        </td>
-                        <td>{{ $acessorio->nome }}</td>
-                        <td>{{ $acessorio->plataforma->nome ?? '-' }}</td>
-                        <td>{{ $acessorio->quantidade }}</td>
-                        <td>
-                            @if ($acessorio->quantidade > 10)
-                                <span class="stock-pill stock-pill--ok">Em estoque</span>
-                            @elseif ($acessorio->quantidade > 0)
-                                <span class="stock-pill stock-pill--low">Pouco restante</span>
-                            @else
-                                <span class="stock-pill stock-pill--out">Esgotado</span>
-                            @endif
-                        </td>
-                        <td>{{ $acessorio->usado->nome ?? '-' }}</td>
-                        <td>{{ $acessorio->retro->nome ?? '-' }}</td>
-                        <td>{{ $acessorio->cor->nome ?? '-' }}</td>
-                        <td>{{ $acessorio->edicaoEspecial->nome ?? '-' }}</td>
-                        <td>
+    @include('partials.lista.tabela', [
+        'itens'   => $acessorios,
+        'tipo'    => 'acessorio',
+        'artigo'  => 'este acessório',
+        'vazio'   => 'Nenhum acessório cadastrado.',
+        'caracteristicas' => fn ($c) => [
+            'estado' => $c->usado->nome ?? null, 'cor' => $c->cor->nome ?? null,
+            'retrô' => $c->retro->nome ?? null, 'edição' => $c->edicaoEspecial->nome ?? null,
+        ],
+    ])
 
- <button type="button" class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#verModal{{ $acessorio->id }}">
-                                Ver
-                            </button>
-                            <a href="{{ route('acessorio.edit', $acessorio->id) }}" class="btn btn-sm btn-warning">Editar</a>
-                            <form action="{{ route('acessorio.destroy', $acessorio->id) }}" method="post"
-                                  class="d-inline" onsubmit="return confirm('Excluir este acessorio?')">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-sm btn-danger">Excluir</button>
-                            </form>
-                        </td>
-                    </tr>
-                @empty
-                    <tr>
-                        <td colspan="10" class="text-center text-muted">Nenhum acessorio cadastrado.</td>
-                    </tr>
-                @endforelse
-            </tbody>
-            
-        </table>
-    </div>
-    <div class="d-flex justify-content-center mt-3">
+    <div class="paginacao mt-3">
         {{ $acessorios->links() }}
     </div>
     {{-- A TABELA TERMINA AQUI. Os modais abaixo NÃO são mais filhos dela. --}}
@@ -210,6 +150,9 @@
                             <dt class="col-sm-4">Quantidade</dt>
                             <dd class="col-sm-8">{{ $acessorio->quantidade }}</dd>
 
+                            <dt class="col-sm-4">Valor</dt>
+                            <dd class="col-sm-8">{{ $acessorio->valor_formatado }}</dd>
+
                             <dt class="col-sm-4">Estado</dt>
                             <dd class="col-sm-8">{{ $acessorio->usado->nome ?? '-' }}</dd>
 
@@ -225,48 +168,7 @@
 
                         <h6 class="mb-3">Histórico de alterações</h6>
 
-                        @if ($acessorio->historico->isEmpty())
-                            <p class="text-muted mb-0">Nenhuma alteração registrada.</p>
-                        @else
-                            <div class="table-responsive">
-                                <table class="table table-dark table-sm align-middle mb-0">
-                                    <thead>
-                                        <tr>
-                                            <th>Data</th>
-                                            <th>Ação</th>
-                                            <th>Campo</th>
-                                            <th>De</th>
-                                            <th>Para</th>
-                                            <th>Usuário</th>
-                                            <th>Reverter</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach ($acessorio->historico->sortByDesc('id') as $item)
-                                            <tr>
-                                                <td>{{ $item->created_at?->format('d/m/Y H:i') }}</td>
-                                                <td>
-                                                    @if ($item->acao === 'criado')
-                                                        <span class="badge bg-success">Criado</span>
-                                                    @elseif ($item->acao === 'excluido')
-                                                        <span class="badge bg-danger">Excluído</span>
-                                                    @elseif ($item->acao === 'revertido')
-                                                        <span class="badge bg-info text-dark">Revertido</span>
-                                                    @else
-                                                        <span class="badge bg-warning text-dark">Atualizado</span>
-                                                    @endif
-                                                </td>
-                                                <td>{{ $item->campo ?? '-' }}</td>
-                                                <td>{{ $item->valor_anterior ?? '-' }}</td>
-                                                <td>{{ $item->valor_novo ?? '-' }}</td>
-                                                <td>{{ $item->usuario ?? 'Sistema' }}</td>
-                                                <td>@include('partials.historico-acoes', ['tipo' => 'acessorio', 'item' => $item, 'ultimo' => $loop->first])</td>
-                                            </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
-                            </div>
-                        @endif
+                        @include('partials.historico-tabela', ['historico' => $acessorio->historico, 'tipo' => 'acessorio'])
                     </div>
 
                     <div class="modal-footer">

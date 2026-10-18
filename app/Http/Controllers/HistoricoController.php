@@ -137,6 +137,11 @@ class HistoricoController extends Controller
     /** Compara como texto, porque o histórico guarda tudo como texto */
     private function mesmoValor($atual, $historico): bool
     {
+        // Preço: "1299.9" e "1299.90" são o mesmo valor
+        if (is_numeric($atual) && is_numeric($historico)) {
+            return (float) $atual === (float) $historico;
+        }
+
         return (string) $atual === (string) $historico && is_null($atual) === is_null($historico);
     }
 

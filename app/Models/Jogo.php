@@ -2,12 +2,13 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\TemValor;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Jogo extends Model
 {
-    use HasFactory;
+    use HasFactory, TemValor;
 
     protected $table = 'jogo';
     public $timestamps = false;
@@ -18,6 +19,7 @@ class Jogo extends Model
         'nome',
         'Plataforma',
         'quantidade',
+        'valor',
         'estado',
         'vintage',
         'colecionador',
