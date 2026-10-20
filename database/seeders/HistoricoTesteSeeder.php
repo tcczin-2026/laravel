@@ -123,9 +123,9 @@ class HistoricoTesteSeeder extends Seeder
                 [
                     'jogo_id'    => $jogo->id,
                     'acao'           => 'atualizado',
-                    'campo'          => 'cores',
+                    'campo'          => 'quantidade', // jogo não tem cor
                     'valor_anterior' => '1',
-                    'valor_novo'     => '4',
+                    'valor_novo'     => '3',
                     'usuario'        => 'Sistema',
                     'created_at'     => now()->subDay()->toDateTimeString(),
                 ],
