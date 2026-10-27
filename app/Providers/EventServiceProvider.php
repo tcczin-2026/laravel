@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use App\Listeners\ProtegeBanco;
 use Illuminate\Auth\Events\Registered;
+use Illuminate\Console\Events\CommandStarting;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Event;
@@ -17,6 +19,11 @@ class EventServiceProvider extends ServiceProvider
     protected $listen = [
         Registered::class => [
             SendEmailVerificationNotification::class,
+        ],
+
+        // Bloqueia migrate:fresh & cia. sem --force e faz backup antes de apagar
+        CommandStarting::class => [
+            ProtegeBanco::class,
         ],
     ];
 

@@ -2,6 +2,7 @@
 
 namespace App\Exceptions;
 
+use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
 
@@ -44,5 +45,18 @@ class Handler extends ExceptionHandler
         $this->reportable(function (Throwable $e) {
             //
         });
+
+        // MySQL desligado: página explicando o que fazer, em vez da tela técnica do Laravel
+        $this->renderable(function (QueryException $e) {
+            if ($this->bancoForaDoAr($e)) {
+                return response()->view('errors.banco-fora', [], 503);
+            }
+        });
+    }
+
+    /** 2002 = conexão recusada (MySQL parado); 2006 = conexão caiu no meio */
+    private function bancoForaDoAr(QueryException $e): bool
+    {
+        return str_contains($e->getMessage(), '[2002]') || str_contains($e->getMessage(), '[2006]');
     }
 }

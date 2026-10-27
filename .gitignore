@@ -15,3 +15,8 @@ yarn-error.log
 /.fleet
 /.idea
 /.vscode
+
+# Cypress (gerados ao rodar os testes)
+/cypress/screenshots
+/cypress/videos
+/cypress/downloads

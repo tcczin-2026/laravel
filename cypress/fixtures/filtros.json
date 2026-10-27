@@ -1,0 +1,128 @@
+{
+    "_leia_me": "Fonte única dos dados de teste: o CypressSeeder cria estes itens e o filtros.cy.js calcula daqui o que cada filtro deve mostrar. Os valores são os NOMES das tabelas auxiliares (veja o AuxiliaresSeeder).",
+
+    "usuario": { "nome": "Cypress Funcionario", "email": "cypress@teste.com", "senha": "cypress123" },
+
+    "telas": {
+        "console": {
+            "vazio": "Nenhum console cadastrado.",
+            "colunas": {
+                "plataforma": ["plataformaConsole", "plataforma"],
+                "estado": ["estado", "usado"],
+                "cor": ["cores", "cor"],
+                "leitor": ["leitor", "digital"],
+                "retro": ["vintage", "retro"],
+                "desbloqueio": ["aberto", "desbloqueado"],
+                "edicao": ["colecionador", "edicao_especial"]
+            },
+            "filtros": {
+                "plataforma": "plataformaConsole",
+                "estado": "estado",
+                "cor": "cores",
+                "leitor": "digitais",
+                "desbloqueio": "desbloqueados",
+                "edicao": "edicoes",
+                "retro": "retros"
+            },
+            "buscasNome": ["playstation", "XBOX", "nintendo", "nao-existe-nada"],
+            "combinacao": { "plataforma": "xbox", "retro": "retro" },
+            "itens": [
+                { "nome": "PlayStation 5 Pro",    "plataforma": "playstation", "estado": "novo",      "cor": "branco", "leitor": "digital", "retro": "atual", "desbloqueio": "bloqueado",    "edicao": "padrao" },
+                { "nome": "PlayStation 2 Fat",    "plataforma": "playstation", "estado": "semi-novo", "cor": "preto",  "leitor": "fisico",  "retro": "retro", "desbloqueio": "desbloqueado", "edicao": "padrao" },
+                { "nome": "Xbox Series X Halo",   "plataforma": "xbox",        "estado": "novo",      "cor": "preto",  "leitor": "fisico",  "retro": "atual", "desbloqueio": "bloqueado",    "edicao": "especial" },
+                { "nome": "Xbox 360 Elite",       "plataforma": "xbox",        "estado": "semi-novo", "cor": "preto",  "leitor": "fisico",  "retro": "retro", "desbloqueio": "desbloqueado", "edicao": "padrao" },
+                { "nome": "Nintendo Switch OLED", "plataforma": "nintendo",    "estado": "novo",      "cor": "branco", "leitor": "fisico",  "retro": "atual", "desbloqueio": "bloqueado",    "edicao": "padrao" },
+                { "nome": "Super Nintendo",       "plataforma": "nintendo",    "estado": "semi-novo", "cor": "cinza",  "leitor": "fisico",  "retro": "retro", "desbloqueio": "bloqueado",    "edicao": "padrao" },
+                { "nome": "Mega Drive",           "plataforma": "sega",        "estado": "semi-novo", "cor": "preto",  "leitor": "fisico",  "retro": "retro", "desbloqueio": "bloqueado",    "edicao": "especial" }
+            ]
+        },
+
+        "controle": {
+            "vazio": "Nenhum controle cadastrado.",
+            "colunas": {
+                "plataforma": ["plataformaControle", "plataforma"],
+                "estado": ["estado", "usado"],
+                "cor": ["cores", "cor"],
+                "retro": ["vintage", "retro"],
+                "edicao": ["colecionador", "edicao_especial"]
+            },
+            "filtros": {
+                "plataforma": "plataformacontrole",
+                "estado": "estado",
+                "cor": "cores",
+                "edicao": "edicoes",
+                "retro": "retros"
+            },
+            "buscasNome": ["controle", "dual", "nao-existe-nada"],
+            "combinacao": { "plataforma": "xbox", "retro": "retro" },
+            "itens": [
+                { "nome": "DualSense Branco",    "plataforma": "playstation", "estado": "novo",      "cor": "branco",   "retro": "atual", "edicao": "padrao" },
+                { "nome": "DualShock 2",         "plataforma": "playstation", "estado": "semi-novo", "cor": "preto",    "retro": "retro", "edicao": "padrao" },
+                { "nome": "Controle Xbox Elite", "plataforma": "xbox",        "estado": "novo",      "cor": "preto",    "retro": "atual", "edicao": "especial" },
+                { "nome": "Controle Xbox Duke",  "plataforma": "xbox",        "estado": "semi-novo", "cor": "preto",    "retro": "retro", "edicao": "padrao" },
+                { "nome": "Joy-Con Neon",        "plataforma": "nintendo",    "estado": "novo",      "cor": "vermelho", "retro": "atual", "edicao": "padrao" },
+                { "nome": "Controle N64 Gold",   "plataforma": "nintendo",    "estado": "semi-novo", "cor": "amarelo",  "retro": "retro", "edicao": "especial" }
+            ]
+        },
+
+        "jogo": {
+            "vazio": "Nenhum jogo cadastrado.",
+            "colunas": {
+                "plataforma": ["Plataforma", "plataforma"],
+                "estado": ["estado", "usado"],
+                "retro": ["vintage", "retro"],
+                "edicao": ["colecionador", "edicao_especial"]
+            },
+            "filtros": {
+                "plataforma": "plataformajogo",
+                "estado": "estado",
+                "edicao": "edicoes",
+                "retro": "retros"
+            },
+            "buscasNome": ["mario", "HALO", "sonic", "nao-existe-nada"],
+            "combinacao": { "plataforma": "nintendo", "edicao": "especial" },
+            "extras": {
+                "_leia_me": "12 jogos a mais (\"Sonic Extra 01\"...\"Sonic Extra 12\") pra ter mais de uma página com filtro",
+                "prefixo": "Sonic Extra",
+                "quantos": 12,
+                "atributos": { "plataforma": "sega", "estado": "novo", "retro": "retro", "edicao": "padrao" }
+            },
+            "itens": [
+                { "nome": "God of War Ragnarok",        "plataforma": "playstation", "estado": "novo",      "retro": "atual", "edicao": "padrao" },
+                { "nome": "Crash Bandicoot",            "plataforma": "playstation", "estado": "semi-novo", "retro": "retro", "edicao": "padrao" },
+                { "nome": "Halo Infinite Steelbook",    "plataforma": "xbox",        "estado": "novo",      "retro": "atual", "edicao": "especial" },
+                { "nome": "Fable II",                   "plataforma": "xbox",        "estado": "semi-novo", "retro": "retro", "edicao": "padrao" },
+                { "nome": "Zelda Tears of the Kingdom", "plataforma": "nintendo",    "estado": "novo",      "retro": "atual", "edicao": "especial" },
+                { "nome": "Super Mario 64",             "plataforma": "nintendo",    "estado": "semi-novo", "retro": "retro", "edicao": "padrao" }
+            ]
+        },
+
+        "acessorio": {
+            "vazio": "Nenhum acessório cadastrado.",
+            "colunas": {
+                "plataforma": ["Plataforma", "plataforma"],
+                "estado": ["estado", "usado"],
+                "cor": ["cores", "cor"],
+                "retro": ["vintage", "retro"],
+                "edicao": ["colecionador", "edicao_especial"]
+            },
+            "filtros": {
+                "plataforma": "plataforma",
+                "estado": "estado",
+                "cor": "cores",
+                "edicao": "edicoes",
+                "retro": "retros"
+            },
+            "buscasNome": ["headset", "PAK", "nao-existe-nada"],
+            "combinacao": { "plataforma": "xbox", "cor": "preto", "estado": "semi-novo" },
+            "itens": [
+                { "nome": "Headset Pulse 3D",      "plataforma": "playstation", "estado": "novo",      "cor": "branco",   "retro": "atual", "edicao": "padrao" },
+                { "nome": "Memory Card PS2",       "plataforma": "playstation", "estado": "semi-novo", "cor": "preto",    "retro": "retro", "edicao": "padrao" },
+                { "nome": "Headset Xbox Wireless", "plataforma": "xbox",        "estado": "novo",      "cor": "preto",    "retro": "atual", "edicao": "padrao" },
+                { "nome": "Kinect",                "plataforma": "xbox",        "estado": "semi-novo", "cor": "preto",    "retro": "retro", "edicao": "especial" },
+                { "nome": "Case Switch Zelda",     "plataforma": "nintendo",    "estado": "novo",      "cor": "verde",    "retro": "atual", "edicao": "especial" },
+                { "nome": "Expansion Pak",         "plataforma": "nintendo",    "estado": "semi-novo", "cor": "vermelho", "retro": "retro", "edicao": "padrao" }
+            ]
+        }
+    }
+}

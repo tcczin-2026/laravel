@@ -2,11 +2,18 @@
     "private": true,
     "scripts": {
         "dev": "vite",
-        "build": "vite build"
+        "build": "vite build",
+        "cypress:preparar": "php -r \"file_put_contents('database/database.sqlite', '');\" && php artisan migrate --force --env=cypress && php artisan db:seed --class=CypressSeeder --force --env=cypress",
+        "cypress:servidor": "cross-env APP_ENV=cypress php artisan serve --port=8010",
+        "cypress:abrir": "npm run cypress:preparar && start-server-and-test cypress:servidor http://127.0.0.1:8010/login \"cypress open\"",
+        "test:e2e": "npm run cypress:preparar && start-server-and-test cypress:servidor http://127.0.0.1:8010/login \"cypress run\""
     },
     "devDependencies": {
         "axios": "^1.1.2",
+        "cross-env": "^7.0.3",
+        "cypress": "^13.15.0",
         "laravel-vite-plugin": "^0.7.2",
+        "start-server-and-test": "^2.0.8",
         "vite": "^4.0.0"
     }
 }
