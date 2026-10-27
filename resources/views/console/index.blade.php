@@ -7,7 +7,7 @@
 @php
         $mostrarFiltro = request()->boolean('mostrarFiltro');
 
-        $filtrosAtivos = collect(request()->only(['nome','plataformaConsole','estado','cores','digitais','desbloqueados','edicoes','retros']))
+        $filtrosAtivos = collect(request()->only(['nome','codigo_barras','plataformaConsole','estado','cores','digitais','desbloqueados','edicoes','retros']))
             ->filter(fn($v) => filled($v))
             ->count();
 
@@ -17,7 +17,8 @@
 <link rel="stylesheet" href="App\Http\resources\css\app.css">
     <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
         <h1 class="h3 mb-0">Consoles</h1>
-        <div class="d-flex gap-2">
+        <div class="d-flex flex-wrap gap-2">
+            @include('partials.lista.busca-codigo', ['tipo' => 'console'])
             <a href="{{ $urlAbrirFiltro }}" class="btn btn-outline-light position-relative">
                 <i class="bi bi-funnel"></i> Filtro
                 @if ($filtrosAtivos > 0)
@@ -173,6 +174,9 @@
 
                             <dt class="col-sm-4">Valor</dt>
                             <dd class="col-sm-8">{{ $console->valor_formatado }}</dd>
+
+                            <dt class="col-sm-4">Código de barras</dt>
+                            <dd class="col-sm-8">{{ $console->codigo_barras ?? '-' }}</dd>
 
                             <dt class="col-sm-4">Armazenamento</dt>
                             <dd class="col-sm-8">{{ $console->armazenamento_formatado }}</dd>

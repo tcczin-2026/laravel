@@ -20,6 +20,7 @@ trait FormataHistorico
         'nome'               => ['nome', null],
         'quantidade'         => ['quantidade', null],
         'valor'              => ['valor', null],
+        'codigo_barras'      => ['código de barras', null],
         'armazenamento'      => ['armazenamento (GB)', null],
         'imagem'             => ['imagem', null],
         'plataformaconsole'  => ['plataforma', 'plataforma'],

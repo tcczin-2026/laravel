@@ -42,6 +42,29 @@ class PainelTest extends TestCase
         $this->assertSame(5, substr_count($pagina2, '>Mega Drive</a>'));
     }
 
+    public function test_historico_do_painel_busca_pelo_id(): void
+    {
+        $aux = $this->auxiliares();
+        $dados = [
+            'quantidade' => 1,
+            'plataformaConsole' => $aux['plataforma'], 'estado' => $aux['usado'], 'leitor' => $aux['digital'],
+            'cores' => $aux['cor'], 'vintage' => $aux['retro'], 'aberto' => $aux['desbloqueado'],
+            'colecionador' => $aux['edicao_especial'],
+        ];
+        $mega  = Console::create(['nome' => 'Mega Drive'] + $dados);
+        $snes  = Console::create(['nome' => 'Super Nintendo'] + $dados);
+        $usuario = $this->funcionario();
+
+        $this->actingAs($usuario)->get("/colecao?id={$snes->id}")
+            ->assertOk()->assertSee('Super Nintendo')->assertSee("Console #{$snes->id}")->assertDontSee('>Mega Drive</a>', false);
+
+        $this->actingAs($usuario)->get("/colecao?id={$mega->id}&tipo=console")
+            ->assertSee('Mega Drive')->assertDontSee('Super Nintendo');
+
+        $this->actingAs($usuario)->get("/colecao?id={$mega->id}&tipo=jogo")
+            ->assertSee('Nenhuma alteração encontrada para essa busca.');
+    }
+
     public function test_historico_do_painel_mostra_alteracao_usuario_e_link(): void
     {
         $aux = $this->auxiliares();
@@ -57,7 +80,7 @@ class PainelTest extends TestCase
 
         $this->get('/colecao')
             ->assertSeeInOrder(['Mega Drive', 'Atualizado', 'quantidade:', '15', '17', 'Ana'])
-            ->assertSee(route('console.index', ['nome' => 'Mega Drive']), false)
+            ->assertSee(route('console.index', ['id' => $console->id]), false)
             ->assertDontSee('list-group-item'); // não usa mais a lista branca do Bootstrap
     }
 

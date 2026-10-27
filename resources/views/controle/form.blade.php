@@ -28,10 +28,21 @@
             </div>
             <div class="col-md-3 mb-3">
                 <label for="valor" class="form-label">Valor (R$)</label>
-                <input type="number" name="valor" id="valor" min="0" step="0.01"
+                <input type="number" name="valor" id="valor" min="1" step="0.01" required
                        class="form-control" placeholder="0,00"
                        value="{{ old('valor', $controle->valor ?? '') }}">
                 @error('valor')
+                    <div class="text-danger small">{{ $message }}</div>
+                @enderror
+            </div>
+
+            <div class="col-md-4 mb-3">
+                <label for="codigo_barras" class="form-label">Código de barras</label>
+                <input type="text" name="codigo_barras" id="codigo_barras" inputmode="numeric"
+                       pattern="[0-9]{8,14}" maxlength="14" class="form-control" placeholder="ex: 7891234567895"
+                       title="De 8 a 14 números (EAN/UPC)"
+                       value="{{ old('codigo_barras', $controle->codigo_barras ?? '') }}">
+                @error('codigo_barras')
                     <div class="text-danger small">{{ $message }}</div>
                 @enderror
             </div>

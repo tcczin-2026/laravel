@@ -39,6 +39,9 @@
                     <td class="col-nome">
                         <div class="fw-semibold">{{ $item->nome }}</div>
                         <div class="small text-muted">#{{ $item->id }} · {{ $item->plataforma->nome ?? '-' }}</div>
+                        @if ($item->codigo_barras)
+                            <div class="small text-muted"><i class="bi bi-upc"></i> {{ $item->codigo_barras }}</div>
+                        @endif
                         {{-- no celular a coluna Valor some, então o preço vem pra cá --}}
                         @if ($item->valor !== null)
                             <div class="small d-md-none">{{ $item->valor_formatado }}</div>

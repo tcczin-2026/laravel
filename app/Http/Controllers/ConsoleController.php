@@ -30,6 +30,16 @@ class ConsoleController extends Controller
             $q->where('nome', 'like', "%{$nome}%");
         });
 
+        // Filtro por id exato (usado pelo link do histórico geral)
+        $query->when($request->id, function ($q, $id) {
+            $q->where('id', $id);
+        });
+
+        // Filtro por código de barras (exato; o leitor manda só os números)
+        $query->when(trim((string) $request->codigo_barras), function ($q, $codigo) {
+            $q->where('codigo_barras', $codigo);
+        });
+
         // Filtro por plataforma
         $query->when($request->plataformaConsole, function ($q, $plataforma) {
             $q->where('plataformaConsole', $plataforma);
@@ -165,7 +175,8 @@ class ConsoleController extends Controller
             'plataformaConsole' => 'required|exists:plataforma,id',
             'quantidade'   => 'required|integer|min:0',
             'valor'         => self::REGRA_VALOR,
-            'armazenamento' => 'nullable|integer|min:1|max:100000', // em GB
+            'codigo_barras' => self::REGRA_CODIGO_BARRAS,
+            'armazenamento' => 'required|integer|min:1|max:100000', // em GB
             'estado'       => 'required|exists:usado,id',
             'leitor'       => 'required|exists:digital,id',
             'cores'        => 'required|exists:cor,id',

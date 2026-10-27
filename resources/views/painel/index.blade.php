@@ -35,8 +35,31 @@
 
     <h5 class="text-muted mt-5 mb-3">Últimas alterações</h5>
 
+    <form method="GET" action="{{ route('painel.index') }}" class="row g-2 mb-3">
+        <div class="col-6 col-md-2">
+            <input type="number" name="id" min="1" class="form-control" placeholder="ID do item"
+                   value="{{ request('id') }}">
+        </div>
+        <div class="col-6 col-md-3">
+            <select name="tipo" class="form-select">
+                <option value="">Todos os tipos</option>
+                @foreach ($tiposHistorico as $valor => $rotulo)
+                    <option value="{{ $valor }}" @selected(request('tipo') === $valor)>{{ $rotulo }}</option>
+                @endforeach
+            </select>
+        </div>
+        <div class="col-auto">
+            <button type="submit" class="btn btn-primary">Buscar</button>
+            @if (request()->filled('id') || request()->filled('tipo'))
+                <a href="{{ route('painel.index') }}" class="btn btn-outline-secondary">Limpar</a>
+            @endif
+        </div>
+    </form>
+
     @if ($historico->isEmpty())
-        <div class="card card-body text-muted">Nenhuma alteração registrada ainda.</div>
+        <div class="card card-body text-muted">
+            {{ request()->filled('id') || request()->filled('tipo') ? 'Nenhuma alteração encontrada para essa busca.' : 'Nenhuma alteração registrada ainda.' }}
+        </div>
     @else
         <div class="table-responsive">
             <table class="table table-dark align-middle">
@@ -57,7 +80,7 @@
                                 <div class="small text-muted">{{ $item['quando']->diffForHumans() }}</div>
                             </td>
                             <td>
-                                <div class="small text-muted">{{ $item['tipo'] }}</div>
+                                <div class="small text-muted">{{ $item['tipo'] }} #{{ $item['id'] }}</div>
                                 @if ($item['link'])
                                     <a href="{{ $item['link'] }}">{{ $item['nome'] }}</a>
                                 @else

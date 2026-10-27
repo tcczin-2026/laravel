@@ -25,6 +25,16 @@ class AcessorioController extends Controller
             $query->when($request->nome, function ($q, $nome) {
                 $q->where('nome', 'like', "%{$nome}%");
             });
+
+            // Filtro por id exato (usado pelo link do histórico geral)
+            $query->when($request->id, function ($q, $id) {
+                $q->where('id', $id);
+            });
+
+            // Filtro por código de barras (exato; o leitor manda só os números)
+            $query->when(trim((string) $request->codigo_barras), function ($q, $codigo) {
+                $q->where('codigo_barras', $codigo);
+            });
     
             // Filtro por plataforma
             $query->when($request->plataforma, function ($q, $plataforma) {
@@ -138,6 +148,7 @@ class AcessorioController extends Controller
             'Plataforma' => 'required|exists:plataforma,id',
             'quantidade'    => 'required|integer|min:0',
             'valor'         => self::REGRA_VALOR,
+            'codigo_barras' => self::REGRA_CODIGO_BARRAS,
             'cores'         => 'required|exists:cor,id',
             'vintage'       => 'required|exists:retro,id',
             'estado'        => 'required|exists:usado,id',

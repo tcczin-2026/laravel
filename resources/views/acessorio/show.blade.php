@@ -10,6 +10,7 @@
             <dt class="col-sm-3">Nome</dt>       <dd class="col-sm-9">{{ $acessorio->nome }}</dd>
             <dt class="col-sm-3">Quantidade</dt> <dd class="col-sm-9">{{ $acessorio->quantidade ?? '-' }}</dd>
             <dt class="col-sm-3">Valor</dt>          <dd class="col-sm-9">{{ $acessorio->valor_formatado }}</dd>
+            <dt class="col-sm-3">Cód. de barras</dt> <dd class="col-sm-9">{{ $acessorio->codigo_barras ?? '-' }}</dd>
             <dt class="col-sm-3">Estado</dt>     <dd class="col-sm-9">{{ $acessorio->usado->nome ?? '-' }}</dd>
             <dt class="col-sm-3">Cor</dt>        <dd class="col-sm-9">{{ $acessorio->cor->nome ?? '-' }}</dd>
         </dl>

@@ -17,6 +17,7 @@ class Controle extends Model
     public ?string $acaoHistorico = null;
     protected $fillable = [
         'nome',
+        'codigo_barras',
         'plataformaControle',
         'quantidade',
         'valor',

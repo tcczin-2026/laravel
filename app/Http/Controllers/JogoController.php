@@ -24,6 +24,16 @@ public function index(Request $request)
         $q->where('nome', 'like', "%{$nome}%");
     });
 
+    // Filtro por id exato (usado pelo link do histórico geral)
+    $query->when($request->id, function ($q, $id) {
+        $q->where('id', $id);
+    });
+
+    // Filtro por código de barras (exato; o leitor manda só os números)
+    $query->when(trim((string) $request->codigo_barras), function ($q, $codigo) {
+        $q->where('codigo_barras', $codigo);
+    });
+
     // Filtro por plataforma (o formulário envia "plataformajogo")
     $query->when($request->plataformajogo, function ($q, $plataforma) {
         $q->where('Plataforma', $plataforma);
@@ -129,6 +139,7 @@ public function index(Request $request)
             'Plataforma'   => 'required|exists:plataforma,id',
             'quantidade'   => 'required|integer|min:0',
             'valor'         => self::REGRA_VALOR,
+            'codigo_barras' => self::REGRA_CODIGO_BARRAS,
             'estado'       => 'required|exists:usado,id',
             'vintage'      => 'required|exists:retro,id',
             'colecionador' => 'required|exists:edicao_especial,id',

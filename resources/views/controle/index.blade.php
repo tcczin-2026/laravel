@@ -6,7 +6,7 @@
     @php
         $mostrarFiltro = request()->boolean('mostrarFiltro');
 
-        $filtrosAtivos = collect(request()->only(['nome','plataformacontrole','estado','cores','edicoes','retros']))
+        $filtrosAtivos = collect(request()->only(['nome','codigo_barras','plataformacontrole','estado','cores','edicoes','retros']))
             ->filter(fn($v) => filled($v))
             ->count();
 
@@ -16,7 +16,8 @@
 
     <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
         <h1 class="h3 mb-0">Controles</h1>
-        <div class="d-flex gap-2">
+        <div class="d-flex flex-wrap gap-2">
+            @include('partials.lista.busca-codigo', ['tipo' => 'controle'])
             <a href="{{ $urlAbrirFiltro }}" class="btn btn-outline-light position-relative">
                 <i class="bi bi-funnel"></i> Filtro
                 @if ($filtrosAtivos > 0)
@@ -155,6 +156,9 @@
 
                             <dt class="col-sm-4">Valor</dt>
                             <dd class="col-sm-8">{{ $controle->valor_formatado }}</dd>
+
+                            <dt class="col-sm-4">Código de barras</dt>
+                            <dd class="col-sm-8">{{ $controle->codigo_barras ?? '-' }}</dd>
 
                             <dt class="col-sm-4">Estado</dt>
                             <dd class="col-sm-8">{{ $controle->usado->nome ?? '-' }}</dd>

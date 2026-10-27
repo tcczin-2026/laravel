@@ -59,7 +59,10 @@ class CadastrosTest extends TestCase
 
     private function dados(string $entidade, array $extra = []): array
     {
-        $dados = ['nome' => "Item {$entidade}", 'quantidade' => 5];
+        $dados = ['nome' => "Item {$entidade}", 'quantidade' => 5, 'valor' => 199.90];
+        if ($entidade === 'console') {
+            $dados['armazenamento'] = 500;
+        }
         foreach (self::ENTIDADES[$entidade] as $campo => $tabela) {
             $dados[$campo] = $this->aux[$tabela];
         }
@@ -128,7 +131,7 @@ class CadastrosTest extends TestCase
     {
         $this->actingAs($this->funcionario())
             ->post("/{$entidade}", [])
-            ->assertSessionHasErrors(array_merge(['nome', 'quantidade'], array_keys(self::ENTIDADES[$entidade])));
+            ->assertSessionHasErrors(array_merge(['nome', 'quantidade', 'valor'], array_keys(self::ENTIDADES[$entidade])));
 
         $this->assertDatabaseCount($entidade, 0);
     }
@@ -256,6 +259,56 @@ class CadastrosTest extends TestCase
 
         $this->actingAs($this->funcionario())->get("/{$entidade}?nome=mario")
             ->assertOk()->assertSee('Super Mario')->assertDontSee('Sonic');
+    }
+
+    #[DataProvider('entidades')]
+    public function test_cadastra_e_busca_pelo_codigo_de_barras(string $entidade): void
+    {
+        $usuario = $this->funcionario();
+        $this->actingAs($usuario)->post("/{$entidade}", $this->dados($entidade, ['nome' => 'Com Codigo', 'codigo_barras' => '7891234567895']))
+            ->assertSessionHasNoErrors();
+        $this->criar($entidade, ['nome' => 'Sem Codigo']);
+
+        $this->assertDatabaseHas($entidade, ['nome' => 'Com Codigo', 'codigo_barras' => '7891234567895']);
+
+        $this->actingAs($usuario)->get("/{$entidade}?codigo_barras=7891234567895")
+            ->assertOk()->assertSee('Com Codigo')->assertDontSee('Sem Codigo');
+
+        // busca exata: um pedaço do código não acha nada
+        $this->actingAs($usuario)->get("/{$entidade}?codigo_barras=789123")
+            ->assertOk()->assertDontSee('Com Codigo');
+
+        $this->actingAs($usuario)->get("/{$entidade}")->assertSee('name="codigo_barras"', false);
+        $this->actingAs($usuario)->get("/{$entidade}/create")->assertSee('id="codigo_barras"', false);
+    }
+
+    #[DataProvider('entidades')]
+    public function test_codigo_de_barras_e_opcional_mas_so_aceita_8_a_14_digitos(string $entidade): void
+    {
+        $usuario = $this->funcionario();
+
+        foreach (['1234567', '123456789012345', '78912345abc95', '789 1234 5678'] as $invalido) {
+            $this->actingAs($usuario)->post("/{$entidade}", $this->dados($entidade, ['codigo_barras' => $invalido]))
+                ->assertSessionHasErrors('codigo_barras');
+        }
+        $this->assertSame(0, DB::table($entidade)->count());
+
+        foreach (['', '12345678', '12345678901234'] as $valido) {
+            $this->actingAs($usuario)->post("/{$entidade}", $this->dados($entidade, ['codigo_barras' => $valido]))
+                ->assertSessionHasNoErrors();
+        }
+        $this->assertSame(3, DB::table($entidade)->count());
+    }
+
+    #[DataProvider('entidades')]
+    public function test_filtro_por_id_separa_itens_com_mesmo_nome(string $entidade): void
+    {
+        $primeiro = $this->criar($entidade, ['nome' => 'Mesmo Nome', 'quantidade' => 3]);
+        $this->criar($entidade, ['nome' => 'Mesmo Nome', 'quantidade' => 8]);
+
+        $html = $this->actingAs($this->funcionario())->get("/{$entidade}?id={$primeiro}")->assertOk()->getContent();
+        $this->assertStringContainsString("/{$entidade}/{$primeiro}/edit", $html);
+        $this->assertStringNotContainsString("/{$entidade}/" . ($primeiro + 1) . '/edit', $html);
     }
 
     #[DataProvider('entidades')]

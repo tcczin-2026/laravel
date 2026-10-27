@@ -17,6 +17,7 @@ class Console extends Model
     public ?string $acaoHistorico = null;
     protected $fillable = [
         'nome',
+        'codigo_barras',
         'plataformaConsole',
         'quantidade',
         'valor',

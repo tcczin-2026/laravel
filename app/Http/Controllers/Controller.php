@@ -14,7 +14,10 @@ class Controller extends BaseController
     public const POR_PAGINA = [10, 25, 50, 100];
 
     /** Regra de validação do preço, igual nas 4 tabelas principais */
-    protected const REGRA_VALOR = 'nullable|numeric|min:0|max:99999999.99';
+    protected const REGRA_VALOR = 'required|numeric|min:1|max:99999999.99';
+
+    /** Código de barras: EAN-8, UPC-A (12), EAN-13 ou GTIN-14, só dígitos */
+    protected const REGRA_CODIGO_BARRAS = 'nullable|digits_between:8,14';
 
     /**
      * Aceita o preço no formato brasileiro: "1.299,90" -> "1299.90".

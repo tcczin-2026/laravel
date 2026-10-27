@@ -41,11 +41,21 @@ class PainelController extends Controller
             [AcessorioHistorico::class, 'acessorio', 'Acessório'],
         ];
 
+        // Busca pelo id do item (?id=5). Como cada tabela tem seus próprios ids,
+        // dá pra escolher o tipo (?tipo=console) pra não misturar o console 5 com o jogo 5.
+        $id = $request->filled('id') ? (int) $request->input('id') : null;
+        $tipoEscolhido = $request->input('tipo');
+
         $itens = collect();
         $total = 0;
         foreach ($fontes as [$model, $relacao, $tipo]) {
-            $itens = $itens->merge($this->historicoDe($model, $relacao, $tipo, $limite));
-            $total += $model::count();
+            if ($tipoEscolhido && $tipoEscolhido !== $relacao) {
+                continue;
+            }
+            $consulta = fn () => $model::query()->when($id, fn ($q) => $q->where("{$relacao}_id", $id));
+
+            $itens = $itens->merge($this->historicoDe($consulta(), $relacao, $tipo, $limite));
+            $total += $consulta()->count();
         }
 
         $historico = new LengthAwarePaginator(
@@ -55,23 +65,26 @@ class PainelController extends Controller
             $pagina,
             ['path' => $request->url()]
         );
-        $historico->withQueryString(); // mantém o ?por_pagina= ao trocar de página
+        $historico->withQueryString(); // mantém o ?por_pagina=, ?id= e ?tipo= ao trocar de página
 
-        return view('painel.index', compact('totais', 'auxiliares', 'historico'));
+        $tiposHistorico = array_column($fontes, 2, 1); // ['console' => 'Console', ...]
+
+        return view('painel.index', compact('totais', 'auxiliares', 'historico', 'tiposHistorico'));
     }
 
-    private function historicoDe(string $model, string $relacao, string $tipo, int $limite)
+    private function historicoDe($consulta, string $relacao, string $tipo, int $limite)
     {
-        return $model::with($relacao)
+        return $consulta->with($relacao)
             ->latest('created_at')
             ->take($limite)
             ->get()
             ->map(function ($h) use ($relacao, $tipo) {
                 return [
                     'tipo'     => $tipo,
+                    'id'       => $h->{"{$relacao}_id"},
                     'nome'     => $h->$relacao->nome ?? $this->nomeDoResumo($h),
                     // link pra listagem já filtrada pelo item (só se ele ainda existe)
-                    'link'     => $h->$relacao ? route("{$relacao}.index", ['nome' => $h->$relacao->nome]) : null,
+                    'link'     => $h->$relacao ? route("{$relacao}.index", ['id' => $h->$relacao->id]) : null,
                     'acao'     => $h->acao,
                     'campo'    => $h->campo_rotulo, // nomes em vez de ids (trait FormataHistorico)
                     'de'       => $h->de_texto,

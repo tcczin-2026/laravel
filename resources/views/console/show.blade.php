@@ -10,6 +10,7 @@
             <dt class="col-sm-3">plataforma</dt>          <dd class="col-sm-9">{{ $console->plataforma->nome ?? '-' }}</dd>
             <dt class="col-sm-3">Quantidade</dt>     <dd class="col-sm-9">{{ $console->quantidade }}</dd>
             <dt class="col-sm-3">Valor</dt>          <dd class="col-sm-9">{{ $console->valor_formatado }}</dd>
+            <dt class="col-sm-3">Cód. de barras</dt> <dd class="col-sm-9">{{ $console->codigo_barras ?? '-' }}</dd>
             <dt class="col-sm-3">Armazenamento</dt>  <dd class="col-sm-9">{{ $console->armazenamento_formatado }}</dd>
             <dt class="col-sm-3">Estado</dt>         <dd class="col-sm-9">{{ $console->usado->nome ?? '-' }}</dd>
             <dt class="col-sm-3">Leitor</dt>         <dd class="col-sm-9">{{ $console->digital->nome ?? '-' }}</dd>

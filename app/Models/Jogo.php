@@ -17,6 +17,7 @@ class Jogo extends Model
     public ?string $acaoHistorico = null;
     protected $fillable = [
         'nome',
+        'codigo_barras',
         'Plataforma',
         'quantidade',
         'valor',

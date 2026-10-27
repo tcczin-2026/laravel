@@ -39,7 +39,10 @@ class ValorArmazenamentoTest extends TestCase
 
     private function dados(string $entidade, array $extra = []): array
     {
-        $dados = ['nome' => 'Item', 'quantidade' => 1];
+        $dados = ['nome' => 'Item', 'quantidade' => 1, 'valor' => '10'];
+        if ($entidade === 'console') {
+            $dados['armazenamento'] = 500;
+        }
         foreach (self::CAMPOS[$entidade] as $campo => $tabela) {
             $dados[$campo] = $this->aux[$tabela];
         }
@@ -69,13 +72,17 @@ class ValorArmazenamentoTest extends TestCase
     }
 
     #[DataProvider('entidades')]
-    public function test_valor_e_opcional(string $entidade): void
+    public function test_valor_e_obrigatorio(string $entidade): void
     {
         $usuario = $this->funcionario();
 
-        $this->actingAs($usuario)->post("/{$entidade}", $this->dados($entidade))->assertSessionHasNoErrors();
+        foreach (['', null] as $vazio) {
+            $this->actingAs($usuario)->post("/{$entidade}", $this->dados($entidade, ['valor' => $vazio]))
+                ->assertSessionHasErrors('valor');
+        }
+        $this->assertSame(0, DB::table($entidade)->count());
 
-        $this->assertNull(DB::table($entidade)->value('valor'));
+        $this->actingAs($usuario)->get("/{$entidade}/create")->assertSee('step="0.01" required', false);
     }
 
     #[DataProvider('entidades')]
@@ -83,7 +90,7 @@ class ValorArmazenamentoTest extends TestCase
     {
         $usuario = $this->funcionario();
 
-        foreach (['-5', 'abc', '100000000'] as $invalido) {
+        foreach (['-5', '0', '0.99', 'abc', '100000000'] as $invalido) {
             $this->actingAs($usuario)->post("/{$entidade}", $this->dados($entidade, ['valor' => $invalido]))
                 ->assertSessionHasErrors('valor');
         }
@@ -109,13 +116,14 @@ class ValorArmazenamentoTest extends TestCase
 
         $this->actingAs($usuario)->post('/console', $this->dados('console', ['nome' => 'PS5', 'armazenamento' => 825]));
         $this->actingAs($usuario)->post('/console', $this->dados('console', ['nome' => 'Series X', 'armazenamento' => 1000]));
-        $this->actingAs($usuario)->post('/console', $this->dados('console', ['nome' => 'Retro']));
+        $this->actingAs($usuario)->post('/console', $this->dados('console', ['nome' => 'Retro', 'armazenamento' => null]))
+            ->assertSessionHasErrors('armazenamento');
 
         $html = $this->actingAs($usuario)->get('/console')->assertOk()->getContent();
         $this->assertStringContainsString('825 GB', $html);
         $this->assertStringContainsString('1 TB', $html);
-        $this->assertNull(DB::table('console')->where('nome', 'Retro')->value('armazenamento'));
-        $this->actingAs($usuario)->get('/console/create')->assertSee('name="armazenamento"', false);
+        $this->assertDatabaseMissing('console', ['nome' => 'Retro']);
+        $this->actingAs($usuario)->get('/console/create')->assertSee('step="1" required', false);
     }
 
     public function test_armazenamento_formatado(): void
@@ -129,7 +137,7 @@ class ValorArmazenamentoTest extends TestCase
     {
         $usuario = $this->funcionario();
 
-        foreach (['0', '-1', '2.5', 'muito'] as $invalido) {
+        foreach (['', '0', '-1', '2.5', 'muito'] as $invalido) {
             $this->actingAs($usuario)->post('/console', $this->dados('console', ['armazenamento' => $invalido]))
                 ->assertSessionHasErrors('armazenamento');
         }
