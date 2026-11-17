@@ -6,6 +6,14 @@
     <title>@yield('titulo', 'Colecao de Games')</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="{{ asset('css/theme.css') }}" rel="stylesheet">
+    <link rel="manifest" href="{{ asset('manifest.json') }}">
+<script>
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/serviceworker.js')
+            .then(() => console.log('Service Worker registrado com sucesso.'))
+            .catch((error) => console.log('Falha ao registrar o Service Worker:', error));
+    }
+</script>
 </head>
 <body>
 

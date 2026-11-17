@@ -61,6 +61,10 @@ Route::middleware('auth')->group(function () {
     Route::post('historico/{tipo}/{id}/desfazer', [App\Http\Controllers\HistoricoController::class, 'desfazer'])->name('historico.desfazer');
     Route::post('historico/{tipo}/{id}/restaurar', [App\Http\Controllers\HistoricoController::class, 'restaurar'])->name('historico.restaurar');
 
+    // teste do offline
+    Route::get('/offline', function () {
+        return view('offline');
+    });
     // ---- So gerente: tabelas auxiliares e usuarios ----
 
     Route::middleware('perfil:gerente')->group(function () {

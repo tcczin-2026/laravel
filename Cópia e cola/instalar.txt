@@ -1,0 +1,2 @@
+criador de icones(precisa node.js)
+npx pwa-asset-generator logo.png ./public/images/icons
