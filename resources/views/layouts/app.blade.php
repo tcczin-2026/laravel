@@ -4,6 +4,19 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>@yield('titulo', 'Colecao de Games')</title>
+
+    {{-- Modo offline / app instalável (public/sw.js, public/js/offline.js) --}}
+    <meta name="app-base" content="{{ url('/') }}/">
+    <meta name="usuario-id" content="{{ auth()->id() }}">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="theme-color" content="#0b0417">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Coleção Games">
+    <link rel="manifest" href="{{ asset('manifest.webmanifest') }}">
+    <link rel="apple-touch-icon" href="{{ asset('icons/apple-touch-icon.png') }}">
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="{{ asset('css/theme.css') }}" rel="stylesheet">
     <link rel="manifest" href="{{ asset('manifest.json') }}">
@@ -16,6 +29,9 @@
 </script>
 </head>
 <body>
+
+{{-- Aviso de conexão: preenchido pelo public/js/offline.js --}}
+<div id="aviso-conexao" class="aviso-conexao" role="status" aria-live="polite" hidden></div>
 
 {{-- Barra do topo: só aparece em telas pequenas (abaixo de lg) --}}
 <header class="app-mobilebar d-lg-none">
@@ -113,5 +129,32 @@
 
 {{-- Sem isso, data-bs-toggle="modal", dropdowns, etc não funcionam --}}
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+{{-- Alterações guardadas offline --}}
+<div class="modal fade" id="modalOfflineFila" tabindex="-1" aria-labelledby="modalOfflineFilaTitulo" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title h5" id="modalOfflineFilaTitulo">Alterações guardadas neste aparelho</h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+            </div>
+            <div class="modal-body" data-lista></div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalOfflineConfirmar" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body" data-texto></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-danger" data-confirmar>Confirmar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="{{ asset('js/offline.js') }}"></script>
 </body>
 </html>

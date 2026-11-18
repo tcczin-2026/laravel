@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#0b0417">
+    <!--BASE-->
+    <title>Sem conexão - Colecao de Games</title>
+    <style>
+        :root { color-scheme: dark; }
+        body {
+            margin: 0; min-height: 100vh; display: grid; place-items: center; padding: 24px; box-sizing: border-box;
+            font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+            background: #0b0417; color: #f2eefc;
+        }
+        main { max-width: 440px; text-align: center; }
+        .logo { width: 56px; height: 56px; margin: 0 auto 20px; border-radius: 16px;
+                background: linear-gradient(135deg, #ff3fa4, #7b2ff7 55%, #4f8cff); }
+        h1 { font-size: 1.4rem; margin: 0 0 12px; }
+        p { color: #9686bf; line-height: 1.5; margin: 0 0 24px; }
+        .botoes { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+        a, button {
+            padding: 10px 18px; border-radius: 10px; font: inherit; font-weight: 600; cursor: pointer;
+            text-decoration: none; border: 1px solid rgba(255,255,255,.12); background: #1c1333; color: #f2eefc;
+        }
+        .principal { background: linear-gradient(135deg, #ff3fa4, #7b2ff7); border-color: transparent; }
+    </style>
+</head>
+<body>
+<main>
+    <div class="logo"></div>
+    <h1>Esta página não está salva para uso offline</h1>
+    <p>Você está sem conexão e esta tela ainda não foi guardada neste aparelho
+       (ex: uma busca com filtros, ou um item cadastrado em outro lugar).
+       As telas principais continuam funcionando.</p>
+    <div class="botoes">
+        <a class="principal" href="colecao">Ir para o painel</a>
+        <button type="button" onclick="history.back()">Voltar</button>
+        <button type="button" onclick="location.reload()">Tentar de novo</button>
+    </div>
+</main>
+</body>
+</html>

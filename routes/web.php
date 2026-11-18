@@ -34,6 +34,19 @@ Route::post('/logout', [App\Http\Controllers\LoginController::class, 'destroy'])
 
 /*
 |--------------------------------------------------------------------------
+| Modo offline (public/sw.js e public/js/offline.js)
+|--------------------------------------------------------------------------
+*/
+
+Route::get('/offline/ping', [App\Http\Controllers\OfflineController::class, 'ping'])->name('offline.ping');
+
+Route::middleware('auth')->group(function () {
+    Route::get('/offline/token', [App\Http\Controllers\OfflineController::class, 'token'])->name('offline.token');
+    Route::get('/offline/paginas', [App\Http\Controllers\OfflineController::class, 'paginas'])->name('offline.paginas');
+});
+
+/*
+|--------------------------------------------------------------------------
 | Colecao de games - CRUD (precisa estar logado)
 |--------------------------------------------------------------------------
 */
