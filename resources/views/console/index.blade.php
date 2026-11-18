@@ -3,8 +3,7 @@
 @section('titulo', 'Consoles')
 
 @section('conteudo')
-
-@php
+    @php
         $mostrarFiltro = request()->boolean('mostrarFiltro');
 
         $filtrosAtivos = collect(request()->only(['nome','codigo_barras','plataformaConsole','estado','cores','digitais','desbloqueados','edicoes','retros']))
@@ -14,7 +13,7 @@
         $urlAbrirFiltro = request()->fullUrlWithQuery(['mostrarFiltro' => 1]);
         $urlFecharFiltro = request()->fullUrlWithQuery(['mostrarFiltro' => null]);
     @endphp
-<link rel="stylesheet" href="App\Http\resources\css\app.css">
+
     <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
         <h1 class="h3 mb-0">Consoles</h1>
         <div class="d-flex flex-wrap gap-2">
@@ -27,7 +26,7 @@
                     </span>
                 @endif
             </a>
-        <a href="{{ route('console.create') }}" class="btn btn-primary">Novo console</a>
+            <a href="{{ route('console.create') }}" class="btn btn-primary">Novo console</a>
         </div>
     </div>
 
@@ -45,88 +44,97 @@
                     <div class="row g-3">
                         <div class="col-md-6">
                             <label class="form-label">Nome</label>
-            <input type="text" name="nome" class="form-control" placeholder="Buscar por nome"
-                   value="{{ request('nome') }}">
-        </div>
+                            <input type="text" name="nome" class="form-control" placeholder="Buscar por nome"
+                                   value="{{ request('nome') }}">
+                        </div>
 
-        <div class="col-md-2">
-            <select name="plataformaConsole" class="form-select">
-                <option value="">Todas as plataformas</option>
-                @foreach ($plataformas as $plataforma)
-                    <option value="{{ $plataforma->id }}" @selected(request('plataformaConsole') == $plataforma->id)>
-                        {{ $plataforma->nome }}
-                    </option>
-                @endforeach
-            </select>
-        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Plataforma</label>
+                            <select name="plataformaConsole" class="form-select">
+                                <option value="">Todas as plataformas</option>
+                                @foreach ($plataformas as $plataforma)
+                                    <option value="{{ $plataforma->id }}" @selected(request('plataformaConsole') == $plataforma->id)>
+                                        {{ $plataforma->nome }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
 
-        <div class="col-md-2">
-            <select name="estado" class="form-select">
-                <option value="">Todos os estados</option>
-                @foreach ($usados as $usado)
-                    <option value="{{ $usado->id }}" @selected(request('estado') == $usado->id)>
-                        {{ $usado->nome }}
-                    </option>
-                @endforeach
-            </select>
-        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Estado</label>
+                            <select name="estado" class="form-select">
+                                <option value="">Todos os estados</option>
+                                @foreach ($usados as $usado)
+                                    <option value="{{ $usado->id }}" @selected(request('estado') == $usado->id)>
+                                        {{ $usado->nome }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
 
-        <div class="col-md-2">
-            <select name="cores" class="form-select">
-                <option value="">Todas as cores</option>
-                @foreach ($cores as $cor)
-                    <option value="{{ $cor->id }}" @selected(request('cores') == $cor->id)>
-                        {{ $cor->nome }}
-                    </option>
-                @endforeach
-            </select>
-        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Cor</label>
+                            <select name="cores" class="form-select">
+                                <option value="">Todas as cores</option>
+                                @foreach ($cores as $cor)
+                                    <option value="{{ $cor->id }}" @selected(request('cores') == $cor->id)>
+                                        {{ $cor->nome }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
 
-        <div class="col-md-2">
-            <select name="digitais" class="form-select">
-                <option value="">Todas as digitais</option>
-                @foreach ($digitais as $digital)
-                    <option value="{{ $digital->id }}" @selected(request('digitais') == $digital->id)>
-                        {{ $digital->nome }}
-                    </option>
-                @endforeach
-            </select>
-           </div> 
+                        <div class="col-md-6">
+                            <label class="form-label">Leitor (Digital)</label>
+                            <select name="digitais" class="form-select">
+                                <option value="">Todas as digitais</option>
+                                @foreach ($digitais as $digital)
+                                    <option value="{{ $digital->id }}" @selected(request('digitais') == $digital->id)>
+                                        {{ $digital->nome }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
 
-                    <div class="col-md-2">
-            <select name="desbloqueados" class="form-select">
-                <option value="">Todos desbloqueados</option>
-                @foreach ($desbloqueados as $desbloqueado)
-                    <option value="{{ $desbloqueado->id }}" @selected(request('desbloqueados') == $desbloqueado->id)>
-                        {{ $desbloqueado->nome }}
-                    </option>
-                @endforeach
-            </select>
-        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Desbloqueado</label>
+                            <select name="desbloqueados" class="form-select">
+                                <option value="">Todos desbloqueados</option>
+                                @foreach ($desbloqueados as $desbloqueado)
+                                    <option value="{{ $desbloqueado->id }}" @selected(request('desbloqueados') == $desbloqueado->id)>
+                                        {{ $desbloqueado->nome }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
 
-        <div class="col-md-2">
-            <select name="edicoes" class="form-select">
-                <option value="">Todos edicoes</option>
-                @foreach ($edicoes as $edicao)
-                    <option value="{{ $edicao->id }}" @selected(request('edicoes') == $edicao->id)>
-                        {{ $edicao->nome }}
-                    </option>
-                @endforeach
-            </select>
-        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Edição</label>
+                            <select name="edicoes" class="form-select">
+                                <option value="">Todas as edições</option>
+                                @foreach ($edicoes as $edicao)
+                                    <option value="{{ $edicao->id }}" @selected(request('edicoes') == $edicao->id)>
+                                        {{ $edicao->nome }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
 
-        <div class="col-md-2">
-            <select name="retros" class="form-select">
-                <option value="">Todas as retros</option>
-                @foreach ($retros as $retro)
-                    <option value="{{ $retro->id }}" @selected(request('retros') == $retro->id)>
-                        {{ $retro->nome }}
-                    </option>
-                @endforeach
-            </select>
-        
-        </div>
-        <div class="card-footer d-flex justify-content-end gap-2">
+                        <div class="col-md-6">
+                            <label class="form-label">Retrocompatibilidade</label>
+                            <select name="retros" class="form-select">
+                                <option value="">Todas as retros</option>
+                                @foreach ($retros as $retro)
+                                    <option value="{{ $retro->id }}" @selected(request('retros') == $retro->id)>
+                                        {{ $retro->nome }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-footer d-flex justify-content-end gap-2">
                     <a href="{{ route('console.index', ['mostrarFiltro' => 1]) }}" class="btn btn-outline-light">Limpar filtros</a>
                     <button type="submit" class="btn btn-primary">
                         <i class="bi bi-check-lg"></i> Aplicar filtros
@@ -136,7 +144,7 @@
         </div>
     @endif
     {{-- FIM DO FILTRO --}}
- 
+
     @include('partials.lista.tabela', [
         'itens'   => $consoles,
         'tipo'    => 'console',

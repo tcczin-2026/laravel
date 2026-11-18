@@ -1,12 +1,9 @@
-<!-- index -->
-
 @extends('layouts.app')
 
 @section('titulo', 'Acessorios')
 
 @section('conteudo')
-
-@php
+    @php
         $mostrarFiltro = request()->boolean('mostrarFiltro');
 
         $filtrosAtivos = collect(request()->only(['nome','codigo_barras','plataforma','estado','cores','edicoes','retros']))
@@ -29,7 +26,7 @@
                     </span>
                 @endif
             </a>
-        <a href="{{ route('acessorio.create') }}" class="btn btn-primary">Novo acessorio</a>
+            <a href="{{ route('acessorio.create') }}" class="btn btn-primary">Novo acessorio</a>
         </div>
     </div>
 
@@ -47,66 +44,74 @@
                     <div class="row g-3">
                         <div class="col-md-6">
                             <label class="form-label">Nome</label>
-            <input type="text" name="nome" class="form-control" placeholder="Buscar por nome"
-                   value="{{ request('nome') }}">
-        </div>
+                            <input type="text" name="nome" class="form-control" placeholder="Buscar por nome"
+                                   value="{{ request('nome') }}">
+                        </div>
 
-        <div class="col-md-2">
-            <select name="plataforma" class="form-select">
-                <option value="">Todas as plataformas</option>
-                @foreach ($plataformas as $plataforma)
-                    <option value="{{ $plataforma->id }}" @selected(request('plataforma') == $plataforma->id)>
-                        {{ $plataforma->nome }}
-                    </option>
-                @endforeach
-            </select>
-        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Plataforma</label>
+                            <select name="plataforma" class="form-select">
+                                <option value="">Todas as plataformas</option>
+                                @foreach ($plataformas as $plataforma)
+                                    <option value="{{ $plataforma->id }}" @selected(request('plataforma') == $plataforma->id)>
+                                        {{ $plataforma->nome }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
 
-        <div class="col-md-2">
-            <select name="estado" class="form-select">
-                <option value="">Todos os estados</option>
-                @foreach ($usados as $usado)
-                    <option value="{{ $usado->id }}" @selected(request('estado') == $usado->id)>
-                        {{ $usado->nome }}
-                    </option>
-                @endforeach
-            </select>
-        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Estado</label>
+                            <select name="estado" class="form-select">
+                                <option value="">Todos os estados</option>
+                                @foreach ($usados as $usado)
+                                    <option value="{{ $usado->id }}" @selected(request('estado') == $usado->id)>
+                                        {{ $usado->nome }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
 
-        <div class="col-md-2">
-            <select name="cores" class="form-select">
-                <option value="">Todas as cores</option>
-                @foreach ($cores as $cor)
-                    <option value="{{ $cor->id }}" @selected(request('cores') == $cor->id)>
-                        {{ $cor->nome }}
-                    </option>
-                @endforeach
-            </select>
-        </div>
-        <div class="col-md-2">
-            <select name="edicoes" class="form-select">
-                <option value="">Todos edicoes</option>
-                @foreach ($edicoes as $edicao)
-                    <option value="{{ $edicao->id }}" @selected(request('edicoes') == $edicao->id)>
-                        {{ $edicao->nome }}
-                    </option>
-                @endforeach
-            </select>
-        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Cor</label>
+                            <select name="cores" class="form-select">
+                                <option value="">Todas as cores</option>
+                                @foreach ($cores as $cor)
+                                    <option value="{{ $cor->id }}" @selected(request('cores') == $cor->id)>
+                                        {{ $cor->nome }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
 
-        <div class="col-md-2">
-            <select name="retros" class="form-select">
-                <option value="">Todas as retros</option>
-                @foreach ($retros as $retro)
-                    <option value="{{ $retro->id }}" @selected(request('retros') == $retro->id)>
-                        {{ $retro->nome }}
-                    </option>
-                @endforeach
-            </select>
-        
-        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Edição</label>
+                            <select name="edicoes" class="form-select">
+                                <option value="">Todas as edições</option>
+                                @foreach ($edicoes as $edicao)
+                                    <option value="{{ $edicao->id }}" @selected(request('edicoes') == $edicao->id)>
+                                        {{ $edicao->nome }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
 
-        <a href="{{ route('acessorio.index', ['mostrarFiltro' => 1]) }}" class="btn btn-outline-light">Limpar filtros</a>
+                        <div class="col-md-6">
+                            <label class="form-label">Retrocompatibilidade</label>
+                            <select name="retros" class="form-select">
+                                <option value="">Todas as retros</option>
+                                @foreach ($retros as $retro)
+                                    <option value="{{ $retro->id }}" @selected(request('retros') == $retro->id)>
+                                        {{ $retro->nome }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-footer d-flex justify-content-end gap-2">
+                    <a href="{{ route('acessorio.index', ['mostrarFiltro' => 1]) }}" class="btn btn-outline-light">Limpar filtros</a>
                     <button type="submit" class="btn btn-primary">
                         <i class="bi bi-check-lg"></i> Aplicar filtros
                     </button>
@@ -115,7 +120,6 @@
         </div>
     @endif
     {{-- FIM DO FILTRO --}}
-
 
     @include('partials.lista.tabela', [
         'itens'   => $acessorios,
