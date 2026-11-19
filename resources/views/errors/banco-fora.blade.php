@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="refresh" content="15">
-    <title>Banco de dados fora do ar - Colecao de Games</title>
+    <title>Banco de dados fora do ar - Coleção de Games</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="{{ asset('css/theme.css') }}" rel="stylesheet">
 </head>

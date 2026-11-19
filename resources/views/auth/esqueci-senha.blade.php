@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Esqueci minha senha - Colecao de Games</title>
+    <title>Esqueci minha senha - Coleção de Games</title>
 
     <link rel="stylesheet" href="{{ asset('css/login.css') }}">
 </head>

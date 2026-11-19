@@ -100,7 +100,7 @@ class AcessorioController extends Controller
         acessorio::create($dados);
 
         return redirect()->route('acessorio.index')
-            ->with('success', 'acessorio cadastrado com sucesso!');
+            ->with('success', 'Acessório cadastrado com sucesso!');
     }
 
  
@@ -126,7 +126,7 @@ class AcessorioController extends Controller
         $acessorio->update($dados);
 
         return redirect()->route('acessorio.index')
-            ->with('success', 'acessorio atualizado com sucesso!');
+            ->with('success', 'Acessório atualizado com sucesso!');
     }
  
     /** DELETE */
@@ -136,7 +136,7 @@ class AcessorioController extends Controller
  
         return redirect()
             ->route('acessorio.index')
-            ->with('success', 'acessorio excluido com sucesso!');
+            ->with('success', 'Acessório excluído com sucesso!');
     }
  
     private function validar(Request $request): array

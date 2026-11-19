@@ -51,6 +51,7 @@
 
     const filaListar = async () => ((await operacao('readonly', (s) => s.getAll())) || [])
         .sort((a, b) => a.criadoEm - b.criadoEm);
+    const filaObter = (id) => operacao('readonly', (s) => s.get(id));
     const filaSalvar = (item) => operacao('readwrite', (s) => s.put(item));
     const filaRemover = (id) => operacao('readwrite', (s) => s.delete(id));
     const filaLimpar = () => operacao('readwrite', (s) => s.clear());
@@ -143,6 +144,12 @@
             return sair(form);
         }
 
+        // Formulário mostrando uma alteração guardada: substitui a da fila (e envia, se online)
+        if (form.dataset.offlineItem) {
+            e.preventDefault();
+            return guardarFormulario(form, e.submitter);
+        }
+
         if (online && navigator.onLine) return; // com conexão: envio normal
 
         e.preventDefault();
@@ -164,12 +171,28 @@
             }
         }
 
+        const metodo = (dados.get('_method') || 'POST').toUpperCase();
+        const fila = await filaListar().catch(() => []);
+        const anteriores = alteracoesAnteriores(fila, form, metodo);
+        const anterior = anteriores[anteriores.length - 1] || null;
+
+        // Imagem escolhida na versão anterior continua valendo se não escolheu outra
+        if (anterior) {
+            for (const [nome, valor] of anterior.campos) {
+                if (valor && valor.arquivo && !campos.some(([n]) => n === nome)) campos.push([nome, valor]);
+            }
+        }
+
         const item = {
-            id: novoId(),
-            criadoEm: Date.now(),
+            id: novoId(),                                   // id novo: o servidor não confunde com a versão antiga
+            substitui: anterior ? anterior.id : null,
+            // cadastro editado mantém o lugar na fila; edição vai para o fim (é a mais recente)
+            criadoEm: anterior && anterior.metodo === 'POST' ? anterior.criadoEm : Date.now(),
             usuario: USUARIO,
             url: form.action,
-            metodo: (dados.get('_method') || 'POST').toUpperCase(),
+            pagina: location.href.split('#')[0],            // onde o formulário está (para editar depois)
+            editavel: metodo !== 'DELETE' && !ehHistorico(form.action),
+            metodo,
             descricao: descrever(form.action, dados),
             campos,
             status: 'pendente',
@@ -178,12 +201,23 @@
 
         try {
             await filaSalvar(item);
+            for (const velho of anteriores) await filaRemover(velho.id);
         } catch (err) {
             avisar('Não foi possível guardar a alteração neste aparelho: ' + err, 'danger');
             return;
         }
 
-        const msg = `Salvo offline: ${item.descricao}. Será enviado quando a conexão voltar.`;
+        let msg = anterior
+            ? `Alteração guardada atualizada: ${item.descricao}. Será enviada quando a conexão voltar.`
+            : `Salvo offline: ${item.descricao}. Será enviado quando a conexão voltar.`;
+
+        if (online && navigator.onLine) {
+            await sincronizar();
+            const restou = await filaObter(item.id).catch(() => null);
+            if (!restou) msg = `Salvo: ${item.descricao}.`;
+            else if (restou.status === 'erro') msg = `Não foi possível salvar ${item.descricao}: ${restou.erro}`;
+            else msg = `Guardado: ${item.descricao}. Será enviado em instantes.`;
+        }
 
         // Formulário de cadastro/edição: volta para a listagem (como faria online)
         const lista = urlDaListagem(form.action, item.metodo);
@@ -226,6 +260,125 @@
         return BASE + partes.join('/');
     }
 
+    function ehHistorico(url) {
+        return url.slice(BASE.length).startsWith('historico/');
+    }
+
+    /**
+     * Alterações da fila que este envio substitui:
+     *  - a que o formulário está mostrando (aberta pelo "Editar" da lista de alterações), ou
+     *  - edições ainda não enviadas do mesmo item (editar duas vezes offline = uma alteração só).
+     */
+    function alteracoesAnteriores(fila, form, metodo) {
+        const minhas = fila.filter((i) => i.usuario === USUARIO);
+        const aberta = form.dataset.offlineItem && minhas.find((i) => i.id === form.dataset.offlineItem);
+        const mesmas = (metodo === 'PUT' || metodo === 'PATCH')
+            ? minhas.filter((i) => i.url === form.action && i.metodo === metodo)
+            : [];
+        const todas = aberta ? [aberta, ...mesmas.filter((i) => i.id !== aberta.id)] : mesmas;
+        return todas.sort((a, b) => a.criadoEm - b.criadoEm);
+    }
+
+    // ------------------------------------------------------------ editar alteração guardada
+
+    /**
+     * Ao abrir um formulário de edição que tem alteração guardada neste aparelho
+     * (ou "#offline-editar=<id>" vindo da lista de alterações), o formulário
+     * mostra a versão guardada, e não a cópia antiga do servidor.
+     */
+    async function prepararEdicao() {
+        const fila = (await filaListar().catch(() => [])).filter((i) => i.usuario === USUARIO && i.editavel !== false);
+        if (!fila.length) return;
+
+        const forms = [...document.querySelectorAll('form[method="post"]')];
+        const pedido = location.hash.match(/^#offline-editar=([\w-]+)$/);
+        let item = null, form = null;
+
+        if (pedido) {
+            item = fila.find((i) => i.id === pedido[1]) || null;
+            form = item && forms.find((f) => f.action === item.url && metodoDoForm(f) === item.metodo);
+        }
+        if (!form) {
+            for (const f of forms) {
+                const metodo = metodoDoForm(f);
+                if (metodo !== 'PUT' && metodo !== 'PATCH') continue;
+                const it = fila.filter((i) => i.url === f.action && i.metodo === metodo).pop();
+                if (it) { item = it; form = f; break; }
+            }
+        }
+        if (!item || !form || form.dataset.offlineItem === item.id) return;
+
+        preencher(form, item.campos);
+        form.dataset.offlineItem = item.id;
+        avisoNoFormulario(form, item);
+    }
+
+    function metodoDoForm(form) {
+        return (form.querySelector('input[name="_method"]')?.value || 'POST').toUpperCase();
+    }
+
+    function preencher(form, campos) {
+        const valores = new Map();
+        for (const [nome, valor] of campos) {
+            if (!valores.has(nome)) valores.set(nome, []);
+            valores.get(nome).push(valor);
+        }
+
+        const usados = new Map();
+        for (const el of form.elements) {
+            const nome = el.name;
+            if (!nome || nome === '_token' || nome === '_method' || el.disabled) continue;
+            if (['submit', 'button', 'reset'].includes(el.type)) continue;
+            const lista = valores.get(nome) || [];
+
+            if (el.type === 'file') {
+                const arq = lista.find((v) => v && v.arquivo);
+                if (arq) mostrarArquivoGuardado(el, arq.nome);
+            } else if (el.type === 'checkbox' || el.type === 'radio') {
+                el.checked = lista.includes(el.value);
+            } else if (el.tagName === 'SELECT' && el.multiple) {
+                for (const op of el.options) op.selected = lista.includes(op.value);
+            } else if (valores.has(nome)) {
+                const i = usados.get(nome) || 0;            // campos repetidos (nome[]) na ordem
+                if (i < lista.length) el.value = lista[i];
+                usados.set(nome, i + 1);
+            }
+        }
+    }
+
+    function mostrarArquivoGuardado(input, nomeArquivo) {
+        if (input.parentElement.querySelector('[data-offline-arquivo]')) return;
+        const nota = document.createElement('div');
+        nota.className = 'small text-warning mt-1';
+        nota.dataset.offlineArquivo = '';
+        nota.textContent = `Imagem guardada neste aparelho: ${nomeArquivo}. Escolha outra só se quiser trocar.`;
+        input.after(nota);
+    }
+
+    function avisoNoFormulario(form, item) {
+        form.parentElement.querySelector('[data-offline-editando]')?.remove();
+
+        const div = document.createElement('div');
+        div.className = 'alert alert-warning d-flex flex-wrap align-items-center gap-2';
+        div.dataset.offlineEditando = '';
+
+        const texto = document.createElement('span');
+        texto.className = 'me-auto';
+        texto.textContent = item.status === 'erro'
+            ? `Esta alteração guardada não pôde ser enviada (${item.erro}). Corrija e salve de novo.`
+            : 'Este formulário mostra a sua alteração guardada neste aparelho, que ainda não foi enviada ao servidor. Ao salvar, ela é substituída.';
+
+        const descartar = botaoAcao('Descartar alteração', 'btn-outline-light', async () => {
+            await filaRemover(item.id);
+            location.replace(location.href.split('#')[0]);
+        });
+
+        div.append(texto, descartar);
+        form.before(div);
+    }
+
+    window.addEventListener('hashchange', prepararEdicao);
+
     // ------------------------------------------------------------ sincronização
 
     async function sincronizar() {
@@ -250,7 +403,11 @@
             let sessao = await buscarToken();
             if (!sessao) return;
 
-            for (const item of pendentes) {
+            for (const daLista of pendentes) {
+                // pode ter sido editada ou descartada enquanto as anteriores eram enviadas
+                const item = await filaObter(daLista.id).catch(() => null);
+                if (!item || item.status !== 'pendente') continue;
+
                 if (item.usuario && item.usuario !== sessao.usuario) {
                     await marcarErro(item, 'Feita por outro usuário. Entre com a conta dele para enviar.');
                     continue;
@@ -271,6 +428,14 @@
                 if (resp.ok) {
                     await filaRemover(item.id);
                     enviados++;
+
+                    // Cadastro editado durante o envio: o original já foi gravado, a edição
+                    // não pode virar um segundo cadastro.
+                    const nova = (await filaListar().catch(() => [])).find((i) => i.substitui === item.id);
+                    if (nova && nova.metodo === 'POST') {
+                        await marcarErro({ ...nova, editavel: false },
+                            'O cadastro foi enviado antes de você terminar de editar. Edite o item pela listagem.');
+                    }
                 } else if (resp.status === 401) {
                     avisar('Sua sessão expirou. Entre de novo para enviar as alterações guardadas.', 'warning');
                     break;
@@ -508,6 +673,12 @@
 
             const acoes = document.createElement('div');
             acoes.className = 'acoes';
+            if (item.pagina && item.editavel && item.usuario === USUARIO) {
+                acoes.appendChild(botaoAcao('Editar', 'btn-info', () => {
+                    janela.hide();
+                    location.href = item.pagina + '#offline-editar=' + item.id;
+                }));
+            }
             if (item.status === 'erro') {
                 acoes.appendChild(botaoAcao('Tentar de novo', 'btn-warning', async () => {
                     await filaSalvar({ ...item, status: 'pendente', erro: null });
@@ -538,13 +709,16 @@
         return b;
     }
 
-    /** Linhas com exclusão guardada aparecem apagadas na listagem */
+    /** Linhas com exclusão guardada aparecem apagadas; com edição guardada, marcadas */
     async function marcarPendentes() {
         const fila = await filaListar().catch(() => []);
-        const urls = new Set(fila.filter((i) => i.metodo === 'DELETE').map((i) => i.url));
+        const excluir = new Set(fila.filter((i) => i.metodo === 'DELETE').map((i) => i.url));
+        const editar = new Set(fila.filter((i) => i.metodo === 'PUT' || i.metodo === 'PATCH').map((i) => i.url));
         document.querySelectorAll('form[method="post"]').forEach((f) => {
             const linha = f.closest('tr');
-            if (linha) linha.classList.toggle('offline-exclusao', urls.has(f.action));
+            if (!linha) return;
+            linha.classList.toggle('offline-exclusao', excluir.has(f.action));
+            linha.classList.toggle('offline-edicao', editar.has(f.action) && !excluir.has(f.action));
         });
     }
 
@@ -569,6 +743,7 @@
     }
 
     mostrarMensagemGuardada();
+    prepararEdicao();
     marcarPendentes();
     atualizarAviso();
     verificarConexao();

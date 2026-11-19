@@ -1,0 +1,21 @@
+# Segurança: só a pasta public/ pode ser acessada pelo navegador.
+# Sem isso, http://localhost/laravel/.env, /.git, /storage/logs... ficam abertos
+# para qualquer pessoa da rede (a .env tem a APP_KEY e a senha do banco).
+#
+# Tudo que for pedido fora de public/ é mandado para public/ (e o Laravel
+# responde 404 se não existir). http://localhost/laravel/ redireciona para o site.
+
+Options -Indexes
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteCond %{REQUEST_URI} ^(.*)/$
+    RewriteRule ^$ %1/public/ [R=302,L]
+    RewriteCond %{REQUEST_URI} !/public/
+    RewriteRule ^(.*)$ public/$1 [L]
+</IfModule>
+
+# Se o mod_rewrite estiver desligado, bloqueia tudo em vez de expor os arquivos
+<IfModule !mod_rewrite.c>
+    Require all denied
+</IfModule>

@@ -2,7 +2,7 @@
 
 @extends('layouts.app')
 
-@section('titulo', 'Acessorios')
+@section('titulo', 'Acessórios')
 
 @section('conteudo')
 
@@ -36,7 +36,7 @@
     @if ($mostrarFiltro)
         <div class="card mb-4">
             <div class="card-header d-flex justify-content-between align-items-center">
-                <span><i class="bi bi-funnel"></i> Filtrar acessorios</span>
+                <span><i class="bi bi-funnel"></i> Filtrar acessórios</span>
                 <a href="{{ $urlFecharFiltro }}" class="btn-close btn-close-white" aria-label="Fechar"></a>
             </div>
 

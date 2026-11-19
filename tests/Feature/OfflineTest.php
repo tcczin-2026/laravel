@@ -147,6 +147,7 @@ class OfflineTest extends TestCase
         $this->actingAs($this->gerente())->get('/colecao')->assertOk()
             ->assertSee('js/offline.js', false)
             ->assertSee('manifest.webmanifest', false)
-            ->assertSee('id="aviso-conexao"', false);
+            ->assertSee('id="aviso-conexao"', false)
+            ->assertDontSee('serviceworker.js', false); // o antigo brigava com o public/sw.js
     }
 }

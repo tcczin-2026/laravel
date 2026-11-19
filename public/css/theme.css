@@ -514,3 +514,12 @@ body:has(.aviso-conexao:not([hidden])) .app-main { padding-bottom: 96px; }
 
 /* linha com exclusão aguardando envio */
 tr.offline-exclusao > * { opacity: 0.45; text-decoration: line-through; }
+
+/* linha com edição aguardando envio */
+tr.offline-edicao > td:first-child { box-shadow: inset 3px 0 0 #fbbf24; }
+tr.offline-edicao .col-nome .fw-semibold::after {
+    content: ' · editado offline';
+    color: #fcd34d;
+    font-size: 0.75em;
+    font-weight: 400;
+}

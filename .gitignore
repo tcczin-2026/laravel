@@ -20,3 +20,7 @@ yarn-error.log
 /cypress/screenshots
 /cypress/videos
 /cypress/downloads
+
+# Configuração local e logs (nunca vão para o Git)
+/.env
+/debug.log

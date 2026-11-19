@@ -65,7 +65,7 @@
             @include('partials.select', ['campo' => 'estado',        'rotulo' => 'Estado',         'opcoes' => $usados,   'selecionado' => $controle->estado ?? null])
             @include('partials.select', ['campo' => 'cores',         'rotulo' => 'Cor',            'opcoes' => $cores,    'selecionado' => $controle->cores ?? null])
             @include('partials.select', ['campo' => 'vintage',       'rotulo' => 'Vintage',        'opcoes' => $retros,   'selecionado' => $controle->vintage ?? null])
-            @include('partials.select', ['campo' => 'colecionador',  'rotulo' => 'Edicao especial','opcoes' => $edicoes,  'selecionado' => $controle->colecionador ?? null])
+            @include('partials.select', ['campo' => 'colecionador',  'rotulo' => 'Edição especial','opcoes' => $edicoes,  'selecionado' => $controle->colecionador ?? null])
         </div>
 
         <div>

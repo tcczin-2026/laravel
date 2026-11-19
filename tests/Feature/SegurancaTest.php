@@ -166,4 +166,54 @@ class SegurancaTest extends TestCase
 
         $this->assertGuest();
     }
+    public function test_login_bloqueia_depois_de_muitas_senhas_erradas(): void
+    {
+        $usuario = User::factory()->create(["password" => "segredo123"]);
+
+        for ($i = 0; $i < \App\Http\Controllers\LoginController::MAX_TENTATIVAS; $i++) {
+            $this->post("/login", ["email" => $usuario->email, "password" => "errada"]);
+        }
+
+        // nem a senha certa entra enquanto estiver bloqueado
+        $this->post("/login", ["email" => $usuario->email, "password" => "segredo123"])
+            ->assertSessionHasErrors("email");
+        $this->assertStringStartsWith("Muitas tentativas erradas.", session("errors")->first("email"));
+        $this->assertGuest();
+    }
+
+    public function test_login_certo_zera_as_tentativas_erradas(): void
+    {
+        $usuario = User::factory()->create(["password" => "segredo123"]);
+
+        for ($i = 0; $i < \App\Http\Controllers\LoginController::MAX_TENTATIVAS - 1; $i++) {
+            $this->post("/login", ["email" => $usuario->email, "password" => "errada"]);
+        }
+        $this->post("/login", ["email" => $usuario->email, "password" => "segredo123"])->assertRedirect(route("painel.index"));
+        $this->post("/logout");
+
+        $this->post("/login", ["email" => $usuario->email, "password" => "errada"])
+            ->assertSessionHasErrors(["email" => "E-mail ou senha incorretos."]);
+    }
+
+    public function test_mensagens_de_validacao_em_portugues(): void
+    {
+        $this->actingAs($this->gerente())
+            ->post("/console", ["nome" => "", "quantidade" => "abc", "codigo_barras" => "12ab"])
+            ->assertSessionHasErrors([
+                "nome"          => "O campo nome é obrigatório.",
+                "quantidade"    => "O campo quantidade deve ser um número inteiro.",
+                "codigo_barras" => "O campo código de barras deve ter entre 8 e 14 dígitos.",
+            ]);
+    }
+
+    public function test_arquivos_internos_nao_ficam_abertos_no_apache(): void
+    {
+        // .htaccess da raiz manda tudo para public/ (senão .env e .git ficam acessíveis)
+        $htaccess = file_get_contents(base_path(".htaccess"));
+        $this->assertStringContainsString("RewriteRule ^(.*)$ public/", $htaccess);
+        $this->assertStringContainsString("Require all denied", $htaccess);
+
+        // .env nunca vai para o Git
+        $this->assertMatchesRegularExpression("~^/?\.env$~m", file_get_contents(base_path(".gitignore")));
+    }
 }

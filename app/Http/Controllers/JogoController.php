@@ -127,7 +127,7 @@ public function index(Request $request)
 
         return redirect()
             ->route('jogo.index')
-            ->with('success', 'Jogo excluido com sucesso!');
+            ->with('success', 'Jogo excluído com sucesso!');
     }
 
     private function validar(Request $request): array

@@ -45,7 +45,7 @@ class SenhaTest extends TestCase
         $usuario = User::factory()->create(['name' => 'Ana']);
         $email   = (new RedefinirSenha('tok123'))->toMail($usuario);
 
-        $this->assertSame('Redefinição de senha - Colecao de Games', $email->subject);
+        $this->assertSame('Redefinição de senha - Coleção de Games', $email->subject);
         $this->assertStringContainsString('/redefinir-senha/tok123', $email->actionUrl);
         $this->assertStringContainsString('Ana', $email->greeting);
     }

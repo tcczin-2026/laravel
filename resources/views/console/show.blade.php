@@ -17,7 +17,7 @@
             <dt class="col-sm-3">Cor</dt>            <dd class="col-sm-9">{{ $console->cor->nome ?? '-' }}</dd>
             <dt class="col-sm-3">Vintage</dt>        <dd class="col-sm-9">{{ $console->retro->nome ?? '-' }}</dd>
             <dt class="col-sm-3">Desbloqueado</dt>   <dd class="col-sm-9">{{ $console->desbloqueado->nome ?? '-' }}</dd>
-            <dt class="col-sm-3">Edicao especial</dt><dd class="col-sm-9">{{ $console->edicaoEspecial->nome ?? '-' }}</dd>
+            <dt class="col-sm-3">Edição especial</dt><dd class="col-sm-9">{{ $console->edicaoEspecial->nome ?? '-' }}</dd>
         </dl>
     </div>
 

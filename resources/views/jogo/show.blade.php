@@ -13,7 +13,7 @@
             <dt class="col-sm-3">Cód. de barras</dt> <dd class="col-sm-9">{{ $jogo->codigo_barras ?? '-' }}</dd>
             <dt class="col-sm-3">Estado</dt>         <dd class="col-sm-9">{{ $jogo->usado->nome ?? '-' }}</dd>
             <dt class="col-sm-3">Vintage</dt>        <dd class="col-sm-9">{{ $jogo->retro->nome ?? '-' }}</dd>
-            <dt class="col-sm-3">Edicao especial</dt><dd class="col-sm-9">{{ $jogo->edicaoEspecial->nome ?? '-' }}</dd>
+            <dt class="col-sm-3">Edição especial</dt><dd class="col-sm-9">{{ $jogo->edicaoEspecial->nome ?? '-' }}</dd>
         </dl>
     </div>
 controle

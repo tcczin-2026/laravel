@@ -158,12 +158,12 @@ class ConsoleController extends Controller
         } catch (QueryException $e) {
             return redirect()
                 ->route('console.index')
-                ->with('error', 'Nao e possivel excluir: existem controles, jogos ou acessorios ligados a este console.');
+                ->with('error', 'Não é possível excluir: existem controles, jogos ou acessórios ligados a este console.');
         }
 
         return redirect()
             ->route('console.index')
-            ->with('success', 'Console excluido com sucesso!');
+            ->with('success', 'Console excluído com sucesso!');
     }
 
     private function validar(Request $request): array

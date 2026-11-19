@@ -21,13 +21,13 @@ use Illuminate\Http\Request;
 class AuxiliarController extends Controller
 {
     private const TIPOS = [
-        'plataforma'           => ['model' => plataforma::class,          'titulo' => 'plataformas'],
+        'plataforma'           => ['model' => plataforma::class,          'titulo' => 'Plataformas'],
         'cor'             => ['model' => Cor::class,            'titulo' => 'Cores'],
-        'retro'           => ['model' => Retro::class,          'titulo' => 'Retro / Vintage'],
+        'retro'           => ['model' => Retro::class,          'titulo' => 'Retrô / Vintage'],
         'usado'           => ['model' => Usado::class,          'titulo' => 'Estado (Usado)'],
         'digital'         => ['model' => Digital::class,        'titulo' => 'Leitor (Digital)'],
         'desbloqueado'    => ['model' => Desbloqueado::class,   'titulo' => 'Desbloqueado'],
-        'edicao_especial' => ['model' => EdicaoEspecial::class, 'titulo' => 'Edicao Especial'],
+        'edicao_especial' => ['model' => EdicaoEspecial::class, 'titulo' => 'Edição Especial'],
     ];
 
     public static function tipos(): array
@@ -112,18 +112,18 @@ class AuxiliarController extends Controller
         } catch (QueryException $e) {
             return redirect()
                 ->route('auxiliar.index', $tipo)
-                ->with('error', 'Nao e possivel excluir: o registro esta em uso.');
+                ->with('error', 'Não é possível excluir: o registro está em uso.');
         }
 
         return redirect()
             ->route('auxiliar.index', $tipo)
-            ->with('success', 'Registro excluido com sucesso!');
+            ->with('success', 'Registro excluído com sucesso!');
     }
 
     /** Resolve o tipo da rota ou devolve 404 */
     private function config(string $tipo): array
     {
-        abort_unless(isset(self::TIPOS[$tipo]), 404, "Tabela auxiliar '{$tipo}' nao existe.");
+        abort_unless(isset(self::TIPOS[$tipo]), 404, "Tabela auxiliar '{$tipo}' não existe.");
 
         return self::TIPOS[$tipo];
     }

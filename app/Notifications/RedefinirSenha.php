@@ -27,12 +27,12 @@ class RedefinirSenha extends Notification
         $minutos = config('auth.passwords.users.expire');
 
         return (new MailMessage)
-            ->subject('Redefinição de senha - Colecao de Games')
+            ->subject('Redefinição de senha - Coleção de Games')
             ->greeting("Olá, {$notifiable->name}!")
             ->line('Recebemos um pedido para redefinir a senha da sua conta.')
             ->action('Criar nova senha', $link)
             ->line("Este link expira em {$minutos} minutos.")
             ->line('Se não foi você que pediu, ignore este e-mail: sua senha continua a mesma.')
-            ->salutation('Colecao de Games');
+            ->salutation('Coleção de Games');
     }
 }

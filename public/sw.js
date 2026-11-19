@@ -9,7 +9,7 @@
  *
  * Ao mudar este arquivo, suba a VERSAO para os aparelhos pegarem a nova.
  */
-const VERSAO = 'v1';
+const VERSAO = 'v2';
 const CACHE_PAGINAS = 'colecao-paginas';           // muda com o usuário, não com a versão
 const CACHE_ESTATICOS = 'colecao-estaticos-' + VERSAO;
 

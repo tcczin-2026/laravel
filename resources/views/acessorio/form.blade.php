@@ -1,7 +1,7 @@
 <!-- form -->
 @extends('layouts.app')
 
-@section('titulo', 'Acessorio')
+@section('titulo', 'Acessório')
 
 @section('conteudo')
     <h1 class="h3 mb-4">{{ $acessorio ? 'Editar acessorio' : 'Novo acessorio' }}</h1>
@@ -66,7 +66,7 @@
             @include('partials.select', ['campo' => 'estado',       'rotulo' => 'Estado',         'opcoes' => $usados,   'selecionado' => $acessorio->estado ?? null])
             @include('partials.select', ['campo' => 'cores',        'rotulo' => 'Cor',            'opcoes' => $cores,    'selecionado' => $acessorio->cores ?? null])
             @include('partials.select', ['campo' => 'vintage',      'rotulo' => 'Vintage',        'opcoes' => $retros,   'selecionado' => $acessorio->vintage ?? null])
-            @include('partials.select', ['campo' => 'colecionador', 'rotulo' => 'Edicao especial','opcoes' => $edicoes,  'selecionado' => $acessorio->colecionador ?? null])
+            @include('partials.select', ['campo' => 'colecionador', 'rotulo' => 'Edição especial','opcoes' => $edicoes,  'selecionado' => $acessorio->colecionador ?? null])
         </div>
 
         <div>

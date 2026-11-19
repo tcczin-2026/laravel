@@ -128,7 +128,7 @@ class ControleController extends Controller
 
         return redirect()
             ->route('controle.index')
-            ->with('success', 'Controle excluido com sucesso!');
+            ->with('success', 'Controle excluído com sucesso!');
     }
 
     private function validar(Request $request): array

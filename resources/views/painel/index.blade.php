@@ -1,9 +1,9 @@
 @extends('layouts.app')
 
-@section('titulo', 'Colecao de Games')
+@section('titulo', 'Coleção de Games')
 
 @section('conteudo')
-    <h1 class="h3 mb-4">Colecao de Games</h1>
+    <h1 class="h3 mb-4">Coleção de Games</h1>
 
     <h5 class="text-muted">Cadastros principais</h5>
     <div class="row g-3 mb-5">

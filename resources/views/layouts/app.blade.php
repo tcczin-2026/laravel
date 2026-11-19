@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>@yield('titulo', 'Colecao de Games')</title>
+    <title>@yield('titulo', 'Coleção de Games')</title>
 
     {{-- Modo offline / app instalável (public/sw.js, public/js/offline.js) --}}
     <meta name="app-base" content="{{ url('/') }}/">
@@ -19,14 +19,7 @@
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="{{ asset('css/theme.css') }}" rel="stylesheet">
-    <link rel="manifest" href="{{ asset('manifest.json') }}">
-<script>
-    if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('/serviceworker.js')
-            .then(() => console.log('Service Worker registrado com sucesso.'))
-            .catch((error) => console.log('Falha ao registrar o Service Worker:', error));
-    }
-</script>
+    {{-- O service worker é registrado pelo public/js/offline.js (public/sw.js) --}}
 </head>
 <body>
 
@@ -37,7 +30,7 @@
 <header class="app-mobilebar d-lg-none">
     <div class="app-brand">
         <div class="logo-dot"></div>
-        <div class="wordmark">Colecao Games<span>Acervo retro</span></div>
+        <div class="wordmark">Coleção Games<span>Acervo retrô</span></div>
     </div>
     <button class="btn btn-secondary app-menu-btn" type="button"
             data-bs-toggle="offcanvas" data-bs-target="#appSidebar" aria-controls="appSidebar" aria-label="Abrir menu">
@@ -50,7 +43,7 @@
     <aside class="app-sidebar offcanvas-lg offcanvas-start" tabindex="-1" id="appSidebar">
         <div class="app-brand">
             <div class="logo-dot"></div>
-            <div class="wordmark">Colecao Games<span>Acervo retro</span></div>
+            <div class="wordmark">Coleção Games<span>Acervo retrô</span></div>
             <button type="button" class="btn-close btn-close-white ms-auto d-lg-none"
                     data-bs-dismiss="offcanvas" data-bs-target="#appSidebar" aria-label="Fechar"></button>
         </div>
@@ -69,7 +62,7 @@
                 <span class="icon">&#128191;</span> Jogos
             </a>
             <a href="{{ route('acessorio.index') }}" class="{{ request()->routeIs('acessorio.*') ? 'active' : '' }}">
-                <span class="icon">&#127911;</span> Acessorios
+                <span class="icon">&#127911;</span> Acessórios
             </a>
 
             {{-- Só o gerente vê (e acessa) usuários e tabelas auxiliares --}}
